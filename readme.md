@@ -17,7 +17,7 @@ Currently work in progress.
 - [ ] cmake
 
 ### On Windows systems
-- msvc C compiler
+- [ ] msvc C compiler
 
 ### Nvim plugins and corresponding configs
 - [x] wbthomason/packer.nvim
