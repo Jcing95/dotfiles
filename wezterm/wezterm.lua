@@ -37,8 +37,8 @@ config.window_background_gradient = {
 }
 config.window_background_opacity = 1
 config.text_background_opacity = 1 
-config.initial_rows = 56 
-config.initial_cols = 224
+config.initial_rows = 48 
+config.initial_cols = 160
 
 
 -- and finally, return the configuration to wezterm
