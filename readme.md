@@ -18,6 +18,7 @@ Currently work in progress.
 
 ### On Windows systems
 - [ ] msvc C compiler
+- [ ] PSfzf
 
 ### Nvim plugins and corresponding configs
 - [x] wbthomason/packer.nvim
