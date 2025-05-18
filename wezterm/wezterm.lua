@@ -5,7 +5,9 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
 -- This is where you actually apply your config choices
---config.default_prog = { 'C:/Program Files/PowerShell/7-preview/pwsh.exe' }
+if wezterm.target_triple:find('windows') then
+  config.default_prog = { 'C:/Program Files/PowerShell/7-preview/pwsh.exe' }
+end
 
 config.default_cursor_style = 'BlinkingBar'
 config.front_end = 'WebGpu'
@@ -35,8 +37,8 @@ config.window_background_gradient = {
 	    },
     }
 }
-config.window_background_opacity = 1
-config.text_background_opacity = 1 
+config.window_background_opacity = 0.75
+config.text_background_opacity = 0.8 
 config.initial_rows = 48 
 config.initial_cols = 160
 config.macos_window_background_blur = 10
