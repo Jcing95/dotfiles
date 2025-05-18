@@ -5,7 +5,7 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
 -- This is where you actually apply your config choices
-config.default_prog = { 'C:/Program Files/PowerShell/7-preview/pwsh.exe' }
+--config.default_prog = { 'C:/Program Files/PowerShell/7-preview/pwsh.exe' }
 
 config.default_cursor_style = 'BlinkingBar'
 config.front_end = 'WebGpu'
