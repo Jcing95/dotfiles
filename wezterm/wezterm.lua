@@ -39,7 +39,11 @@ config.window_background_opacity = 1
 config.text_background_opacity = 1 
 config.initial_rows = 48 
 config.initial_cols = 160
+config.macos_window_background_blur = 10
+config.send_composed_key_when_left_alt_is_pressed = true
+
 
 
 -- and finally, return the configuration to wezterm
 return config
+
