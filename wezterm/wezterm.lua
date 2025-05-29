@@ -11,7 +11,7 @@ end
 config.debug_key_events = true
 config.default_cursor_style = 'BlinkingBar'
 config.front_end = 'WebGpu'
-config.webgpu_power_preference = 'HighPerformance'
+config.webgpu_power_preference = 'LowPower'
 config.window_frame = {
       active_titlebar_bg = 'hsl(120,66%,8%)',
     button_bg = '#FF0000',--'hsl(120,33%,5%)',
