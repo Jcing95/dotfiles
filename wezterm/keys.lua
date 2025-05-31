@@ -5,24 +5,92 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 local act = wezterm.action
 
+config.leader = { key='b', mods='CTRL' }
+config.disable_default_key_bindings = true
+
 config.keys = {
-    { key = 'b', mods = 'LEADER|CTRL', action=act{SendString='\u{2}'}},
-    { key = 'V',  mods= 'SHIFT|CTRL', action=act.PasteFrom 'Clipboard'},
-    { key = 'C',  mods= 'SHIFT|CTRL', action=act.CopyTo 'Clipboard'},
-    { key = '*', mods= 'SHIFT|CTRL', action ='IncreaseFontSize' },
-    { key = '_', mods= 'SHIFT|CTRL', action ='DecreaseFontSize' },
-    { key = '=', mods= 'SHIFT|CTRL', action ='ResetFontSize' },
-    { key = '%', mods= 'LEADER|SHIFT', action =act{SplitVertical={domain='CurrentPaneDomain'}}},
-    { key = '"', mods= 'LEADER|SHIFT', action =act{SplitHorizontal={domain='CurrentPaneDomain'}}},
-    { key = 'h', mods = 'LEADER', action=act{ActivatePaneDirection='Left'}},
-    { key = 'j', mods = 'LEADER', action=act{ActivatePaneDirection='Down'}},
-    { key = 'k', mods = 'LEADER', action=act{ActivatePaneDirection='Up'}},
-    { key = 'l', mods = 'LEADER', action=act{ActivatePaneDirection='Right'}},
-    { key = 'LeftArrow', mods = 'CTRL|SHIFT', action=act{AdjustPaneSize={'Left', 2}}},
-    { key = 'DownArrow', mods = 'CTRL|SHIFT', action=act{AdjustPaneSize={'Down', 2}}},
-    { key = 'UpArrow', mods = 'CTRL|SHIFT', action=act{AdjustPaneSize={'Up', 2}}},
-    { key = 'RightArrow', mods = 'CTRL|SHIFT', action=act{AdjustPaneSize={'Right', 2}}},
-  }
+-- custom keys
+    { key = 'b', mods = 'LEADER|CTRL', action = act{SendString='\u{2}'}},
+    { key = 'V', mods = 'SHIFT|CTRL', action = act.PasteFrom 'Clipboard' },
+    { key = 'C', mods = 'SHIFT|CTRL', action = act.CopyTo 'Clipboard' },
+    { key = '*', mods = 'SHIFT|CTRL', action = 'IncreaseFontSize' },
+    { key = '_', mods = 'SHIFT|CTRL', action = 'DecreaseFontSize' },
+    { key = '=', mods = 'SHIFT|CTRL', action = 'ResetFontSize' },
+    { key = '%', mods = 'LEADER|SHIFT', action =act{ SplitPane = { direction = 'Down', size = {Percent = 20}}}},
+    { key = '"', mods = 'LEADER|SHIFT', action =act{ SplitPane = { direction = 'Right', size = {Percent = 33}}}},
+    { key = 'h', mods = 'LEADER', action = act{ ActivatePaneDirection = 'Left'}},
+    { key = 'j', mods = 'LEADER', action = act{ ActivatePaneDirection = 'Down'}},
+    { key = 'k', mods = 'LEADER', action = act{ ActivatePaneDirection = 'Up'}},
+    { key = 'l', mods = 'LEADER', action = act{ ActivatePaneDirection = 'Right'}},
+    { key = 'LeftArrow', mods = 'CTRL|SHIFT', action = act{ AdjustPaneSize = {'Left', 2}}},
+    { key = 'DownArrow', mods = 'CTRL|SHIFT', action = act{ AdjustPaneSize = {'Down', 2}}},
+    { key = 'UpArrow', mods = 'CTRL|SHIFT', action = act{ AdjustPaneSize = {'Up', 2}}},
+    { key = 'RightArrow', mods = 'CTRL|SHIFT', action = act{ AdjustPaneSize = {'Right', 2}}},
+-- default keys
+    { key = 'Tab', mods = 'CTRL', action = act.ActivateTabRelative(1) },
+    { key = 'Tab', mods = 'SHIFT|CTRL', action = act.ActivateTabRelative(-1) },
+    { key = 'Enter', mods = 'ALT', action = act.ToggleFullScreen },
+    { key = 'C', mods = 'CTRL', action = act.CopyTo 'Clipboard' },
+    { key = 'F', mods = 'CTRL', action = act.Search 'CurrentSelectionOrEmptyString' },
+    { key = 'F', mods = 'SHIFT|CTRL', action = act.Search 'CurrentSelectionOrEmptyString' },
+    { key = 'K', mods = 'CTRL', action = act.ClearScrollback 'ScrollbackOnly' },
+    { key = 'K', mods = 'SHIFT|CTRL', action = act.ClearScrollback 'ScrollbackOnly' },
+    { key = 'L', mods = 'CTRL', action = act.ShowDebugOverlay },
+    { key = 'L', mods = 'SHIFT|CTRL', action = act.ShowDebugOverlay },
+    { key = 'M', mods = 'CTRL', action = act.Hide },
+    { key = 'M', mods = 'SHIFT|CTRL', action = act.Hide },
+
+    { key = 'P', mods = 'CTRL', action = act.ActivateCommandPalette },
+    { key = 'P', mods = 'SHIFT|CTRL', action = act.ActivateCommandPalette },
+    { key = 'R', mods = 'CTRL', action = act.ReloadConfiguration },
+    { key = 'R', mods = 'SHIFT|CTRL', action = act.ReloadConfiguration },
+
+    { key = 'T', mods = 'CTRL', action = act.SpawnTab 'CurrentPaneDomain' },
+    { key = 'T', mods = 'SHIFT|CTRL', action = act.SpawnTab 'CurrentPaneDomain' },
+    { key = 'U', mods = 'CTRL', action = act.CharSelect{ copy_on_select = true, copy_to =  'ClipboardAndPrimarySelection' } },
+    { key = 'U', mods = 'SHIFT|CTRL', action = act.CharSelect{ copy_on_select = true, copy_to =  'ClipboardAndPrimarySelection' } },
+    { key = 'V', mods = 'CTRL', action = act.PasteFrom 'Clipboard' },
+
+    { key = 'W', mods = 'CTRL', action = act.CloseCurrentTab{ confirm = true } },
+    { key = 'W', mods = 'SHIFT|CTRL', action = act.CloseCurrentTab{ confirm = true } },
+    { key = 'X', mods = 'CTRL', action = act.ActivateCopyMode },
+    { key = 'X', mods = 'SHIFT|CTRL', action = act.ActivateCopyMode },
+    { key = 'Z', mods = 'CTRL', action = act.TogglePaneZoomState },
+    { key = 'Z', mods = 'SHIFT|CTRL', action = act.TogglePaneZoomState },
+
+    { key = 'c', mods = 'SUPER', action = act.CopyTo 'Clipboard' },
+    { key = 'f', mods = 'SHIFT|CTRL', action = act.Search 'CurrentSelectionOrEmptyString' },
+    { key = 'f', mods = 'SUPER', action = act.Search 'CurrentSelectionOrEmptyString' },
+    { key = 'l', mods = 'SHIFT|CTRL', action = act.ShowDebugOverlay },
+    { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection 'Right' },
+    { key = 'p', mods = 'SHIFT|CTRL', action = act.ActivateCommandPalette },
+    { key = 'r', mods = 'SHIFT|CTRL', action = act.ReloadConfiguration },
+    { key = 'r', mods = 'SUPER', action = act.ReloadConfiguration },
+    { key = 't', mods = 'SHIFT|CTRL', action = act.SpawnTab 'CurrentPaneDomain' },
+    { key = 't', mods = 'SUPER', action = act.SpawnTab 'CurrentPaneDomain' },
+    { key = 'u', mods = 'SHIFT|CTRL', action = act.CharSelect{ copy_on_select = true, copy_to =  'ClipboardAndPrimarySelection' } },
+    { key = 'v', mods = 'SUPER', action = act.PasteFrom 'Clipboard' },
+
+    { key = 'x', mods = 'SHIFT|CTRL', action = act.ActivateCopyMode },
+    { key = 'z', mods = 'SHIFT|CTRL', action = act.TogglePaneZoomState },
+    { key = '{', mods = 'SUPER', action = act.ActivateTabRelative(-1) },
+    { key = '{', mods = 'SHIFT|SUPER', action = act.ActivateTabRelative(-1) },
+    { key = '}', mods = 'SUPER', action = act.ActivateTabRelative(1) },
+    { key = '}', mods = 'SHIFT|SUPER', action = act.ActivateTabRelative(1) },
+
+    { key = 'phys:Space', mods = 'SHIFT|CTRL', action = act.QuickSelect },
+    { key = 'PageUp', mods = 'SHIFT', action = act.ScrollByPage(-1) },
+    { key = 'PageUp', mods = 'CTRL', action = act.ActivateTabRelative(-1) },
+    { key = 'PageUp', mods = 'SHIFT|CTRL', action = act.MoveTabRelative(-1) },
+    { key = 'PageDown', mods = 'SHIFT', action = act.ScrollByPage(1) },
+    { key = 'PageDown', mods = 'CTRL', action = act.ActivateTabRelative(1) },
+    { key = 'PageDown', mods = 'SHIFT|CTRL', action = act.MoveTabRelative(1) },
+    { key = 'Insert', mods = 'SHIFT', action = act.PasteFrom 'PrimarySelection' },
+    { key = 'Insert', mods = 'CTRL', action = act.CopyTo 'PrimarySelection' },
+    { key = 'Copy', mods = 'NONE', action = act.CopyTo 'Clipboard' },
+    { key = 'Paste', mods = 'NONE', action = act.PasteFrom 'Clipboard' },
+}
+
 config.key_tables = {
     copy_mode = {
       { key = 'Tab', mods = 'NONE', action = act.CopyMode 'MoveForwardWord' },
@@ -103,3 +171,4 @@ config.key_tables = {
     },
   }
 
+  return config

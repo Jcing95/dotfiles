@@ -1,11 +1,9 @@
---load keybindings
-require 'keys'
 
 -- Pull in the wezterm API
 local wezterm = require 'wezterm'
 
 -- This will hold the configuration.
-local config = wezterm.config_builder()
+local config = require'keys'
 
 -- This is where you actually apply your config choices
 if wezterm.target_triple:find('windows') then
@@ -46,8 +44,7 @@ config.initial_rows = 48
 config.initial_cols = 160
 config.macos_window_background_blur = 10
 config.send_composed_key_when_left_alt_is_pressed = true
-config.leader = { key='b', mods='CTRL' }
-config.disable_default_key_bindings = true
+
 
 
 -- and finally, return the configuration to wezterm
