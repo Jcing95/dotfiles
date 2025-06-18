@@ -1,6 +1,6 @@
 [directory.substitutions]
 'codesphere-monorepo' = "󰺕"
-
+'/mnt/d/' = " D:/"
 [aws]
 symbol = "  "
 
