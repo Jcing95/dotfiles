@@ -11,15 +11,25 @@
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    timeout = 3;
+    systemd-boot = {
+      enable = true;
+      configurationLimit = 5;
+      extraInstallCommands = ''
+        ${pkgs.gnused}/bin/sed -i 's/^default .*/default auto-windows/' /boot/loader/loader.conf
+      '';
+    };
+  };
   networking = {
     hostName = "nixos"; # Define your hostname.
     nameservers = [ "1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001" ];
     networkmanager.enable = true;
     networkmanager.dns = "default";
   };
+
+  
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -64,6 +74,7 @@
       telegram-desktop
       discord
       spotify
+      prismlauncher
     ];
   };
 
@@ -72,7 +83,10 @@
     allowUnfree = true;
   };
 
-
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "nvidia";
+    WLR_NO_HARDWARE_CURSORS = "1";
+  };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -98,6 +112,7 @@
     hyprpaper
     goxlr-utility
     nextcloud-client
+    pwvucontrol
   ];
 
   fonts.packages = with pkgs; [
@@ -147,6 +162,7 @@
     xserver = {
       enable = true;
       # Configure keymap in X11
+      videoDrivers = ["nvidia"];
       xkb = {
         layout = "de";
         variant = "";
@@ -215,6 +231,21 @@
   hardware = {
     graphics.enable = true;
     bluetooth.enable = true;
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = false;
+      
+      prime = {
+          offload.enable = true;
+          offload.enableOffloadCmd = true;
+          intelBusId = "PCI:00:02:0";
+          nvidiaBusId = "PCI:01:00:0";
+        };
+
+      open = false;
+      nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
   };
   
   # Some programs need SUID wrappers, can be configured further or are

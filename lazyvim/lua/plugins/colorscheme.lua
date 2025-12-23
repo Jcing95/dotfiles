@@ -1,0 +1,18 @@
+return {
+  {
+    "Shatur/neovim-ayu",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("ayu").setup({
+        mirage = false, -- Set to true for mirage variant
+      })
+    end,
+  },
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "ayu-dark",
+    },
+  },
+}
