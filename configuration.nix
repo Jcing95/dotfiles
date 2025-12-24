@@ -91,6 +91,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     git
+    dunst
     neovim
     lazygit
     tree-sitter
@@ -110,9 +111,16 @@
     unrar
     wl-clipboard
     hyprpaper
+    hyprshot
     goxlr-utility
     nextcloud-client
     pwvucontrol
+    networkmanagerapplet
+    nwg-displays
+    nwg-look
+    wlsunset
+    psmisc
+    hypridle
   ];
 
   fonts.packages = with pkgs; [
@@ -141,7 +149,7 @@
       shellAliases = {
         ll = "ls -la";
 	      os-rebuild = "sudo nixos-rebuild switch";
-        os-gc = "sudo nixos-collect-garbage";
+        os-gc = "sudo nix-env --delete-generations old && nix-collect-garbage -d";
       };
       histSize = 10000;
       histFile = "$HOME/.zsh_history";
@@ -161,12 +169,7 @@
   services = {
     xserver = {
       enable = true;
-      # Configure keymap in X11
       videoDrivers = ["nvidia"];
-      xkb = {
-        layout = "de";
-        variant = "";
-      };
     };
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = false;
