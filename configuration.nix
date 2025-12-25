@@ -16,7 +16,7 @@
     timeout = 3;
     systemd-boot = {
       enable = true;
-      configurationLimit = 5;
+      configurationLimit = 3;
       extraInstallCommands = ''
         ${pkgs.gnused}/bin/sed -i 's/^default .*/default auto-windows/' /boot/loader/loader.conf
       '';
@@ -121,6 +121,7 @@
     wlsunset
     psmisc
     hypridle
+    nordzy-cursor-theme
   ];
 
   fonts.packages = with pkgs; [
