@@ -20,6 +20,7 @@
     nwg-displays
     nwg-look
     wlsunset
+    brightnessctl
     wl-clipboard   
     pwvucontrol
     gnome-keyring

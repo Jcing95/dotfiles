@@ -76,7 +76,6 @@
     syntaxHighlighting.enable = true;
     shellAliases = {
       ll = "ls -la";
-      os-rebuild = "sudo nixos-rebuild switch --flake ~/dotfiles";
       os-gc = "sudo nix-env --delete-generations old && nix-collect-garbage -d";
     };
     histSize = 10000;
