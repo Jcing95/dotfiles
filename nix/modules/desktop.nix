@@ -21,12 +21,12 @@
     hyprpaper
     hyprshot
     hypridle
-    
     # Utilities
     networkmanagerapplet
     nwg-displays
     nwg-look
     wlsunset
+    wl-clipboard   
     pwvucontrol
     gnome-keyring
     polkit

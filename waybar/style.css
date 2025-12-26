@@ -1,6 +1,6 @@
 * {
     font-family: "FiraCode Nerd Font", sans-serif;
-    font-size: 13px;
+    font-size: 1rem;
 }
 
 window#waybar {
@@ -57,37 +57,31 @@ button:hover {
     margin-left: 0;
 }
 
-.modules-right > widget:last-child > #workspaces {
-    margin-right: 0;
+
+
+.modules-right widget {
+  background-color: rgba(0,0,0,0.1);
+  color: #ffffff;
+  padding: 0 0.1rem;
+  margin: 0;
 }
 
-/* Right side modules - clean style matching left */
+.modules-right widget:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+#idle_inhibitor {
+  padding-right: 1.5rem;
+  padding-left: 0.5rem;
+}
+
 #cpu,
-#clock,
 #memory,
 #temperature,
 #backlight,
-#network,
 #pulseaudio,
-#battery,
-#tray,
-#idle_inhibitor {
-    padding: 0 10px;
-    color: #ffffff;
-    background-color: transparent;
-    
-}
-
-#cpu:hover,
-#clock:hover,
-#memory:hover,
-#temperature:hover,
-#backlight:hover,
-#network:hover,
-#pulseaudio:hover,
-#battery:hover,
-#idle_inhibitor:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+#battery {
+    padding-right: 1rem;
 }
 
 /* Battery states */
@@ -111,23 +105,19 @@ button:hover {
     }
 }
 
-/* Temperature warning */
 #temperature.critical {
     color: #eb4d4b;
 }
 
-/* Network disconnected */
 #network.disconnected {
     color: #f53c3c;
 }
 
-/* Audio muted */
 #pulseaudio.muted,
 #wireplumber.muted {
     color: #90b1b1;
 }
 
-/* Tray */
 #tray > .passive {
     -gtk-icon-effect: dim;
 }
