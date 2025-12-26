@@ -4,14 +4,6 @@
 {
   # Desktop packages
   environment.systemPackages = with pkgs; [
-    # Desktop apps
-    brave
-    telegram-desktop
-    discord
-    spotify
-    prismlauncher
-    nextcloud-client
-    
     # Hyprland ecosystem
     wezterm
     dmenu
@@ -21,6 +13,8 @@
     hyprpaper
     hyprshot
     hypridle
+    hyprlock
+
     # Utilities
     networkmanagerapplet
     nwg-displays
@@ -44,10 +38,15 @@
   programs.steam.enable = true;
 
   # Display manager
-  services.xserver.enable = true;
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = false;
-
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+        user = "greeter";
+      };
+    };
+  };
   # Bluetooth
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;

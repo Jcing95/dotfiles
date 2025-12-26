@@ -65,7 +65,6 @@
     fd
     unzip
     unrar
-    wl-clipboard
     psmisc
   ];
 
@@ -101,6 +100,7 @@
   security = {
     rtkit.enable = true;
     polkit.enable = true;
+    pam.services.hyprlock = {};
   };
 
   # Polkit authentication agent

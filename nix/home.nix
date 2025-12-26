@@ -9,7 +9,12 @@
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
-    
+    brave
+    telegram-desktop
+    discord
+    spotify
+    prismlauncher
+    nextcloud-client
   ];
 
   home.pointerCursor = {
