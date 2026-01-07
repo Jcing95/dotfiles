@@ -1,4 +1,4 @@
-local wezterm = require 'wezterm'
+local wezterm = require("wezterm")
 
 local config = wezterm.config_builder()
 
@@ -32,6 +32,8 @@ config.window_background_gradient = {
 }
 config.window_background_opacity = 0.75
 config.text_background_opacity = 0.8
+config.macos_window_background_blur = 10
+config.send_composed_key_when_left_alt_is_pressed = true
+config.window_decorations = "RESIZE"
 
-return config;
-
+return config
