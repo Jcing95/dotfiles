@@ -7,7 +7,9 @@ config-version = 2
 
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
+after-startup-command = [
+  'exec-and-forget borders active_color=0xF016701c inactive_color=0x80104f14 width=3.0'
+]
 
 # Start AeroSpace at login
 start-at-login = true
@@ -110,18 +112,25 @@ on-mode-changed = []
     cmd-slash = 'layout tiles horizontal vertical'
     cmd-comma = 'layout accordion horizontal vertical'
     cmd-enter = 'exec-and-forget wezterm'
-    cmd-b = 'exec-and-forget open -a "Brave Browser.app"'
+    cmd-b = 'exec-and-forget open -na "Brave Browser.app"'
     cmd-q = 'close'
+    cmd-m = 'macos-native-minimize'
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
     cmd-h = 'focus left'
     cmd-j = 'focus down'
     cmd-k = 'focus up'
     cmd-l = 'focus right'
-
-
+    cmd-ctrl-h = 'focus-monitor left'
+    cmd-ctrl-j = 'focus-monitor down'
+    cmd-ctrl-k = 'focus-monitor up'
+    cmd-ctrl-l = 'focus-monitor right'
+    cmd-shift-ctrl-h = 'move-node-to-monitor left --focus-follows-window --wrap-around'
+    cmd-shift-ctrl-j = 'move-node-to-monitor down --focus-follows-window --wrap-around'
+    cmd-shift-ctrl-k = 'move-node-to-monitor up --focus-follows-window --wrap-around'
+    cmd-shift-ctrl-l = 'move-node-to-monitor right --focus-follows-window --wrap-around'
 
     cmd-shift-r = 'reload-config'
-    cmd-v = 'layout floating tiling' # Toggle between floating and tiling layout
+    cmd-shift-v = 'layout floating tiling' # Toggle between floating and tiling layout
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
     cmd-shift-h = 'move left'
@@ -130,8 +139,8 @@ on-mode-changed = []
     cmd-shift-l = 'move right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-    cmd-u = 'resize smart -50'
-    cmd-p = 'resize smart +50'
+    cmd-shift-u = 'resize smart -50'
+    cmd-shift-p = 'resize smart +50'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
     cmd-1 = 'workspace 1'
@@ -178,3 +187,6 @@ on-mode-changed = []
     cmd-shift-j = ['join-with down', 'mode main']
     cmd-shift-k = ['join-with up', 'mode main']
     cmd-shift-l = ['join-with right', 'mode main']
+[workspace-to-monitor-force-assignment]
+    1 = 'main'
+    2 = 'secondary'
