@@ -78,6 +78,10 @@
     shellAliases = {
       ll = "ls -la";
       os-gc = "sudo nix-env --delete-generations old && nix-collect-garbage -d";
+      ws = "cd ~/workspace/";
+      config = "nvim ~/workspace/dotfiles/";
+      ":q" = "exit";
+      q = "exit";
     };
     histSize = 10000;
     histFile = "$HOME/.zsh_history";
@@ -93,6 +97,12 @@
     _1password-gui = {
       enable = true;
       polkitPolicyOwners = [ "jcing" ];
+    };
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        stdenv.cc.cc
+      ];
     };
   };
 

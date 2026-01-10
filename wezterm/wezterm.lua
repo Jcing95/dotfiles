@@ -12,7 +12,20 @@ config.window_frame = {
 	button_bg = "#FF0000", --'hsl(120,33%,5%)',
 	font = require("wezterm").font("FiraCode Nerd Font"),
 }
-config.font = wezterm.font("FiraCode Nerd Font")
+config.font = wezterm.font({
+	family = "FiraCode Nerd Font",
+	harfbuzz_features = {
+		"calt",
+		"ss01",
+		"ss02",
+		"ss03",
+		"ss04",
+		"ss05",
+		"ss06",
+		"zero",
+		"onum",
+	},
+})
 config.window_background_gradient = {
 	colors = {
 		"hsl(120,33%,5%)",
@@ -34,6 +47,11 @@ config.window_background_opacity = 0.75
 config.text_background_opacity = 0.8
 config.macos_window_background_blur = 10
 config.send_composed_key_when_left_alt_is_pressed = true
-config.window_decorations = "RESIZE"
+config.window_decorations = "NONE"
+
+-- Shift + Enter = new line (for claude code etc.)
+config.keys = {
+	{ key = "Enter", mods = "SHIFT", action = wezterm.action({ SendString = "\x1b\r" }) },
+}
 
 return config

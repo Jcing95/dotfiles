@@ -13,5 +13,5 @@
 
   networking.hostName = "workstation";
   
-  programs.zsh.shellAliases.os-rebuild = "sudo nixos-rebuild switch --flake ~/dotfiles/nix#laptop";
+  programs.zsh.shellAliases.os-rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#workstation";
 }

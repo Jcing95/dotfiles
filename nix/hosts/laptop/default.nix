@@ -17,5 +17,5 @@
     ${pkgs.gnused}/bin/sed -i 's/^default .*/default auto-windows/' /boot/loader/loader.conf
   '';
   
-  programs.zsh.shellAliases.os-rebuild = "sudo nixos-rebuild switch --flake ~/dotfiles/nix#laptop";
+  programs.zsh.shellAliases.os-rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#laptop";
 }
