@@ -2,22 +2,10 @@
 { config, pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    goxlr-utility
-  ];
+  
+  services.goxlr-utility.enable = true;
 
   systemd.user.services = {
-    goxlr-utility = {
-      description = "GoXLR Utility";
-      wantedBy = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" "pipewire.service" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.goxlr-utility}/bin/goxlr-daemon";
-        Restart = "always";
-        RestartSec = "5s";
-      };
-    };
-
     goxlr-set-default = {
       description = "Set GoXLR System as default sink";
       after = [ 

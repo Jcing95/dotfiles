@@ -17,6 +17,7 @@
     prismlauncher
     nextcloud-client
     claude-code
+    runelite
   ];
 
   home.pointerCursor = {
@@ -45,10 +46,10 @@
       package = pkgs.papirus-icon-theme;
     };
 
-    font = {
-      name = "FiraCode Nerd Font";
-      size = 11;
-    };
+#    font = {
+#      name = "FiraCode Nerd Font";
+#      size = 11;
+#    };
 
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;

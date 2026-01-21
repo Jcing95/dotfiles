@@ -43,7 +43,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd start-hyprland -g 'Trying to enter the system. Awaiting authentication...' -w 100 --theme 'button=red;text=green;time=red;action=red;container=black;input=red'";
         user = "greeter";
       };
     };
