@@ -68,12 +68,12 @@ on-mode-changed = []
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 0
-    inner.vertical =   0
-    outer.left =       0
-    outer.bottom =     0
-    outer.top =        0
-    outer.right =      0
+    inner.horizontal = 3
+    inner.vertical =   3
+    outer.left =       3
+    outer.bottom =     3
+    outer.top =        3
+    outer.right =      3
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -109,34 +109,30 @@ on-mode-changed = []
     # '''
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    cmd-slash = 'layout tiles horizontal vertical'
-    cmd-comma = 'layout accordion horizontal vertical'
+#    cmd-slash = 'layout tiles horizontal vertical'
+#cmd-comma = 'layout accordion horizontal vertical'
     cmd-enter = 'exec-and-forget wezterm'
     cmd-b = 'exec-and-forget open -na "Brave Browser.app"'
     cmd-q = 'close'
     cmd-m = 'macos-native-minimize'
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    cmd-h = 'focus left'
-    cmd-j = 'focus down'
-    cmd-k = 'focus up'
-    cmd-l = 'focus right'
-    cmd-ctrl-h = 'focus-monitor left'
-    cmd-ctrl-j = 'focus-monitor down'
-    cmd-ctrl-k = 'focus-monitor up'
-    cmd-ctrl-l = 'focus-monitor right'
-    cmd-shift-ctrl-h = 'move-node-to-monitor left --focus-follows-window --wrap-around'
-    cmd-shift-ctrl-j = 'move-node-to-monitor down --focus-follows-window --wrap-around'
-    cmd-shift-ctrl-k = 'move-node-to-monitor up --focus-follows-window --wrap-around'
-    cmd-shift-ctrl-l = 'move-node-to-monitor right --focus-follows-window --wrap-around'
+    cmd-h = 'focus left --boundaries all-monitors-outer-frame'
+    cmd-j = 'focus down --boundaries all-monitors-outer-frame'
+    cmd-k = 'focus up --boundaries all-monitors-outer-frame'
+    cmd-l = 'focus right --boundaries all-monitors-outer-frame'
+    cmd-ctrl-h = 'join-with left'
+    cmd-ctrl-j = 'join-with down'
+    cmd-ctrl-k = 'join-with up'
+    cmd-ctrl-l = 'join-with right'
 
     cmd-shift-r = 'reload-config'
     cmd-shift-v = 'layout floating tiling' # Toggle between floating and tiling layout
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    cmd-shift-h = 'move left'
-    cmd-shift-j = 'move down'
-    cmd-shift-k = 'move up'
-    cmd-shift-l = 'move right'
+    cmd-shift-h = 'move left --boundaries all-monitors-outer-frame'
+    cmd-shift-j = 'move down --boundaries all-monitors-outer-frame'
+    cmd-shift-k = 'move up --boundaries all-monitors-outer-frame'
+    cmd-shift-l = 'move right --boundaries all-monitors-outer-frame'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
     cmd-shift-u = 'resize smart -50'
@@ -155,16 +151,16 @@ on-mode-changed = []
     cmd-0 = 'workspace 0'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    cmd-shift-1 = 'move-node-to-workspace 1'
-    cmd-shift-2 = 'move-node-to-workspace 2'
-    cmd-shift-3 = 'move-node-to-workspace 3'
-    cmd-shift-4 = 'move-node-to-workspace 4'
-    cmd-shift-5 = 'move-node-to-workspace 5'
-    cmd-shift-6 = 'move-node-to-workspace 6'
-    cmd-shift-7 = 'move-node-to-workspace 7'
-    cmd-shift-8 = 'move-node-to-workspace 8'
-    cmd-shift-9 = 'move-node-to-workspace 9'
-    cmd-shift-0 = 'move-node-to-workspace 0'
+    cmd-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
+    cmd-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
+    cmd-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'
+    cmd-shift-4 = 'move-node-to-workspace 4 --focus-follows-window'
+    cmd-shift-5 = 'move-node-to-workspace 5 --focus-follows-window'
+    cmd-shift-6 = 'move-node-to-workspace 6 --focus-follows-window'
+    cmd-shift-7 = 'move-node-to-workspace 7 --focus-follows-window'
+    cmd-shift-8 = 'move-node-to-workspace 8 --focus-follows-window'
+    cmd-shift-9 = 'move-node-to-workspace 9 --focus-follows-window'
+    cmd-shift-0 = 'move-node-to-workspace 0 --focus-follows-window'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     cmd-tab = 'workspace-back-and-forth'
@@ -189,4 +185,9 @@ on-mode-changed = []
     cmd-shift-l = ['join-with right', 'mode main']
 [workspace-to-monitor-force-assignment]
     1 = 'main'
-    2 = 'secondary'
+    2 = 'main'
+    3 = 'main'
+    4 = 'secondary'
+    5 = 'secondary'
+    6 = 'secondary'
+    
