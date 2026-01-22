@@ -47,7 +47,12 @@ config.window_background_opacity = 0.75
 config.text_background_opacity = 0.8
 config.macos_window_background_blur = 10
 config.send_composed_key_when_left_alt_is_pressed = true
-config.window_decorations = "NONE"
+
+if wezterm.target_triple == "x86_64-unknown-linux-gnu" then
+	config.window_decorations = "NONE"
+else
+	config.window_decorations = "RESIZE"
+end
 
 -- Shift + Enter = new line (for claude code etc.)
 config.keys = {
