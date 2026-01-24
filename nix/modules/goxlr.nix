@@ -3,8 +3,11 @@
 
 {
   
-  services.goxlr-utility.enable = true;
-
+  services.goxlr-utility = {
+    enable = true;
+    autoStart.xdg = true;
+  };
+  
   systemd.user.services = {
     goxlr-set-default = {
       description = "Set GoXLR System as default sink";
