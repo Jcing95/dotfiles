@@ -13,9 +13,9 @@
   networking.hostName = "laptop";
 
   # Windows dual-boot: set Windows as default boot option
-  boot.loader.systemd-boot.extraInstallCommands = ''
-    ${pkgs.gnused}/bin/sed -i 's/^default .*/default auto-windows/' /boot/loader/loader.conf
-  '';
+  # boot.loader.systemd-boot.extraInstallCommands = ''
+  #   ${pkgs.gnused}/bin/sed -i 's/^default .*/default auto-windows/' /boot/loader/loader.conf
+  # '';
   
   programs.zsh.shellAliases.os-rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#laptop";
 }
