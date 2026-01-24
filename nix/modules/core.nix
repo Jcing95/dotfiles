@@ -56,7 +56,6 @@
   # Core system packages
   environment.systemPackages = with pkgs; [
     git
-    neovim
     lazygit
     tree-sitter
     gcc
@@ -68,6 +67,13 @@
     unrar
     psmisc
   ];
+
+  programs.neovim = {
+      enable = true;
+      defaultEditor = true;
+      vimAlias = true;
+      viAlias = true;
+  };
 
   # ZSH system-wide config
   programs.zsh = {
