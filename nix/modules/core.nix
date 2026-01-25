@@ -7,6 +7,8 @@
     "nix-command"
     "flakes"
   ];
+  nix.settings.trusted-users = [ "root" "jcing" ];
+  
 
   # Bootloader base config
   boot.loader = {
@@ -83,6 +85,7 @@
     syntaxHighlighting.enable = true;
     shellAliases = {
       ll = "ls -la";
+      rebuild = "home-manager switch --flake $DOTFILES/nix";
       os-gc = "sudo nix-env --delete-generations old && nix-collect-garbage -d";
       ws = "cd ~/workspace/";
       config = "nvim ~/workspace/dotfiles/";

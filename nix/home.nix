@@ -18,6 +18,7 @@
     nextcloud-client
     claude-code
     runelite
+    devenv
   ];
 
   home.pointerCursor = {
