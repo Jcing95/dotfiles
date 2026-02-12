@@ -48,7 +48,7 @@
   users.users.jcing = {
     isNormalUser = true;
     description = "Jcing";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "ydotool"];
   };
   users.defaultUserShell = pkgs.zsh;
 
@@ -91,6 +91,7 @@
       config = "nvim ~/workspace/dotfiles/";
       ":q" = "exit";
       q = "exit";
+      autoclick = "$DOTFILES/autoclick.sh";
     };
     histSize = 10000;
     histFile = "$HOME/.zsh_history";

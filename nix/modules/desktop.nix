@@ -25,6 +25,7 @@
     pwvucontrol
     gnome-keyring
     polkit
+    libnotify
   ];
 
   # Fonts
@@ -51,4 +52,8 @@
   # Bluetooth
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
+
+  # Autoclicker
+  programs.ydotool.enable = true;
+
 }

@@ -9,7 +9,6 @@
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
-    home-manager
     brave
     telegram-desktop
     discord
@@ -17,9 +16,10 @@
     prismlauncher
     nextcloud-client
     claude-code
+    bolt-launcher
     runelite
-    jagex-launcher
     devenv
+    hueadm
   ];
 
   home.pointerCursor = {

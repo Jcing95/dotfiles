@@ -45,12 +45,18 @@
           }
         ];
       };
-
-      homeConfigurations."jcing" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [ ./home.nix ];
-      };
-
+    };
+    
+    homeConfigurations."jcing" = home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      modules = [
+        ./home.nix
+        {
+          home.username = "jcing";
+          home.homeDirectory = "/home/jcing/";
+          nixpkgs.config.allowUnfree = true;
+        }
+      ];
     };
   };
 }
