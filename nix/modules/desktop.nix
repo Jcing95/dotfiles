@@ -14,7 +14,6 @@
     hyprshot
     hypridle
     hyprlock
-
     # Utilities
     networkmanagerapplet
     nwg-displays

@@ -68,6 +68,7 @@
     unzip
     unrar
     psmisc
+    home-manager
   ];
 
   programs.neovim = {

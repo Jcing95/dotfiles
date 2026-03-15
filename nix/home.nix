@@ -20,6 +20,7 @@
     runelite
     devenv
     hueadm
+    heroic
   ];
 
   home.pointerCursor = {

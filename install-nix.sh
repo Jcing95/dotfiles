@@ -1,6 +1,10 @@
 #! /bin/sh
 
 dir="$(cd "$(dirname "$0")" && pwd)"
+
+# Determine hostname for monitor config
+hostname=$(hostname)
+
 mkdir -p ~/.config
 mkdir -p ~/.config/Nextcloud
 mkdir -p ~/.config/hypr/
@@ -10,7 +14,7 @@ ln -sfn $dir/lazyvim ~/.config/nvim
 ln -sfn $dir/nextcloud.cfg ~/.config/Nextcloud
 ln -sfn $dir/hyprland.conf ~/.config/hypr/hyprland.conf
 ln -sfn $dir/hyprlock.conf ~/.config/hypr/hyprlock.conf
-ln -sfn $dir/monitors-$(hostname).conf ~/.config/hypr/monitors.conf
+ln -sfn $dir/monitors-$hostname.conf ~/.config/hypr/monitors.conf
 
 # Set DOTFILES env var for zsh
 env_line="export DOTFILES=\"$dir\""
