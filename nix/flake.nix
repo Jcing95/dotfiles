@@ -3,32 +3,24 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    
+
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }: 
+  outputs = { self, nixpkgs, home-manager, ... }:
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
   in
   {
     nixosConfigurations = {
-      
-      laptop = nixpkgs.lib.nixosSystem {
+      homelab = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          ./hosts/laptop
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.users.jcing = import ./home.nix;
-          }
+          ./hosts/homelab
         ];
       };
 
@@ -36,24 +28,29 @@
         inherit system;
         modules = [
           ./hosts/workstation
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.users.jcing = import ./home.nix;
-          }
         ];
       };
     };
-    
-    homeConfigurations."jcing" = home-manager.lib.homeManagerConfiguration {
+
+    homeConfigurations."jcing@workstation" = home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [
-        ./home.nix
+        ./home-workstation.nix
         {
           home.username = "jcing";
-          home.homeDirectory = "/home/jcing/";
+          home.homeDirectory = "/home/jcing";
+          nixpkgs.config.allowUnfree = true;
+        }
+      ];
+    };
+
+    homeConfigurations."jcing@homelab" = home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      modules = [
+        ./home-homelab.nix
+        {
+          home.username = "jcing";
+          home.homeDirectory = "/home/jcing";
           nixpkgs.config.allowUnfree = true;
         }
       ];

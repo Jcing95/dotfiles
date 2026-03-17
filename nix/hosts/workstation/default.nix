@@ -12,8 +12,6 @@
   ];
 
   networking.hostName = "workstation";
-  
-  programs.zsh.shellAliases.os-rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#workstation";
 
 # Mount Windows ESP so systemd-boot can chainload it
   fileSystems."/boot/windows" = {

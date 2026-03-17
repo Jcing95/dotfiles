@@ -1,4 +1,3 @@
-# Laptop-specific configuration
 { config, pkgs, ... }:
 
 {
@@ -20,13 +19,7 @@
     HandleLidSwitchExternalPower = "ignore";
   };
 
-  # Windows dual-boot: set Windows as default boot option
-  # boot.loader.systemd-boot.extraInstallCommands = ''
-  #   ${pkgs.gnused}/bin/sed -i 's/^default .*/default auto-windows/' /boot/loader/loader.conf
-  # '';
-  
   programs.zsh.shellAliases = {
-    os-rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#laptop";
     tv-on = "sudo systemctl start greetd";
     tv-off = "sudo systemctl stop greetd";
   };

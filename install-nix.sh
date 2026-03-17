@@ -12,9 +12,9 @@ ln -sfn $dir/wezterm ~/.config/wezterm
 ln -sfn $dir/waybar ~/.config/waybar
 ln -sfn $dir/lazyvim ~/.config/nvim
 ln -sfn $dir/nextcloud.cfg ~/.config/Nextcloud
-ln -sfn $dir/hyprland.conf ~/.config/hypr/hyprland.conf
-ln -sfn $dir/hyprlock.conf ~/.config/hypr/hyprlock.conf
-ln -sfn $dir/monitors-$hostname.conf ~/.config/hypr/monitors.conf
+ln -sfn $dir/hyprland/common.conf ~/.config/hypr/hyprland.conf
+ln -sfn $dir/hyprland/hyprlock.conf ~/.config/hypr/hyprlock.conf
+ln -sfn $dir/hyprland/$hostname.conf ~/.config/hypr/host.conf
 
 # Set DOTFILES env var for zsh
 env_line="export DOTFILES=\"$dir\""
