@@ -26,6 +26,11 @@
     gnome-keyring
     polkit
     libnotify
+
+
+    #Networking
+    cloudflared
+    wireguard-tools
   ];
 
   # Fonts
@@ -44,7 +49,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "nvidia-offload start-hyprland";
+        command = "start-hyprland";
         user = "jcing";
       };
     };

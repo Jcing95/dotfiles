@@ -9,17 +9,8 @@
 
   home.packages = with pkgs; [
     brave
-    telegram-desktop
-    discord
     spotify
-    prismlauncher
-    nextcloud-client
     claude-code
-    bolt-launcher
-    runelite
-    devenv
-    hueadm
-    heroic
   ];
 
   home.pointerCursor = {
