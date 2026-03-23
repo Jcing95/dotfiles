@@ -4,9 +4,11 @@
 {
   programs.git = {
     enable = true;
-    userName = "jcing";
-    userEmail = "dev@jcing.de";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "jcing";
+        email = "dev@jcing.de";
+      };
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
       pull.rebase = true;

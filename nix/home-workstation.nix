@@ -11,7 +11,8 @@
   home.file.".config/wezterm".source = ../wezterm;
   home.file.".config/nvim".source = ../lazyvim;
   home.file.".config/waybar".source = ../waybar;
-  home.file.".config/Nextcloud".source = ../nextcloud.cfg;
+  # Nextcloud needs a writable config file, not a nix store symlink
+  home.file.".config/Nextcloud/nextcloud.cfg".text = builtins.readFile ../nextcloud.cfg;
   home.file.".config/hypr/hyprland.conf".source = ../hypr/common.conf;
   home.file.".config/hypr/hyprlock.conf".source = ../hypr/hyprlock.conf;
   home.file.".config/hypr/hypridle.conf".source = ../hypr/hypridle.conf;
@@ -57,8 +58,9 @@
       gtk-application-prefer-dark-theme = true;
     };
 
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = true;
+    gtk4 = {
+      theme = null;  # GTK4 apps use libadwaita, explicit theming not needed
+      extraConfig.gtk-application-prefer-dark-theme = true;
     };
   };
 
