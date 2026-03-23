@@ -3,9 +3,10 @@
 
 {
   imports = [
+    ./home-modules/git.nix
   ];
 
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.05";
 
   home.packages = with pkgs; [
     github-copilot-cli
