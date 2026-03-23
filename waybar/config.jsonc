@@ -2,7 +2,7 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 30,
+    "height": 48,
     "spacing": 4,
 
     "modules-left": [
@@ -35,7 +35,7 @@
     },
 
     "tray": {
-        "icon-size": 18,
+        "icon-size": 24,
         "spacing": 10
     },
 

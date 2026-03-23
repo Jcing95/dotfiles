@@ -14,6 +14,7 @@
     hyprshot
     hypridle
     hyprlock
+    hyprshutdown
     wlogout
     # Utilities
     networkmanagerapplet
@@ -52,8 +53,5 @@
   # Bluetooth
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
-
-  # Autoclicker
-  programs.ydotool.enable = true;
 
 }

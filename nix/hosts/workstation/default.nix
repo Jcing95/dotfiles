@@ -13,18 +13,4 @@
 
   networking.hostName = "workstation";
 
-# Mount Windows ESP so systemd-boot can chainload it
-  fileSystems."/boot/windows" = {
-    device = "/dev/disk/by-uuid/7E62-7861";
-    fsType = "vfat";
-    options = [ "ro" "nofail" ];
-  };
-
-# Add Windows boot entry
-  boot.loader.systemd-boot.extraEntries = {
-    "windows.conf" = ''
-      title Windows
-      efi /windows/EFI/Microsoft/Boot/bootmgfw.efi
-    '';
-  };
 }

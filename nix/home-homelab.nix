@@ -7,6 +7,14 @@
 
   home.stateVersion = "24.11";
 
+  home.file.".config/wezterm".source = ../wezterm;
+  home.file.".config/nvim".source = ../lazyvim;
+  home.file.".config/waybar".source = ../waybar;
+  home.file.".config/hypr/hyprland.conf".source = ../hypr/common.conf;
+  home.file.".config/hypr/hyprlock.conf".source = ../hypr/hyprlock.conf;
+  home.file.".config/hypr/hypridle.conf".source = ../hypr/hypridle.conf;
+  home.file.".config/hypr/host.conf".source = ../hypr/homelab.conf;
+
   home.packages = with pkgs; [
     brave
     spotify

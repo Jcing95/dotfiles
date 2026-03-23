@@ -57,9 +57,9 @@
     shellInit = ''
       # Aliases
       alias ll="ls -la"
-      alias rebuild="home-manager switch --flake ~/dotfiles/nix#jcing@macbook-jcing"
-      alias os-rebuild="sudo darwin-rebuild switch --flake ~/dotfiles/nix"
-      alias config="cd ~/dotfiles && nvim"
+      alias rebuild="home-manager switch --flake $DOTFILES/nix#jcing@macbook-jcing"
+      alias os-rebuild="sudo darwin-rebuild switch --flake $DOTFILES/nix#macbook-jcing"
+      alias config="cd $DOTFILES && nvim"
       alias ":q"="exit"
       alias "q"="exit"
       alias cc='clear && clear'

@@ -62,7 +62,4 @@
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
-  # Autoclicker
-  programs.ydotool.enable = true;
-
 }
