@@ -19,5 +19,9 @@
   home.file."Library/Preferences/Nextcloud/nextcloud.cfg".text = builtins.readFile ../nextcloud.cfg;
   
   programs.starship.enable = true;
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
   programs.home-manager.enable = true;
 }
