@@ -3,13 +3,14 @@
 
 {
   imports = [
-    ../../modules/darwin/core.nix
+    ../../modules/darwin.nix
   ];
 
   # Hostname
   networking.hostName = "macbook-jcing";
 
   system.primaryUser = "jcing";
+
   # User
   users.users.jcing = {
     home = "/Users/jcing";

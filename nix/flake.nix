@@ -49,7 +49,7 @@
     homeConfigurations."jcing@workstation" = home-manager.lib.homeManagerConfiguration {
       pkgs = linuxPkgs;
       modules = [
-        ./home-workstation.nix
+        ./home/workstation.nix
         {
           home.username = "jcing";
           home.homeDirectory = "/home/jcing";
@@ -61,7 +61,7 @@
     homeConfigurations."jcing@homelab" = home-manager.lib.homeManagerConfiguration {
       pkgs = linuxPkgs;
       modules = [
-        ./home-homelab.nix
+        ./home/homelab.nix
         {
           home.username = "jcing";
           home.homeDirectory = "/home/jcing";
@@ -73,7 +73,7 @@
     homeConfigurations."jcing@macbook-jcing" = home-manager.lib.homeManagerConfiguration {
       pkgs = darwinPkgs;
       modules = [
-        ./home-macbook.nix
+        ./home/macbook.nix
         {
           home.username = "jcing";
           home.homeDirectory = "/Users/jcing";

@@ -1,18 +1,24 @@
 # Home Manager configuration for macbook
 { pkgs, ... }:
 
+let
+  oms = pkgs.callPackage ../pkgs/oms.nix {};
+in
 {
   imports = [
-    ./home-modules/git.nix
+    ./common.nix
   ];
 
   home.stateVersion = "25.05";
 
   home.packages = with pkgs; [
     github-copilot-cli
+    oms
+    google-cloud-sdk
+    cloudflared
   ];
 
-  home.file.".aerospace.toml".source = ../aerospace.toml;
+  home.file.".config/aerospace.toml".source = ../aerospace.toml;
   home.file.".config/wezterm".source = ../wezterm;
   home.file.".config/nvim".source = ../lazyvim;
   # Nextcloud needs a writable/accessible config file, not a nix store symlink

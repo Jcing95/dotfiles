@@ -1,9 +1,9 @@
-# Home Manager configuration for workstation
+# Home Manager configuration for homelab
 { pkgs, ... }:
 
 {
   imports = [
-    ./home-modules/git.nix
+    ./common.nix
   ];
 
   home.stateVersion = "25.05";
@@ -11,32 +11,21 @@
   home.file.".config/wezterm".source = ../wezterm;
   home.file.".config/nvim".source = ../lazyvim;
   home.file.".config/waybar".source = ../waybar;
-  # Nextcloud needs a writable config file, not a nix store symlink
-  home.file.".config/Nextcloud/nextcloud.cfg".text = builtins.readFile ../nextcloud.cfg;
   home.file.".config/hypr/hyprland.conf".source = ../hypr/common.conf;
   home.file.".config/hypr/hyprlock.conf".source = ../hypr/hyprlock.conf;
   home.file.".config/hypr/hypridle.conf".source = ../hypr/hypridle.conf;
-  home.file.".config/hypr/host.conf".source = ../hypr/workstation.conf;
+  home.file.".config/hypr/host.conf".source = ../hypr/homelab.conf;
 
   home.packages = with pkgs; [
     brave
-    telegram-desktop
-    discord
     spotify
-    prismlauncher
-    nextcloud-client
     claude-code
-    bolt-launcher
-    runelite
-    devenv
-    hueadm
-    heroic
   ];
 
   home.pointerCursor = {
     name = "Nordzy-cursors";
     package = pkgs.nordzy-cursor-theme;
-    size = 36;
+    size = 24;
     gtk.enable = true;
     x11.enable = true;
   };
