@@ -18,11 +18,11 @@ in
     cloudflared
   ];
 
-  home.file.".config/aerospace.toml".source = ../aerospace.toml;
-  home.file.".config/wezterm".source = ../wezterm;
-  home.file.".config/nvim".source = ../lazyvim;
+  home.file.".config/aerospace.toml".source = ../../aerospace.toml;
+  home.file.".config/wezterm".source = ../../wezterm;
+  home.file.".config/nvim".source = ../../lazyvim;
   # Nextcloud needs a writable/accessible config file, not a nix store symlink
-  home.file."Library/Preferences/Nextcloud/nextcloud.cfg".text = builtins.readFile ../nextcloud.cfg;
+  home.file."Library/Preferences/Nextcloud/nextcloud.cfg".text = builtins.readFile ../../nextcloud.cfg;
   
   programs.starship.enable = true;
   programs.direnv = {

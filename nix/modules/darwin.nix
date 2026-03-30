@@ -66,6 +66,9 @@
     '';
     
     shellInit = ''
+      # Dotfiles path
+      export DOTFILES="$HOME/dotfiles"
+
       # PATH additions
       export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
       export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
