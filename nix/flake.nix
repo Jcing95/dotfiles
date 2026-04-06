@@ -13,19 +13,22 @@
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
   };
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, ... }:
   let
+    username = "jcing";
+    email = "dev@jcing.de";
     linuxSystem = "x86_64-linux";
     darwinSystem = "aarch64-darwin";
     linuxPkgs = nixpkgs.legacyPackages.${linuxSystem};
-    darwinPkgs = nixpkgs.legacyPackages.${darwinSystem};
   in
   {
     nixosConfigurations = {
       homelab = nixpkgs.lib.nixosSystem {
         system = linuxSystem;
+        specialArgs = { inherit username email; };
         modules = [
           ./hosts/homelab
         ];
@@ -33,6 +36,7 @@
 
       workstation = nixpkgs.lib.nixosSystem {
         system = linuxSystem;
+        specialArgs = { inherit username email; };
         modules = [
           ./hosts/workstation
         ];
@@ -41,45 +45,44 @@
 
     darwinConfigurations."macbook-jcing" = nix-darwin.lib.darwinSystem {
       system = darwinSystem;
+      specialArgs = { inherit username email; };
       modules = [
         ./hosts/macbook
+        home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = { inherit username email; };
+          home-manager.users.${username} = import ./home/macbook.nix;
+        }
       ];
     };
 
-    homeConfigurations."jcing@workstation" = home-manager.lib.homeManagerConfiguration {
+    homeConfigurations."${username}@workstation" = home-manager.lib.homeManagerConfiguration {
       pkgs = linuxPkgs;
+      extraSpecialArgs = { inherit username email; };
       modules = [
         ./home/workstation.nix
         {
-          home.username = "jcing";
-          home.homeDirectory = "/home/jcing";
+          home.username = username;
+          home.homeDirectory = "/home/${username}";
           nixpkgs.config.allowUnfree = true;
         }
       ];
     };
 
-    homeConfigurations."jcing@homelab" = home-manager.lib.homeManagerConfiguration {
+    homeConfigurations."${username}@homelab" = home-manager.lib.homeManagerConfiguration {
       pkgs = linuxPkgs;
+      extraSpecialArgs = { inherit username email; };
       modules = [
         ./home/homelab.nix
         {
-          home.username = "jcing";
-          home.homeDirectory = "/home/jcing";
+          home.username = username;
+          home.homeDirectory = "/home/${username}";
           nixpkgs.config.allowUnfree = true;
         }
       ];
     };
 
-    homeConfigurations."jcing@macbook-jcing" = home-manager.lib.homeManagerConfiguration {
-      pkgs = darwinPkgs;
-      modules = [
-        ./home/macbook.nix
-        {
-          home.username = "jcing";
-          home.homeDirectory = "/Users/jcing";
-          nixpkgs.config.allowUnfree = true;
-        }
-      ];
-    };
   };
 }

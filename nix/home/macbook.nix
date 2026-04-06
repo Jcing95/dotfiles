@@ -1,14 +1,28 @@
 # Home Manager configuration for macbook
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 
 let
   oms = pkgs.callPackage ../pkgs/oms.nix {};
+
+  sketchybarConfig = pkgs.stdenvNoCC.mkDerivation {
+    name = "sketchybar-config";
+    src = ../../darwin/sketchybar;
+    dontUnpack = true;
+    installPhase = ''
+      mkdir -p $out
+      cp -r $src/* $out/
+      find $out -name '*.sh' -exec chmod +x {} \;
+      chmod +x $out/sketchybarrc
+    '';
+  };
 in
 {
   imports = [
     ./common.nix
   ];
 
+  home.username = username;
+  home.homeDirectory = "/Users/${username}";
   home.stateVersion = "25.05";
 
   home.packages = with pkgs; [
@@ -18,12 +32,13 @@ in
     cloudflared
   ];
 
-  home.file.".config/aerospace.toml".source = ../../aerospace.toml;
+  # Dotfile symlinks
   home.file.".config/wezterm".source = ../../wezterm;
   home.file.".config/nvim".source = ../../lazyvim;
-  # Nextcloud needs a writable/accessible config file, not a nix store symlink
-  home.file."Library/Preferences/Nextcloud/nextcloud.cfg".text = builtins.readFile ../../nextcloud.cfg;
-  
+
+  # Sketchybar config (deployed with executable permissions)
+  home.file.".config/sketchybar".source = sketchybarConfig;
+
   programs.starship.enable = true;
   programs.direnv = {
     enable = true;

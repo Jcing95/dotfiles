@@ -8,11 +8,15 @@ config-version = 2
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  'exec-and-forget borders active_color=0xF016701c inactive_color=0x80104f14 width=3.0'
+  'exec-and-forget /bin/bash -c "/run/current-system/sw/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$(/run/current-system/sw/bin/aerospace list-workspaces --focused)"'
+]
+
+exec-on-workspace-change = ['/bin/bash', '-c',
+    '/run/current-system/sw/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
 ]
 
 # Start AeroSpace at login
-start-at-login = true
+start-at-login = false
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
 enable-normalization-flatten-containers = true
@@ -126,7 +130,7 @@ on-mode-changed = []
     cmd-ctrl-l = 'join-with right'
 
     cmd-shift-r = 'reload-config'
-    cmd-shift-v = 'layout floating tiling' # Toggle between floating and tiling layout
+    ctrl-cmd-v = 'layout floating tiling' # Toggle between floating and tiling layout
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
     cmd-shift-h = 'move left --boundaries all-monitors-outer-frame'
@@ -192,4 +196,4 @@ on-mode-changed = []
     4 = 'secondary'
     5 = 'secondary'
     6 = 'secondary'
-    
+

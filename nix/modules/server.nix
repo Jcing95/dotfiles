@@ -1,5 +1,5 @@
 # Homelab-specific server configuration
-{ pkgs, lib, ... }:
+{ pkgs, lib, username, ... }:
 
 {
   imports = [ ./hyprland.nix ];
@@ -14,7 +14,7 @@
   services.greetd.settings = {
     default_session = {
       command = "start-hyprland";
-      user = "jcing";
+      user = username;
     };
   };
 

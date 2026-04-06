@@ -1,5 +1,5 @@
 # Core system configuration shared by all hosts
-{ config, pkgs, ... }:
+{ config, pkgs, username, ... }:
 
 {
   imports = [
@@ -11,7 +11,7 @@
     "nix-command"
     "flakes"
   ];
-  nix.settings.trusted-users = [ "root" "jcing" ];
+  nix.settings.trusted-users = [ "root" username ];
   
 
   # Bootloader base config
@@ -49,9 +49,9 @@
   console.keyMap = "de";
 
   # User account
-  users.users.jcing = {
+  users.users.${username} = {
     isNormalUser = true;
-    description = "Jcing";
+    description = username;
     extraGroups = [ "networkmanager" "wheel" ];
   };
   users.defaultUserShell = pkgs.zsh;
@@ -90,7 +90,7 @@
     _1password.enable = true;
     _1password-gui = {
       enable = true;
-      polkitPolicyOwners = [ "jcing" ];
+      polkitPolicyOwners = [ username ];
     };
     nix-ld = {
       enable = true;

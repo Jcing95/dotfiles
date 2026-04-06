@@ -1,5 +1,5 @@
 # OpenSSH deamon configuration
-{ config, pkgs, ... }:
+{ config, pkgs, username, ... }:
 
 {
   services.openssh = {
@@ -11,7 +11,7 @@
     
     ports = [ 22420 ];
   };
-  users.users.jcing.openssh.authorizedKeys.keys = [
+  users.users.${username}.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFRkbqPt+f6ZyGFnz1wCbR21mXhX75Lb6yCxy6OmmMUU dev@jcing.de"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsu6Ktzn5AsGAdnNyHiZOZZIAnMA2zoCCcAlYpwGdk8 dev@jcing.de"
   ];

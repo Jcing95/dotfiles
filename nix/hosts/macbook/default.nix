@@ -1,5 +1,5 @@
 # macbook-jcing host configuration
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 
 {
   imports = [
@@ -9,11 +9,11 @@
   # Hostname
   networking.hostName = "macbook-jcing";
 
-  system.primaryUser = "jcing";
+  system.primaryUser = username;
 
   # User
-  users.users.jcing = {
-    home = "/Users/jcing";
+  users.users.${username} = {
+    home = "/Users/${username}";
     shell = pkgs.zsh;
   };
 
@@ -27,27 +27,13 @@
       upgrade = true;
     };
 
-    taps = [
-      "felixkratz/formulae"
-      "nikitabobko/tap"
-    ];
-
-    # Tap-only formulae that aren't in nixpkgs
-    brews = [
-      "borders"
-    ];
-
     casks = [
+      "raycast"
       "1password"
       "1password-cli"
-      "nikitabobko/tap/aerospace"
-      "alt-tab"
       "dbeaver-community"
-      "font-hack-nerd-font"
-      "iterm2"
+      "font-fira-code-nerd-font"
       "postman"
-      "rectangle"
-      "stats"
       "visual-studio-code"
       "wezterm"
     ];
