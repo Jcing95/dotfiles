@@ -14,9 +14,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    oms = {
+      url = "github:codesphere-cloud/oms";
+      flake = false;
+    };
+
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-darwin, ... }:
+  outputs = { self, nixpkgs, home-manager, nix-darwin, oms, ... }:
   let
     username = "jcing";
     email = "dev@jcing.de";
@@ -52,7 +57,7 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit username email; };
+          home-manager.extraSpecialArgs = { inherit username email; omsSrc = oms; };
           home-manager.users.${username} = import ./home/macbook.nix;
         }
       ];

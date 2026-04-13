@@ -34,7 +34,6 @@
     kubelogin-oidc
 
     curl
-    fzf
     ripgrep
     fd
     tree-sitter
@@ -63,53 +62,8 @@
     ];
   };
 
-  environment.variables.EDITOR = "nvim";
-
-  # Shell configuration
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    enableSyntaxHighlighting = true;
-
-    # PATH and global exports (runs for all shells including non-interactive)
-    shellInit = ''
-      export DOTFILES="$HOME/dotfiles"
-
-      export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-      export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-      export PATH="''${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
-      export KUBE_EDITOR="nvim"
-
-      if [ -f "$HOME/.deno/env" ]; then
-        . "$HOME/.deno/env"
-      fi
-    '';
-
-    interactiveShellInit = ''
-      autoload -U up-line-or-beginning-search
-      autoload -U down-line-or-beginning-search
-      zle -N up-line-or-beginning-search
-      zle -N down-line-or-beginning-search
-      bindkey "^[[A" up-line-or-beginning-search
-      bindkey "^[[B" down-line-or-beginning-search
-
-      alias ll="ls -la"
-      alias la="ls -la"
-      alias k=kubectl
-      alias cs='cd ~/workspace/codesphere-monorepo'
-      alias csp='cd ~/workspace/codesphere-monorepo/packages'
-      alias ws='cd ~/workspace/'
-      alias wsp='cd ~/workspace/private/'
-      alias yib='yarn install && yarn build'
-      alias src='source ~/.zshrc'
-      alias rebuild="sudo darwin-rebuild switch --flake $DOTFILES/nix#macbook-jcing"
-      alias config="cd $DOTFILES && nvim"
-      alias ":q"="exit"
-      alias "q"="exit"
-      alias cc='clear && clear'
-    '';
-  };
+  # ZSH as system shell (user-level config is in Home Manager)
+  programs.zsh.enable = true;
 
   system.defaults = {
     dock = {

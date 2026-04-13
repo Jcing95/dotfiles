@@ -58,11 +58,28 @@
         "type": "github"
       }
     },
+    "oms": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776085438,
+        "narHash": "sha256-LwibPv8Mfc1HNdSJKwJxLWkm/lM9dsWpFnzYoBDtJE4=",
+        "owner": "codesphere-cloud",
+        "repo": "oms",
+        "rev": "1a8b2eb8da6f6e20639b24e95d1d8ffd30713809",
+        "type": "github"
+      },
+      "original": {
+        "owner": "codesphere-cloud",
+        "repo": "oms",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "oms": "oms"
       }
     }
   },

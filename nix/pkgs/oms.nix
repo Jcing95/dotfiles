@@ -1,26 +1,34 @@
-{ lib, stdenv, fetchurl }:
+{ lib, buildGoModule, stdenv, src }:
 
-let
-  version = "1.33.0";
-in
-stdenv.mkDerivation {
+buildGoModule {
   pname = "oms";
-  inherit version;
+  version = src.shortRev or "unstable";
 
-  src = fetchurl {
-    url = "https://github.com/codesphere-cloud/oms/releases/download/v${version}/oms_${version}_darwin_arm64";
-    sha256 = "cded5b0358a53943a5e131f0dc46fd11d397e8e07bd1837de275d899d18ea241";
-  };
+  inherit src;
+  subPackages = [ "cli" ];
 
-  dontUnpack = true;
+  # Relax Go version requirement when nixpkgs is slightly behind
+  preBuild = ''
+    substituteInPlace go.mod --replace-fail "go 1.26.2" "go 1.26.1"
+  '';
 
-  installPhase = ''
-    install -D -m 755 $src $out/bin/oms
+  vendorHash = "sha256-7Pm24VHj9UgcK4pxEysfqeKOAMXzKKbnxMCf4ST4D1g=";
+
+  ldflags = let pkg = "github.com/codesphere-cloud/oms/internal/version"; in [
+    "-X ${pkg}.version=${src.shortRev or "unstable"}"
+    "-X ${pkg}.commit=${src.rev or "unknown"}"
+    "-X ${pkg}.os=${stdenv.hostPlatform.parsed.kernel.name}"
+    "-X ${pkg}.arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    "-X ${pkg}.date=${src.lastModifiedDate or "unknown"}"
+  ];
+
+  postInstall = ''
+    mv $out/bin/cli $out/bin/oms
   '';
 
   meta = with lib; {
     description = "Codesphere OMS CLI";
     homepage = "https://github.com/codesphere-cloud/oms";
-    platforms = [ "aarch64-darwin" ];
+    license = licenses.asl20;
   };
 }
