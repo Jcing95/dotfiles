@@ -8,6 +8,12 @@
 
   home.stateVersion = "25.05";
 
+  programs.zsh.shellAliases = {
+    rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#$(hostname)";
+    os-gc = "sudo nix-env --delete-generations old && nix-collect-garbage -d";
+    config = "nvim $DOTFILES";
+  };
+
   home.file.".config/wezterm".source = ../../wezterm;
   home.file.".config/nvim".source = ../../lazyvim;
   home.file.".config/waybar".source = ../../waybar;

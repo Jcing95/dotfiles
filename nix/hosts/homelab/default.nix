@@ -21,8 +21,4 @@
     HandleLidSwitchExternalPower = "ignore";
   };
 
-  programs.zsh.shellAliases = {
-    tv-on = "sudo systemctl start greetd";
-    tv-off = "sudo systemctl stop greetd";
-  };
 }

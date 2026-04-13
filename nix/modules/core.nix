@@ -84,7 +84,6 @@
 
   # Common programs
   programs = {
-    starship.enable = true;
     dconf.enable = true;
     thunar.enable = true;
     _1password.enable = true;

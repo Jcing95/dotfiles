@@ -6,6 +6,11 @@
     ./linux.nix
   ];
 
+  programs.zsh.shellAliases = {
+    tv-on = "sudo systemctl start greetd";
+    tv-off = "sudo systemctl stop greetd";
+  };
+
   home.file.".config/hypr/host.conf".source = ../../hypr/homelab.conf;
 
   home.packages = with pkgs; [
