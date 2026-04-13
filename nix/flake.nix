@@ -27,7 +27,6 @@
     email = "dev@jcing.de";
     linuxSystem = "x86_64-linux";
     darwinSystem = "aarch64-darwin";
-    linuxPkgs = nixpkgs.legacyPackages.${linuxSystem};
   in
   {
     nixosConfigurations = {
@@ -36,6 +35,13 @@
         specialArgs = { inherit username email; };
         modules = [
           ./hosts/homelab
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit username email; };
+            home-manager.users.${username} = import ./home/homelab.nix;
+          }
         ];
       };
 
@@ -44,6 +50,13 @@
         specialArgs = { inherit username email; };
         modules = [
           ./hosts/workstation
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit username email; };
+            home-manager.users.${username} = import ./home/workstation.nix;
+          }
         ];
       };
     };
@@ -59,32 +72,6 @@
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = { inherit username email; omsSrc = oms; };
           home-manager.users.${username} = import ./home/macbook.nix;
-        }
-      ];
-    };
-
-    homeConfigurations."${username}@workstation" = home-manager.lib.homeManagerConfiguration {
-      pkgs = linuxPkgs;
-      extraSpecialArgs = { inherit username email; };
-      modules = [
-        ./home/workstation.nix
-        {
-          home.username = username;
-          home.homeDirectory = "/home/${username}";
-          nixpkgs.config.allowUnfree = true;
-        }
-      ];
-    };
-
-    homeConfigurations."${username}@homelab" = home-manager.lib.homeManagerConfiguration {
-      pkgs = linuxPkgs;
-      extraSpecialArgs = { inherit username email; };
-      modules = [
-        ./home/homelab.nix
-        {
-          home.username = username;
-          home.homeDirectory = "/home/${username}";
-          nixpkgs.config.allowUnfree = true;
         }
       ];
     };

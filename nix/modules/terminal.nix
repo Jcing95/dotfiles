@@ -10,8 +10,7 @@
 
     shellAliases = {
       ll = "ls -la";
-      rebuild = "home-manager switch --flake $DOTFILES/nix#${username}@$(hostname)";
-      os-rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#$(hostname)";
+      rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#$(hostname)";
       os-gc = "sudo nix-env --delete-generations old && nix-collect-garbage -d";
       ws = "cd ~/workspace/";
       config = "nvim ~/workspace/dotfiles/";
