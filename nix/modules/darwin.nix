@@ -59,6 +59,7 @@
       "postman"
       "visual-studio-code"
       "wezterm"
+      "cloudflare-warp"
     ];
   };
 

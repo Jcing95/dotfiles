@@ -56,6 +56,19 @@ sketchybar --add item space_updater left \
     script="$PLUGIN_DIR/aerospace_spaces.sh" \
   --subscribe space_updater aerospace_workspace_change front_app_switched
 
+# ── Indicator spacer (mic/cam/capture dot) ───────────────────────────
+sketchybar --add item indicator_spacer right \
+  --set indicator_spacer \
+    icon.drawing=off \
+    label.drawing=off \
+    width=15 \
+    background.color=0x80104f14 \
+    background.border_width=2 \
+    background.border_color=0xFF167c1c \
+    background.corner_radius=5 \
+    background.height=20 \
+    background.y_offset=10
+
 # ── Battery ──────────────────────────────────────────────────────────
 sketchybar --add item battery right \
   --set battery \
@@ -65,10 +78,16 @@ sketchybar --add item battery right \
     script="$PLUGIN_DIR/battery.sh" \
   --subscribe battery routine power_source_change system_woke
 
-# ── WiFi alias ───────────────────────────────────────────────────────
-sketchybar --add alias "Control Center,WiFi" right \
-  --set "Control Center,WiFi" \
-    alias.color=0xFFFFFFFF
+# ── WiFi ─────────────────────────────────────────────────────────────
+sketchybar --add item wifi right \
+  --set wifi \
+    update_freq=10 \
+    icon.font="$FONT:Light:15.0" \
+    icon.padding_left=10 \
+    icon.padding_right=10 \
+    label.drawing=off \
+    script="$PLUGIN_DIR/wifi.sh" \
+  --subscribe wifi wifi_change system_woke
 
 # ── Date (left of notch) ────────────────────────────────────────────
 sketchybar --add item date q \
@@ -84,6 +103,7 @@ sketchybar --add item date q \
 # ── Notch spacer ────────────────────────────────────────────────────
 sketchybar --add item notch center \
   --set notch \
+    display=main \
     icon.drawing=off \
     label.drawing=off \
     background.border_width=2 \
@@ -121,7 +141,7 @@ sketchybar --add bracket spaces_group \
     background.color=0x80104f14 \
     background.height=40
 
-sketchybar --add bracket right_group "Control Center,WiFi" battery \
+sketchybar --add bracket right_group wifi battery \
   --set right_group \
     background.border_width=2 \
     background.corner_radius=10 \
