@@ -62,6 +62,10 @@
     };
   };
 
+  home.sessionVariables = {
+    SOPS_AGE_SSH_PRIVATE_KEY_FILE = "/etc/ssh/ssh_host_ed25519_key";
+  };
+
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;

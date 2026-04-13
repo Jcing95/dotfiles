@@ -9,6 +9,7 @@
     ../../modules/nvidia.nix
     ../../modules/sshd.nix
     ../../modules/cloudflared.nix
+    ../../modules/sops.nix
   ];
 
   networking.hostName = "homelab";

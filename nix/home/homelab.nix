@@ -12,6 +12,8 @@
     brave
     spotify
     claude-code
+    ssh-to-age
+    sops
   ];
 
   home.pointerCursor.size = 24;

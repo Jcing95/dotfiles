@@ -1,0 +1,12 @@
+keys:
+  # Master key  
+  - &master age1yqxzpl2wsgcsvwaqsj587ph6v4kz5ntnmcyq6p7lup5kdryysdws9lesh0
+  # Homelab SSH host key
+  - &homelab age1adac7vc8mzyrpxu0d4h06t0fjglwa7660qaz2rwq4x3v2629xy3q6y0wlk
+
+creation_rules:
+  - path_regex: secrets/homelab\.yaml$
+    key_groups:
+      - age:
+          - *master
+          - *homelab

@@ -19,9 +19,13 @@
       flake = false;
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-darwin, oms, ... }:
+  outputs = { self, nixpkgs, home-manager, nix-darwin, oms, sops-nix, ... }:
   let
     username = "jcing";
     email = "dev@jcing.de";
@@ -34,6 +38,7 @@
         system = linuxSystem;
         specialArgs = { inherit username email; };
         modules = [
+          sops-nix.nixosModules.sops
           ./hosts/homelab
           home-manager.nixosModules.home-manager
           {
