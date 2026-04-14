@@ -1,7 +1,11 @@
 # Shared Home Manager configuration for all hosts
-{ username, email, ... }:
+{ pkgs, username, email, ... }:
 
 {
+  home.packages = with pkgs; [
+    any-nix-shell
+  ];
+
   home.sessionVariables = {
     DOTFILES = "$HOME/dotfiles";
     EDITOR = "nvim";
@@ -23,6 +27,10 @@
       ignoreAllDups = true;
       share = true;
     };
+
+    initContent = ''
+      any-nix-shell zsh --info-right | source /dev/stdin
+    '';
 
     shellAliases = {
       ll = "ls -la";
