@@ -1,5 +1,5 @@
 # Workstation-specific configuration
-{ config, pkgs, ... }:
+{ config, pkgs, username, ... }:
 
 {
   imports = [
@@ -13,4 +13,5 @@
 
   networking.hostName = "workstation";
 
+  users.users.${username}.extraGroups = [ "corectrl" ];
 }
