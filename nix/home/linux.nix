@@ -12,6 +12,7 @@
     rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#$(hostname)";
     os-gc = "sudo nix-env --delete-generations old && nix-collect-garbage -d";
     config = "nvim $DOTFILES";
+    secrets = "sudo -E sops";
   };
 
   home.file.".config/wezterm".source = ../../wezterm;

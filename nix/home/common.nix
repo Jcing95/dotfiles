@@ -5,7 +5,6 @@
   home.sessionVariables = {
     DOTFILES = "$HOME/dotfiles";
     EDITOR = "nvim";
-    SOPS_AGE_SSH_PRIVATE_KEY_FILE = "/etc/ssh/ssh_host_ed25519_key";
   };
 
   programs.starship.enable = true;
