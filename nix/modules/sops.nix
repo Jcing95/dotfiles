@@ -15,6 +15,7 @@ in
     };
 
     secrets."cloudflared/tunnel-token" = {};
+    secrets."protonvpn/wireguard-private-key" = {};
   };
 
   # Derive age key from SSH host key for standalone sops CLI usage

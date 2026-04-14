@@ -9,6 +9,7 @@
     ../../modules/audio.nix
     ../../modules/amd.nix
     ../../modules/goxlr.nix
+    ../../modules/homelab-hosts.nix
   ];
 
   networking.hostName = "workstation";

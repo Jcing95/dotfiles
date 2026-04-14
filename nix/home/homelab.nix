@@ -11,6 +11,8 @@
     tv-off = "sudo systemctl stop greetd";
   };
 
+  home.sessionVariables.KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
+
   home.file.".config/hypr/host.conf".source = ../../hypr/homelab.conf;
 
   home.packages = with pkgs; [
