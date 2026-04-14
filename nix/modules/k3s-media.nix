@@ -306,14 +306,21 @@ in
               name = "homepage";
               image = "ghcr.io/gethomepage/homepage:latest";
               ports = [{ containerPort = 3000; }];
+              env = [
+                { name = "HOMEPAGE_ALLOWED_HOSTS"; value = "homepage.homelab.local"; }
+              ];
               volumeMounts = [
                 { name = "config"; mountPath = "/app/config"; }
+                { name = "config-files"; mountPath = "/app/config/services.yaml"; subPath = "services.yaml"; }
+                { name = "config-files"; mountPath = "/app/config/settings.yaml"; subPath = "settings.yaml"; }
+                { name = "config-files"; mountPath = "/app/config/widgets.yaml"; subPath = "widgets.yaml"; }
+                { name = "config-files"; mountPath = "/app/config/bookmarks.yaml"; subPath = "bookmarks.yaml"; }
               ];
             }];
-            volumes = [{
-              name = "config";
-              configMap.name = "homepage-config";
-            }];
+            volumes = [
+              (hostVol "config" "/mnt/storage/k3s/config/homepage")
+              { name = "config-files"; configMap.name = "homepage-config"; }
+            ];
           };
         };
       };
