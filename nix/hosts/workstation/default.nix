@@ -1,5 +1,5 @@
 # Workstation-specific configuration
-{ config, pkgs, username, ... }:
+{ config, pkgs, lib, username, ... }:
 
 {
   imports = [
@@ -9,10 +9,13 @@
     ../../modules/audio.nix
     ../../modules/amd.nix
     ../../modules/goxlr.nix
-    ../../modules/homelab-hosts.nix
   ];
 
   networking.hostName = "workstation";
+
+  # Use homelab Adguard Home for DNS — resolves *.lab + ad blocking
+  networking.nameservers = lib.mkForce [ "192.168.0.121" "1.1.1.1" ];
+  networking.networkmanager.insertNameservers = lib.mkForce [ "192.168.0.121" "1.1.1.1" ];
 
   users.users.${username}.extraGroups = [ "corectrl" ];
 }

@@ -4,7 +4,6 @@
 {
   imports = [
     ../../modules/darwin.nix
-    ../../modules/homelab-hosts.nix
   ];
 
   # Hostname

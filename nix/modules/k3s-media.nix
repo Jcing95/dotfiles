@@ -7,6 +7,7 @@ let
   puid = "1000";
   pgid = "1000";
   mediaNamespace = "media";
+  homelabIp = "192.168.0.121";
 
   # Common linuxserver env vars
   lsioEnv = [
@@ -24,21 +25,34 @@ let
   # volumeMount helper
   mount = name: mountPath: { inherit name mountPath; };
 
-  # Simple single-container Deployment
-  mkDeployment = { name, image, env ? [], ports ? [], volumeMounts ? [], volumes ? [], extraSpec ? {} }:
-    {
+  # Simple single-container Deployment with best practices
+  mkDeployment = {
+    name, image,
+    env ? [], ports ? [], volumeMounts ? [], volumes ? [],
+    extraSpec ? {},
+    livenessProbe ? null,
+    readinessProbe ? null,
+    resources ? null,
+    securityContext ? null,
+  }:
+    let
+      container = { inherit name image env ports volumeMounts; }
+        // lib.optionalAttrs (livenessProbe != null) { inherit livenessProbe; }
+        // lib.optionalAttrs (readinessProbe != null) { inherit readinessProbe; }
+        // lib.optionalAttrs (resources != null) { inherit resources; }
+        // lib.optionalAttrs (securityContext != null) { inherit securityContext; };
+    in {
       apiVersion = "apps/v1";
       kind = "Deployment";
       metadata = { inherit name; namespace = mediaNamespace; };
       spec = {
         replicas = 1;
+        strategy.type = "Recreate";
         selector.matchLabels.app = name;
         template = {
           metadata.labels.app = name;
           spec = {
-            containers = [{
-              inherit name image env ports volumeMounts;
-            }];
+            containers = [ container ];
             inherit volumes;
           } // extraSpec;
         };
@@ -55,6 +69,22 @@ let
       ports = [{ inherit port; targetPort = port; }];
     };
   };
+
+  # HTTP probe helper
+  httpProbe = path: port: {
+    httpGet = { inherit path port; };
+    initialDelaySeconds = 30;
+    periodSeconds = 30;
+    timeoutSeconds = 5;
+  };
+
+  # TCP probe helper
+  tcpProbe = port: {
+    tcpSocket = { inherit port; };
+    initialDelaySeconds = 30;
+    periodSeconds = 30;
+    timeoutSeconds = 5;
+  };
 in
 {
   services.k3s.manifests = {
@@ -69,9 +99,15 @@ in
     # ── Jellyfin ───────────────────────────────────────────────────────────────
     jellyfin.content = mkDeployment {
       name = "jellyfin";
-      image = "lscr.io/linuxserver/jellyfin:latest";
+      image = "lscr.io/linuxserver/jellyfin:10.11.8ubu2404-ls28";
       env = lsioEnv;
       ports = [{ containerPort = 8096; }];
+      livenessProbe = httpProbe "/health" 8096;
+      readinessProbe = httpProbe "/health" 8096;
+      resources = {
+        requests = { cpu = "500m"; memory = "512Mi"; };
+        limits = { cpu = "4000m"; memory = "4Gi"; };
+      };
       volumeMounts = [
         (mount "config" "/config")
         (mount "media" "/media")
@@ -87,24 +123,29 @@ in
 
     jellyfin-svc.content = mkService "jellyfin" 8096;
 
-    # ── Download client (qBittorrent + gluetun VPN sidecar) ───────────────────
+    # ── Torrent client (qBittorrent + gluetun VPN sidecar) ───────────────────
     # gluetun and qbittorrent share the same pod network namespace.
     # gluetun sets iptables DROP rules for non-VPN traffic — kill switch built-in.
-    download-client.content = {
+    torrent.content = {
       apiVersion = "apps/v1";
       kind = "Deployment";
-      metadata = { name = "download-client"; namespace = mediaNamespace; };
+      metadata = { name = "torrent"; namespace = mediaNamespace; };
       spec = {
         replicas = 1;
-        selector.matchLabels.app = "download-client";
+        strategy.type = "Recreate";
+        selector.matchLabels.app = "torrent";
         template = {
-          metadata.labels.app = "download-client";
+          metadata.labels.app = "torrent";
           spec = {
             containers = [
               {
                 name = "gluetun";
-                image = "qmcgaw/gluetun:latest";
+                image = "qmcgaw/gluetun:v3.41.1";
                 securityContext.capabilities.add = [ "NET_ADMIN" ];
+                resources = {
+                  requests = { cpu = "50m"; memory = "64Mi"; };
+                  limits = { cpu = "500m"; memory = "256Mi"; };
+                };
                 env = [
                   # Custom WireGuard provider — uses exact NL#908 config from ProtonVPN dashboard.
                   # This is more reliable than the protonvpn provider mode which uses API
@@ -137,10 +178,17 @@ in
               }
               {
                 name = "qbittorrent";
-                image = "lscr.io/linuxserver/qbittorrent:latest";
+                image = "lscr.io/linuxserver/qbittorrent:5.1.4-r3-ls450";
                 env = lsioEnv ++ [
                   { name = "WEBUI_PORT"; value = "8080"; }
                 ];
+                resources = {
+                  requests = { cpu = "100m"; memory = "256Mi"; };
+                  limits = { cpu = "1000m"; memory = "1Gi"; };
+                };
+                livenessProbe = tcpProbe 8080;
+                readinessProbe = tcpProbe 8080;
+                securityContext.allowPrivilegeEscalation = false;
                 # No ports — shares gluetun's network namespace
                 volumeMounts = [
                   (mount "qbt-config" "/config")
@@ -150,7 +198,7 @@ in
             ];
             volumes = [
               (hostVol "gluetun-config" "/mnt/storage/k3s/config/gluetun")
-              (hostVol "qbt-config" "/mnt/storage/k3s/config/qbittorrent")
+              (hostVol "qbt-config" "/mnt/storage/k3s/config/torrent")
               (hostVol "downloads" "/mnt/storage/media/downloads")
             ];
           };
@@ -158,14 +206,21 @@ in
       };
     };
 
-    download-client-svc.content = mkService "download-client" 8080;
+    torrent-svc.content = mkService "torrent" 8080;
 
     # ── Sonarr ─────────────────────────────────────────────────────────────────
     sonarr.content = mkDeployment {
       name = "sonarr";
-      image = "lscr.io/linuxserver/sonarr:latest";
+      image = "lscr.io/linuxserver/sonarr:4.0.17.2952-ls307";
       env = lsioEnv;
       ports = [{ containerPort = 8989; }];
+      livenessProbe = httpProbe "/ping" 8989;
+      readinessProbe = httpProbe "/ping" 8989;
+      resources = {
+        requests = { cpu = "100m"; memory = "256Mi"; };
+        limits = { cpu = "1000m"; memory = "1Gi"; };
+      };
+      securityContext.allowPrivilegeEscalation = false;
       volumeMounts = [
         (mount "config" "/config")
         (mount "media" "/media")
@@ -181,9 +236,16 @@ in
     # ── Radarr ─────────────────────────────────────────────────────────────────
     radarr.content = mkDeployment {
       name = "radarr";
-      image = "lscr.io/linuxserver/radarr:latest";
+      image = "lscr.io/linuxserver/radarr:6.1.1.10360-ls299";
       env = lsioEnv;
       ports = [{ containerPort = 7878; }];
+      livenessProbe = httpProbe "/ping" 7878;
+      readinessProbe = httpProbe "/ping" 7878;
+      resources = {
+        requests = { cpu = "100m"; memory = "256Mi"; };
+        limits = { cpu = "1000m"; memory = "1Gi"; };
+      };
+      securityContext.allowPrivilegeEscalation = false;
       volumeMounts = [
         (mount "config" "/config")
         (mount "media" "/media")
@@ -199,9 +261,16 @@ in
     # ── Prowlarr ───────────────────────────────────────────────────────────────
     prowlarr.content = mkDeployment {
       name = "prowlarr";
-      image = "lscr.io/linuxserver/prowlarr:latest";
+      image = "lscr.io/linuxserver/prowlarr:2.3.5.5327-ls142";
       env = lsioEnv;
       ports = [{ containerPort = 9696; }];
+      livenessProbe = httpProbe "/ping" 9696;
+      readinessProbe = httpProbe "/ping" 9696;
+      resources = {
+        requests = { cpu = "50m"; memory = "128Mi"; };
+        limits = { cpu = "500m"; memory = "512Mi"; };
+      };
+      securityContext.allowPrivilegeEscalation = false;
       volumeMounts = [(mount "config" "/config")];
       volumes = [(hostVol "config" "/mnt/storage/k3s/config/prowlarr")];
     };
@@ -211,9 +280,16 @@ in
     # ── Bazarr ─────────────────────────────────────────────────────────────────
     bazarr.content = mkDeployment {
       name = "bazarr";
-      image = "lscr.io/linuxserver/bazarr:latest";
+      image = "lscr.io/linuxserver/bazarr:v1.5.6-ls344";
       env = lsioEnv;
       ports = [{ containerPort = 6767; }];
+      livenessProbe = httpProbe "/api/system/health" 6767;
+      readinessProbe = httpProbe "/api/system/health" 6767;
+      resources = {
+        requests = { cpu = "50m"; memory = "128Mi"; };
+        limits = { cpu = "500m"; memory = "512Mi"; };
+      };
+      securityContext.allowPrivilegeEscalation = false;
       volumeMounts = [
         (mount "config" "/config")
         (mount "media" "/media")
@@ -229,9 +305,16 @@ in
     # ── Jellyseerr ─────────────────────────────────────────────────────────────
     jellyseerr.content = mkDeployment {
       name = "jellyseerr";
-      image = "fallenbagel/jellyseerr:latest";
+      image = "fallenbagel/jellyseerr:v3.1.1";
       env = [{ name = "LOG_LEVEL"; value = "debug"; }];
       ports = [{ containerPort = 5055; }];
+      livenessProbe = httpProbe "/api/v1/status" 5055;
+      readinessProbe = httpProbe "/api/v1/status" 5055;
+      resources = {
+        requests = { cpu = "100m"; memory = "256Mi"; };
+        limits = { cpu = "1000m"; memory = "1Gi"; };
+      };
+      securityContext.allowPrivilegeEscalation = false;
       volumeMounts = [(mount "config" "/app/config")];
       volumes = [(hostVol "config" "/mnt/storage/k3s/config/jellyseerr")];
     };
@@ -241,9 +324,16 @@ in
     # ── Flaresolverr ───────────────────────────────────────────────────────────
     flaresolverr.content = mkDeployment {
       name = "flaresolverr";
-      image = "ghcr.io/flaresolverr/flaresolverr:latest";
+      image = "ghcr.io/flaresolverr/flaresolverr:v3.4.6";
       env = [{ name = "LOG_LEVEL"; value = "info"; }];
       ports = [{ containerPort = 8191; }];
+      livenessProbe = httpProbe "/health" 8191;
+      readinessProbe = httpProbe "/health" 8191;
+      resources = {
+        requests = { cpu = "100m"; memory = "256Mi"; };
+        limits = { cpu = "1000m"; memory = "1Gi"; };
+      };
+      securityContext.allowPrivilegeEscalation = false;
       volumeMounts = [];
       volumes = [];
     };
@@ -264,28 +354,40 @@ in
         "services.yaml" = ''
           - Media:
               - Jellyfin:
-                  href: http://jellyfin:8096
+                  href: http://jellyfin.lab
                   icon: jellyfin.png
+                  description: Media server
               - Jellyseerr:
-                  href: http://jellyseerr:5055
+                  href: http://jellyseerr.lab
                   icon: jellyseerr.png
+                  description: Media requests
           - Management:
               - Sonarr:
-                  href: http://sonarr:8989
+                  href: http://sonarr.lab
                   icon: sonarr.png
+                  description: TV shows
               - Radarr:
-                  href: http://radarr:7878
+                  href: http://radarr.lab
                   icon: radarr.png
+                  description: Movies
               - Prowlarr:
-                  href: http://prowlarr:9696
+                  href: http://prowlarr.lab
                   icon: prowlarr.png
+                  description: Indexers
               - Bazarr:
-                  href: http://bazarr:6767
+                  href: http://bazarr.lab
                   icon: bazarr.png
+                  description: Subtitles
           - Downloads:
               - qBittorrent:
-                  href: http://download-client:8080
+                  href: http://torrent.lab
                   icon: qbittorrent.png
+                  description: Torrent client (VPN)
+          - Infrastructure:
+              - Adguard Home:
+                  href: http://adguard.lab
+                  icon: adguard-home.png
+                  description: DNS & ad blocker
         '';
         "widgets.yaml" = "[]";
         "bookmarks.yaml" = "[]";
@@ -298,17 +400,25 @@ in
       metadata = { name = "homepage"; namespace = mediaNamespace; };
       spec = {
         replicas = 1;
+        strategy.type = "Recreate";
         selector.matchLabels.app = "homepage";
         template = {
           metadata.labels.app = "homepage";
           spec = {
             containers = [{
               name = "homepage";
-              image = "ghcr.io/gethomepage/homepage:latest";
+              image = "ghcr.io/gethomepage/homepage:v1.12.3";
               ports = [{ containerPort = 3000; }];
               env = [
-                { name = "HOMEPAGE_ALLOWED_HOSTS"; value = "homepage.homelab.local"; }
+                { name = "HOMEPAGE_ALLOWED_HOSTS"; value = "homepage.lab,${homelabIp}"; }
               ];
+              livenessProbe = httpProbe "/" 3000;
+              readinessProbe = httpProbe "/" 3000;
+              resources = {
+                requests = { cpu = "50m"; memory = "64Mi"; };
+                limits = { cpu = "500m"; memory = "256Mi"; };
+              };
+              securityContext.allowPrivilegeEscalation = false;
               volumeMounts = [
                 { name = "config"; mountPath = "/app/config"; }
                 { name = "config-files"; mountPath = "/app/config/services.yaml"; subPath = "services.yaml"; }
@@ -328,16 +438,27 @@ in
 
     homepage-svc.content = mkService "homepage" 3000;
 
-    # ── Traefik IngressRoutes (LAN access to all service UIs) ─────────────────
-    # k3s bundles Traefik — these CRDs are available out of the box
-    traefik-middleware.content = {
-      apiVersion = "traefik.io/v1alpha1";
-      kind = "Middleware";
-      metadata = { name = "strip-prefix"; namespace = mediaNamespace; };
-      spec.stripPrefix.prefixes = [ "/" ];
+    # ── Adguard Home (external service — runs on host, not in k3s) ─────────────
+    adguard-svc.content = {
+      apiVersion = "v1";
+      kind = "Service";
+      metadata = { name = "adguard"; namespace = mediaNamespace; };
+      spec.ports = [{ port = 3380; targetPort = 3380; }];
     };
 
-    ingress-jellyfin.content = {
+    adguard-endpoints.content = {
+      apiVersion = "v1";
+      kind = "Endpoints";
+      metadata = { name = "adguard"; namespace = mediaNamespace; };
+      subsets = [{
+        addresses = [{ ip = homelabIp; }];
+        ports = [{ port = 3380; }];
+      }];
+    };
+
+    # ── Traefik Ingress (LAN access to all service UIs) ──────────────────────
+    # k3s bundles Traefik — these are available out of the box
+    media-ingress.content = {
       apiVersion = "networking.k8s.io/v1";
       kind = "Ingress";
       metadata = {
@@ -346,7 +467,7 @@ in
         annotations."traefik.ingress.kubernetes.io/router.entrypoints" = "web";
       };
       spec.rules = map (svc: {
-        host = "${svc.name}.homelab.local";
+        host = "${svc.name}.lab";
         http.paths = [{
           path = "/";
           pathType = "Prefix";
@@ -356,15 +477,16 @@ in
           };
         }];
       }) [
-        { name = "jellyfin";       port = 8096; }
-        { name = "sonarr";         port = 8989; }
-        { name = "radarr";         port = 7878; }
-        { name = "prowlarr";       port = 9696; }
-        { name = "bazarr";         port = 6767; }
-        { name = "jellyseerr";     port = 5055; }
-        { name = "download-client"; port = 8080; }
-        { name = "flaresolverr";   port = 8191; }
-        { name = "homepage";       port = 3000; }
+        { name = "jellyfin";     port = 8096; }
+        { name = "sonarr";       port = 8989; }
+        { name = "radarr";       port = 7878; }
+        { name = "prowlarr";     port = 9696; }
+        { name = "bazarr";       port = 6767; }
+        { name = "jellyseerr";   port = 5055; }
+        { name = "torrent";      port = 8080; }
+        { name = "flaresolverr"; port = 8191; }
+        { name = "homepage";     port = 3000; }
+        { name = "adguard";      port = 3380; }
       ];
     };
 

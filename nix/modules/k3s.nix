@@ -39,7 +39,7 @@
     "d /mnt/storage/k3s/config/radarr 0755 root root -"
     "d /mnt/storage/k3s/config/prowlarr 0755 root root -"
     "d /mnt/storage/k3s/config/bazarr 0755 root root -"
-    "d /mnt/storage/k3s/config/qbittorrent 0755 root root -"
+    "d /mnt/storage/k3s/config/torrent 0755 root root -"
     "d /mnt/storage/k3s/config/gluetun 0755 root root -"
     "d /mnt/storage/k3s/config/jellyseerr 0755 root root -"
     "d /mnt/storage/k3s/config/flaresolverr 0755 root root -"

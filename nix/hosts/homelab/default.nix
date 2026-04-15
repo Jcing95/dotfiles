@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -10,19 +10,17 @@
     ../../modules/sshd.nix
     ../../modules/cloudflared.nix
     ../../modules/sops.nix
+    ../../modules/adguardhome.nix
     ../../modules/k3s.nix
     ../../modules/k3s-media.nix
   ];
 
   networking.hostName = "homelab";
 
-  networking.hosts."127.0.0.1" = [
-    "jellyfin.homelab.local"      "sonarr.homelab.local"
-    "radarr.homelab.local"        "prowlarr.homelab.local"
-    "bazarr.homelab.local"        "jellyseerr.homelab.local"
-    "download-client.homelab.local"
-    "flaresolverr.homelab.local"  "homepage.homelab.local"
-  ];
+  # Use local Adguard Home for DNS (overrides core.nix Cloudflare defaults)
+  # Adguard Home rewrites *.lab → 192.168.0.121, no /etc/hosts needed
+  networking.nameservers = lib.mkForce [ "127.0.0.1" ];
+  networking.networkmanager.insertNameservers = lib.mkForce [ "127.0.0.1" ];
 
   # Allow laptop to stay on with lid closed (connected to external display)
   services.logind.settings.Login = {
