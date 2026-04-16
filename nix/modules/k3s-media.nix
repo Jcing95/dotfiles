@@ -87,6 +87,14 @@ let
   };
 in
 {
+  # Ensure media directories exist with correct ownership for linuxserver containers
+  systemd.tmpfiles.rules = [
+    "d /mnt/storage/media 0755 ${puid} ${pgid} -"
+    "d /mnt/storage/media/tv 0755 ${puid} ${pgid} -"
+    "d /mnt/storage/media/movies 0755 ${puid} ${pgid} -"
+    "d /mnt/storage/media/downloads 0755 ${puid} ${pgid} -"
+  ];
+
   services.k3s.manifests = {
 
     # ── Namespace ──────────────────────────────────────────────────────────────
@@ -100,7 +108,11 @@ in
     jellyfin.content = mkDeployment {
       name = "jellyfin";
       image = "lscr.io/linuxserver/jellyfin:10.11.8ubu2404-ls28";
-      env = lsioEnv;
+      env = lsioEnv ++ [
+        { name = "LD_LIBRARY_PATH"; value = "/usr/local/nvidia/lib64"; }
+        { name = "NVIDIA_VISIBLE_DEVICES"; value = "all"; }
+        { name = "NVIDIA_DRIVER_CAPABILITIES"; value = "all"; }
+      ];
       ports = [{ containerPort = 8096; }];
       livenessProbe = httpProbe "/health" 8096;
       readinessProbe = httpProbe "/health" 8096;
@@ -112,11 +124,19 @@ in
         (mount "config" "/config")
         (mount "media" "/media")
         (mount "dev-dri" "/dev/dri")
+        (mount "nvidia0" "/dev/nvidia0")
+        (mount "nvidiactl" "/dev/nvidiactl")
+        (mount "nvidia-uvm" "/dev/nvidia-uvm")
+        (mount "nvidia-libs" "/usr/local/nvidia/lib64")
       ];
       volumes = [
         (hostVol "config" "/mnt/storage/k3s/config/jellyfin")
         (hostVol "media" "/mnt/storage/media")
         (hostVol "dev-dri" "/dev/dri")
+        { name = "nvidia0"; hostPath = { path = "/dev/nvidia0"; }; }
+        { name = "nvidiactl"; hostPath = { path = "/dev/nvidiactl"; }; }
+        { name = "nvidia-uvm"; hostPath = { path = "/dev/nvidia-uvm"; }; }
+        { name = "nvidia-libs"; hostPath = { path = "/run/opengl-driver/lib"; type = "Directory"; }; }
       ];
       extraSpec.securityContext.privileged = true;
     };
@@ -167,6 +187,8 @@ in
                   { name = "DNS_ADDRESS"; value = "10.2.0.1"; }
                   # Allow inbound connections to qBittorrent webui from the cluster
                   { name = "FIREWALL_INPUT_PORTS"; value = "8080"; }
+                  # ProtonVPN blocks ICMP — use DNS healthcheck instead
+                  { name = "HEALTH_SMALL_CHECK_TYPE"; value = "dns"; }
                   { name = "TZ"; value = tz; }
                 ];
                 ports = [
@@ -283,8 +305,8 @@ in
       image = "lscr.io/linuxserver/bazarr:v1.5.6-ls344";
       env = lsioEnv;
       ports = [{ containerPort = 6767; }];
-      livenessProbe = httpProbe "/api/system/health" 6767;
-      readinessProbe = httpProbe "/api/system/health" 6767;
+      livenessProbe = tcpProbe 6767;
+      readinessProbe = tcpProbe 6767;
       resources = {
         requests = { cpu = "50m"; memory = "128Mi"; };
         limits = { cpu = "500m"; memory = "512Mi"; };
@@ -305,11 +327,11 @@ in
     # ── Jellyseerr ─────────────────────────────────────────────────────────────
     jellyseerr.content = mkDeployment {
       name = "jellyseerr";
-      image = "fallenbagel/jellyseerr:v3.1.1";
+      image = "ghcr.io/seerr-team/seerr:v3.2.0";
       env = [{ name = "LOG_LEVEL"; value = "debug"; }];
       ports = [{ containerPort = 5055; }];
-      livenessProbe = httpProbe "/api/v1/status" 5055;
-      readinessProbe = httpProbe "/api/v1/status" 5055;
+      livenessProbe = tcpProbe 5055;
+      readinessProbe = tcpProbe 5055;
       resources = {
         requests = { cpu = "100m"; memory = "256Mi"; };
         limits = { cpu = "1000m"; memory = "1Gi"; };
@@ -354,38 +376,38 @@ in
         "services.yaml" = ''
           - Media:
               - Jellyfin:
-                  href: http://jellyfin.lab
+                  href: http://jellyfin.jcing.de
                   icon: jellyfin.png
                   description: Media server
               - Jellyseerr:
-                  href: http://jellyseerr.lab
+                  href: http://jellyseerr.jcing.de
                   icon: jellyseerr.png
                   description: Media requests
           - Management:
               - Sonarr:
-                  href: http://sonarr.lab
+                  href: http://sonarr.jcing.de
                   icon: sonarr.png
                   description: TV shows
               - Radarr:
-                  href: http://radarr.lab
+                  href: http://radarr.jcing.de
                   icon: radarr.png
                   description: Movies
               - Prowlarr:
-                  href: http://prowlarr.lab
+                  href: http://prowlarr.jcing.de
                   icon: prowlarr.png
                   description: Indexers
               - Bazarr:
-                  href: http://bazarr.lab
+                  href: http://bazarr.jcing.de
                   icon: bazarr.png
                   description: Subtitles
           - Downloads:
               - qBittorrent:
-                  href: http://torrent.lab
+                  href: http://torrent.jcing.de
                   icon: qbittorrent.png
                   description: Torrent client (VPN)
           - Infrastructure:
               - Adguard Home:
-                  href: http://adguard.lab
+                  href: http://adguard.jcing.de
                   icon: adguard-home.png
                   description: DNS & ad blocker
         '';
@@ -410,7 +432,7 @@ in
               image = "ghcr.io/gethomepage/homepage:v1.12.3";
               ports = [{ containerPort = 3000; }];
               env = [
-                { name = "HOMEPAGE_ALLOWED_HOSTS"; value = "homepage.lab,${homelabIp}"; }
+                { name = "HOMEPAGE_ALLOWED_HOSTS"; value = "homepage.jcing.de,${homelabIp}"; }
               ];
               livenessProbe = httpProbe "/" 3000;
               readinessProbe = httpProbe "/" 3000;
@@ -467,7 +489,7 @@ in
         annotations."traefik.ingress.kubernetes.io/router.entrypoints" = "web";
       };
       spec.rules = map (svc: {
-        host = "${svc.name}.lab";
+        host = "${svc.name}.jcing.de";
         http.paths = [{
           path = "/";
           pathType = "Prefix";

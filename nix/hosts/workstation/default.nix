@@ -13,7 +13,7 @@
 
   networking.hostName = "workstation";
 
-  # Use homelab Adguard Home for DNS — resolves *.lab + ad blocking
+  # Use homelab Adguard Home for DNS — resolves *.jcing.de + ad blocking
   networking.nameservers = lib.mkForce [ "192.168.0.121" "1.1.1.1" ];
   networking.networkmanager.insertNameservers = lib.mkForce [ "192.168.0.121" "1.1.1.1" ];
 

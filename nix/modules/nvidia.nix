@@ -21,14 +21,13 @@
     nvidia = {
       modesetting.enable = true;
 
-      # Power management for suspend/resume and GPU power-off
+      # Power management for suspend/resume
       powerManagement.enable = true;
-      powerManagement.finegrained = true;
+      powerManagement.finegrained = false;
 
-      # Offload mode: Intel primary, NVIDIA powers down when unused
+      # Sync mode: both GPUs always on — needed for Jellyfin NVENC transcoding
       prime = {
-        offload.enable = true;
-        offload.enableOffloadCmd = true;  # Provides nvidia-offload wrapper
+        sync.enable = true;
 
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
@@ -36,7 +35,7 @@
 
       open = false;
       nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
     };
   };
 }

@@ -18,9 +18,12 @@
   networking.hostName = "homelab";
 
   # Use local Adguard Home for DNS (overrides core.nix Cloudflare defaults)
-  # Adguard Home rewrites *.lab → 192.168.0.121, no /etc/hosts needed
+  # Adguard Home rewrites *.jcing.de → 192.168.0.121, no /etc/hosts needed
   networking.nameservers = lib.mkForce [ "127.0.0.1" ];
   networking.networkmanager.insertNameservers = lib.mkForce [ "127.0.0.1" ];
+
+  # Enable Wake on LAN on Ethernet
+  networking.interfaces.enp3s0f1.wakeOnLan.enable = true;
 
   # Allow laptop to stay on with lid closed (connected to external display)
   services.logind.settings.Login = {
