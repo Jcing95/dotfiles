@@ -93,6 +93,9 @@ in
     "d /mnt/storage/media/tv 0755 ${puid} ${pgid} -"
     "d /mnt/storage/media/movies 0755 ${puid} ${pgid} -"
     "d /mnt/storage/media/downloads 0755 ${puid} ${pgid} -"
+    "Z /mnt/storage/media/downloads 0755 ${puid} ${pgid} -"
+    "d /mnt/storage/k3s/config/torrent 0755 ${puid} ${pgid} -"
+    "Z /mnt/storage/k3s/config/torrent 0755 ${puid} ${pgid} -"
   ];
 
   services.k3s.manifests = {
