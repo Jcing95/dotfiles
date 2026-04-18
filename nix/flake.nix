@@ -31,6 +31,7 @@
     email = "dev@jcing.de";
     linuxSystem = "x86_64-linux";
     darwinSystem = "aarch64-darwin";
+    overlays = [ (import ./overlays.nix) ];
   in
   {
     nixosConfigurations = {
@@ -38,6 +39,7 @@
         system = linuxSystem;
         specialArgs = { inherit username email; };
         modules = [
+          { nixpkgs.overlays = overlays; }
           sops-nix.nixosModules.sops
           ./hosts/homelab
           home-manager.nixosModules.home-manager
@@ -54,6 +56,7 @@
         system = linuxSystem;
         specialArgs = { inherit username email; };
         modules = [
+          { nixpkgs.overlays = overlays; }
           ./hosts/workstation
           home-manager.nixosModules.home-manager
           {
@@ -70,6 +73,7 @@
       system = darwinSystem;
       specialArgs = { inherit username email; };
       modules = [
+        { nixpkgs.overlays = overlays; }
         ./hosts/macbook
         home-manager.darwinModules.home-manager
         {

@@ -23,6 +23,8 @@
     devenv
     hueadm
     heroic
+    lutris
+    bottles
   ];
 
   home.pointerCursor.size = 36;

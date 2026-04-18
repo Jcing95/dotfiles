@@ -13,6 +13,7 @@
     os-gc = "sudo nix-env --delete-generations old && nix-collect-garbage -d";
     config = "nvim $DOTFILES";
     secrets = "sudo -E sops";
+    k = "kubectl";
   };
 
   home.file.".config/wezterm".source = ../../wezterm;
