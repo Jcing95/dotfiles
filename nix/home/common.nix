@@ -33,8 +33,10 @@
     '';
 
     shellAliases = {
-      ll = "ls -la";
-      la = "ls -la";
+      cat = "bat";
+      ls = "eza --icons";
+      ll = "eza -lah --icons --git";
+      la = "eza -lah --icons --git";
       ws = "cd ~/workspace/";
       ":q" = "exit";
       q = "exit";
@@ -70,6 +72,23 @@
       push.autoSetupRemote = true;
       pull.rebase = true;
     };
+  };
+
+  programs.bat.enable = true;
+
+  programs.eza = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.tmux = {
+    enable = true;
+    terminal = "tmux-256color";
+    historyLimit = 10000;
+    escapeTime = 0;
+    mouse = true;
+    keyMode = "vi";
+    baseIndex = 1;
   };
 
   programs.zoxide = {

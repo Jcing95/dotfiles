@@ -24,7 +24,7 @@
           { domain = "radarr.jcing.de";       answer = "192.168.0.121"; enabled = true; }
           { domain = "prowlarr.jcing.de";     answer = "192.168.0.121"; enabled = true; }
           { domain = "bazarr.jcing.de";       answer = "192.168.0.121"; enabled = true; }
-          { domain = "jellyseerr.jcing.de";   answer = "192.168.0.121"; enabled = true; }
+          { domain = "seerr.jcing.de";        answer = "192.168.0.121"; enabled = true; }
           { domain = "torrent.jcing.de";      answer = "192.168.0.121"; enabled = true; }
           { domain = "flaresolverr.jcing.de"; answer = "192.168.0.121"; enabled = true; }
           { domain = "homepage.jcing.de";     answer = "192.168.0.121"; enabled = true; }

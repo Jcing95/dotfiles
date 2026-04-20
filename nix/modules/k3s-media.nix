@@ -96,6 +96,8 @@ in
     "Z /mnt/storage/media/downloads 0755 ${puid} ${pgid} -"
     "d /mnt/storage/k3s/config/torrent 0755 ${puid} ${pgid} -"
     "Z /mnt/storage/k3s/config/torrent 0755 ${puid} ${pgid} -"
+    "d /mnt/storage/k3s/config/seerr 0755 ${puid} ${pgid} -"
+    "Z /mnt/storage/k3s/config/seerr 0755 ${puid} ${pgid} -"
   ];
 
   services.k3s.manifests = {
@@ -327,9 +329,9 @@ in
 
     bazarr-svc.content = mkService "bazarr" 6767;
 
-    # ── Jellyseerr ─────────────────────────────────────────────────────────────
-    jellyseerr.content = mkDeployment {
-      name = "jellyseerr";
+    # ── Seerr ─────────────────────────────────────────────────────────────
+    seerr.content = mkDeployment {
+      name = "seerr";
       image = "ghcr.io/seerr-team/seerr:v3.2.0";
       env = [{ name = "LOG_LEVEL"; value = "debug"; }];
       ports = [{ containerPort = 5055; }];
@@ -341,10 +343,10 @@ in
       };
       securityContext.allowPrivilegeEscalation = false;
       volumeMounts = [(mount "config" "/app/config")];
-      volumes = [(hostVol "config" "/mnt/storage/k3s/config/jellyseerr")];
+      volumes = [(hostVol "config" "/mnt/storage/k3s/config/seerr")];
     };
 
-    jellyseerr-svc.content = mkService "jellyseerr" 5055;
+    seerr-svc.content = mkService "seerr" 5055;
 
     # ── Flaresolverr ───────────────────────────────────────────────────────────
     flaresolverr.content = mkDeployment {
@@ -382,9 +384,9 @@ in
                   href: http://jellyfin.jcing.de
                   icon: jellyfin.png
                   description: Media server
-              - Jellyseerr:
-                  href: http://jellyseerr.jcing.de
-                  icon: jellyseerr.png
+              - Seerr:
+                  href: http://seerr.jcing.de
+                  icon: overseerr.png
                   description: Media requests
           - Management:
               - Sonarr:
@@ -507,7 +509,7 @@ in
         { name = "radarr";       port = 7878; }
         { name = "prowlarr";     port = 9696; }
         { name = "bazarr";       port = 6767; }
-        { name = "jellyseerr";   port = 5055; }
+        { name = "seerr";         port = 5055; }
         { name = "torrent";      port = 8080; }
         { name = "flaresolverr"; port = 8191; }
         { name = "homepage";     port = 3000; }
