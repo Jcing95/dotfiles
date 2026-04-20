@@ -1,8 +1,9 @@
 # Home Manager configuration for macbook
-{ pkgs, username, omsSrc, ... }:
+{ config, pkgs, username, omsSrc, ... }:
 
 let
   oms = pkgs.callPackage ../pkgs/oms.nix { src = omsSrc; };
+  dotfiles = "${config.home.homeDirectory}/dotfiles";
 
   sketchybarConfig = pkgs.stdenvNoCC.mkDerivation {
     name = "sketchybar-config";
@@ -32,9 +33,9 @@ in
     cloudflared
   ];
 
-  # Dotfile symlinks
-  home.file.".config/wezterm".source = ../../wezterm;
-  home.file.".config/nvim".source = ../../lazyvim;
+  # Dotfile symlinks (out-of-store so changes are reflected immediately)
+  home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/wezterm";
+  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/lazyvim";
 
   # Sketchybar config (deployed with executable permissions)
   home.file.".config/sketchybar".source = sketchybarConfig;

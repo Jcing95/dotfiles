@@ -1,6 +1,9 @@
 # Home Manager configuration for workstation
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
+let
+  dotfiles = "${config.home.homeDirectory}/dotfiles";
+in
 {
   imports = [
     ./linux.nix
@@ -8,7 +11,7 @@
 
   # Nextcloud needs a writable config file, not a nix store symlink
   home.file.".config/Nextcloud/nextcloud.cfg".text = builtins.readFile ../../nextcloud.cfg;
-  home.file.".config/hypr/host.conf".source = ../../hypr/workstation.conf;
+  home.file.".config/hypr/host.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/workstation.conf";
 
   home.packages = with pkgs; [
     brave

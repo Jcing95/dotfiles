@@ -1,6 +1,9 @@
 # Shared Home Manager configuration for Linux desktops
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
+let
+  dotfiles = "${config.home.homeDirectory}/dotfiles";
+in
 {
   imports = [
     ./common.nix
@@ -16,12 +19,13 @@
     k = "kubectl";
   };
 
-  home.file.".config/wezterm".source = ../../wezterm;
-  home.file.".config/nvim".source = ../../lazyvim;
-  home.file.".config/waybar".source = ../../waybar;
-  home.file.".config/hypr/hyprland.conf".source = ../../hypr/common.conf;
-  home.file.".config/hypr/hyprlock.conf".source = ../../hypr/hyprlock.conf;
-  home.file.".config/hypr/hypridle.conf".source = ../../hypr/hypridle.conf;
+  # Dotfile symlinks (out-of-store so changes are reflected immediately)
+  home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/wezterm";
+  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/lazyvim";
+  home.file.".config/waybar".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/waybar";
+  home.file.".config/hypr/hyprland.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/common.conf";
+  home.file.".config/hypr/hyprlock.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hyprlock.conf";
+  home.file.".config/hypr/hypridle.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hypridle.conf";
 
   home.pointerCursor = {
     name = "Nordzy-cursors";

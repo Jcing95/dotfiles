@@ -1,6 +1,9 @@
 # Home Manager configuration for homelab
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
+let
+  dotfiles = "${config.home.homeDirectory}/dotfiles";
+in
 {
   imports = [
     ./linux.nix
@@ -13,7 +16,7 @@
 
   home.sessionVariables.KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
 
-  home.file.".config/hypr/host.conf".source = ../../hypr/homelab.conf;
+  home.file.".config/hypr/host.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/homelab.conf";
 
   home.packages = with pkgs; [
     brave

@@ -9,10 +9,10 @@ buildGoModule {
 
   # Relax Go version requirement when nixpkgs is slightly behind
   preBuild = ''
-    substituteInPlace go.mod --replace-fail "go 1.26.2" "go 1.26.1"
+    sed -i 's/^go [0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?$/go 1.26.1/' go.mod
   '';
 
-  vendorHash = "sha256-7Pm24VHj9UgcK4pxEysfqeKOAMXzKKbnxMCf4ST4D1g=";
+  vendorHash = "sha256-3jl+VfqxOtPk/xWuAlOthdMminos2X/4FBpLJ3i/lFs=";
 
   ldflags = let pkg = "github.com/codesphere-cloud/oms/internal/version"; in [
     "-X ${pkg}.version=${src.shortRev or "unstable"}"
