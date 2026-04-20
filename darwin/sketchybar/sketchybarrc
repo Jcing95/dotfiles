@@ -27,7 +27,8 @@ sketchybar --default \
   label.padding_right=6 \
   background.color=0x00000000 \
   background.corner_radius=10 \
-  background.height=40
+  background.height=40 \
+  background.padding_right=5
 
 # ── Custom events ────────────────────────────────────────────────────
 sketchybar --add event aerospace_workspace_change
@@ -36,118 +37,119 @@ sketchybar --add event aerospace_workspace_change
 for sid in $(seq 1 9); do
   sketchybar --add item space.$sid left \
     --set space.$sid \
-      icon="$sid" \
-      icon.font="$FONT:Regular:13.0" \
-      icon.padding_left=10 \
-      icon.padding_right=10 \
-      icon.color=0xFF888888 \
-      label.drawing=off \
-      background.color=0x00000000 \
-      background.height=40 \
-      background.corner_radius=0 \
-      click_script="aerospace workspace $sid"
+    icon="$sid" \
+    icon.font="$FONT:Regular:13.0" \
+    icon.padding_left=10 \
+    icon.padding_right=10 \
+    icon.color=0xFF888888 \
+    label.drawing=off \
+    background.color=0x00000000 \
+    background.height=40 \
+    background.corner_radius=0 \
+    click_script="aerospace workspace $sid"
 done
 
 # Single handler for all space updates (avoids 9x redundant runs)
 sketchybar --add item space_updater left \
   --set space_updater \
-    drawing=off \
-    update_freq=5 \
-    script="$PLUGIN_DIR/aerospace_spaces.sh" \
+  drawing=off \
+  update_freq=5 \
+  script="$PLUGIN_DIR/aerospace_spaces.sh" \
   --subscribe space_updater aerospace_workspace_change front_app_switched
 
 # ── Indicator spacer (mic/cam/capture dot) ───────────────────────────
 sketchybar --add item indicator_spacer right \
   --set indicator_spacer \
-    icon.drawing=off \
-    label.drawing=off \
-    width=15 \
-    background.color=0x80104f14 \
-    background.border_width=2 \
-    background.border_color=0xFF167c1c \
-    background.corner_radius=5 \
-    background.height=20 \
-    background.y_offset=10
+  icon.drawing=off \
+  label.drawing=off \
+  width=15 \
+  padding_left=10 \
+  background.color=0x80104f14 \
+  background.border_width=2 \
+  background.border_color=0xFF167c1c \
+  background.corner_radius=10 \
+  background.height=15 \
+  background.y_offset=4
 
 # ── Battery ──────────────────────────────────────────────────────────
 sketchybar --add item battery right \
   --set battery \
-    update_freq=60 \
-    icon.padding_left=10 \
-    label.padding_right=6 \
-    script="$PLUGIN_DIR/battery.sh" \
+  update_freq=60 \
+  icon.padding_left=10 \
+  label.padding_right=6 \
+  script="$PLUGIN_DIR/battery.sh" \
   --subscribe battery routine power_source_change system_woke
 
 # ── WiFi ─────────────────────────────────────────────────────────────
 sketchybar --add item wifi right \
   --set wifi \
-    update_freq=10 \
-    icon.font="$FONT:Light:15.0" \
-    icon.padding_left=10 \
-    icon.padding_right=10 \
-    label.drawing=off \
-    script="$PLUGIN_DIR/wifi.sh" \
+  update_freq=10 \
+  icon.font="$FONT:Light:15.0" \
+  icon.padding_left=10 \
+  icon.padding_right=10 \
+  label.drawing=off \
+  script="$PLUGIN_DIR/wifi.sh" \
   --subscribe wifi wifi_change system_woke
 
 # ── Date (left of notch) ────────────────────────────────────────────
 sketchybar --add item date q \
   --set date \
-    update_freq=60 \
-    icon.drawing=off \
-    label.font="$FONT:Regular:13.0" \
-    label.padding_left=10 \
-    padding_right=10 \
-    script="$PLUGIN_DIR/date.sh" \
+  update_freq=60 \
+  icon.drawing=off \
+  label.font="$FONT:Regular:13.0" \
+  label.padding_left=10 \
+  padding_right=10 \
+  script="$PLUGIN_DIR/date.sh" \
   --subscribe date routine system_woke
 
 # ── Notch spacer ────────────────────────────────────────────────────
 sketchybar --add item notch center \
   --set notch \
-    display=main \
-    icon.drawing=off \
-    label.drawing=off \
-    background.border_width=2 \
-    background.corner_radius=8 \
-    background.border_color=0xFF167c1c \
-    width=212
+  display=main \
+  icon.drawing=off \
+  label.drawing=off \
+  background.border_width=2 \
+  background.corner_radius=8 \
+  background.border_color=0xFF167c1c \
+  width=212
 
 # ── Clock (right of notch) ──────────────────────────────────────────
 sketchybar --add item clock e \
   --set clock \
-    update_freq=10 \
-    icon.drawing=off \
-    label.font="$FONT:Regular:13.0" \
-    label.padding_right=10 \
-    padding_left=10 \
-    script="$PLUGIN_DIR/clock.sh" \
+  update_freq=10 \
+  icon.drawing=off \
+  label.font="$FONT:Regular:13.0" \
+  label.padding_right=10 \
+  padding_left=10 \
+  script="$PLUGIN_DIR/clock.sh" \
   --subscribe clock routine system_woke
 
 # ── Brackets ─────────────────────────────────────────────────────────
 sketchybar --add bracket notch_group date notch clock \
   --set notch_group \
-    background.border_width=2 \
-    background.corner_radius=10 \
-    background.border_color=0xFF167c1c \
-    background.color=0x80104f14 \
-    background.height=40
+  background.border_width=2 \
+  background.corner_radius=10 \
+  background.border_color=0xFF167c1c \
+  background.color=0x80104f14 \
+  background.height=40
 
 sketchybar --add bracket spaces_group \
-    space.1 space.2 space.3 space.4 space.5 \
-    space.6 space.7 space.8 space.9 \
+  space.1 space.2 space.3 space.4 space.5 \
+  space.6 space.7 space.8 space.9 \
   --set spaces_group \
-    background.border_width=2 \
-    background.corner_radius=10 \
-    background.border_color=0xFF167c1c \
-    background.color=0x80104f14 \
-    background.height=40
+  background.border_width=2 \
+  background.corner_radius=10 \
+  background.border_color=0xFF167c1c \
+  background.color=0x80104f14 \
+  background.height=40
 
 sketchybar --add bracket right_group wifi battery \
   --set right_group \
-    background.border_width=2 \
-    background.corner_radius=10 \
-    background.border_color=0xFF167c1c \
-    background.color=0x80104f14 \
-    background.height=40
+  background.border_width=2 \
+  background.corner_radius=10 \
+  background.border_color=0xFF167c1c \
+  background.color=0x80104f14 \
+  background.height=40
 
 # ── Force initial update ─────────────────────────────────────────────
 sketchybar --update
