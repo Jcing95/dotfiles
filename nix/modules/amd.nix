@@ -15,9 +15,14 @@
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
-    extraPackages = with pkgs; [
-    ];
   };
+
+  environment.systemPackages = with pkgs; [
+    wine
+    winetricks
+    vulkan-loader
+  ];
+
   hardware.amdgpu.overdrive.enable = true;
 
   programs.corectrl = {

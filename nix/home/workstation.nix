@@ -25,6 +25,7 @@
     heroic
     lutris
     bottles
+    umu-launcher
   ];
 
   home.pointerCursor.size = 36;
