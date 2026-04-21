@@ -43,6 +43,7 @@
       cc = "clear && clear";
       src = "source ~/.zshrc";
       update = "nix flake update --flake $DOTFILES/nix";
+      k = "kubectl";
     };
   };
 

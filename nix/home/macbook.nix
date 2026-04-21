@@ -50,7 +50,6 @@ in
   };
 
   programs.zsh.shellAliases = {
-    k = "kubectl";
     cs = "cd ~/workspace/codesphere-monorepo";
     csp = "cd ~/workspace/codesphere-monorepo/packages";
     wsp = "cd ~/workspace/private/";

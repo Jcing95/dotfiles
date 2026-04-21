@@ -3,7 +3,7 @@
 
 let
   # TODO: Update this to your private repo URL
-  argocdRepoUrl = "git@github.com:Jcing/homelab-charts.git";
+  argocdRepoUrl = "git@github.com:Jcing95/homelab-charts.git";
 in
 {
   services.k3s = {
@@ -54,8 +54,7 @@ in
               type: ClusterIP
             ingress:
               enabled: true
-              hosts:
-                - argocd.jcing.de
+              hostname: argocd.jcing.de
               annotations:
                 traefik.ingress.kubernetes.io/router.entrypoints: web
           configs:
@@ -81,20 +80,15 @@ in
       sleep 10
 
       # Create repo credentials secret (SSH deploy key from sops)
-      kubectl -n argocd apply -f - <<YAML
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: homelab-charts-repo
-        namespace: argocd
-        labels:
-          argocd.argoproj.io/secret-type: repository
-      stringData:
-        type: git
-        url: "${argocdRepoUrl}"
-        sshPrivateKey: |
-          $(cat ${config.sops.secrets."argocd/ssh-deploy-key".path})
-      YAML
+      # Use kubectl create secret to avoid YAML parsing issues with SSH key delimiters
+      kubectl create secret generic homelab-charts-repo \
+        --namespace=argocd \
+        --from-literal=type=git \
+        --from-literal=url="${argocdRepoUrl}" \
+        --from-file=sshPrivateKey=${config.sops.secrets."argocd/ssh-deploy-key".path} \
+        --dry-run=client -o yaml \
+        | kubectl label --local -f - argocd.argoproj.io/secret-type=repository -o yaml \
+        | kubectl apply -f -
 
       # Apply the root app-of-apps Application
       kubectl apply -f - <<YAML
