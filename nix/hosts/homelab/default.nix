@@ -12,7 +12,7 @@
     ../../modules/sops.nix
     ../../modules/adguardhome.nix
     ../../modules/k3s.nix
-    ../../modules/k3s-media.nix
+    ../../modules/k3s-storage.nix
   ];
 
   networking.hostName = "homelab";

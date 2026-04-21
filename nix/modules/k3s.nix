@@ -1,6 +1,10 @@
-# k3s single-node cluster infrastructure
+# k3s single-node cluster infrastructure + ArgoCD bootstrap
 { config, pkgs, lib, ... }:
 
+let
+  # TODO: Update this to your private repo URL
+  argocdRepoUrl = "git@github.com:Jcing/homelab-charts.git";
+in
 {
   services.k3s = {
     enable = true;
@@ -24,29 +28,105 @@
 
   networking.firewall.allowedTCPPorts = [ 80 443 8096 ];
 
-  # Storage directory structure for all services
-  systemd.tmpfiles.rules = [
-    "d /mnt/storage/media 0775 root root -"
-    "d /mnt/storage/media/movies 0775 root root -"
-    "d /mnt/storage/media/tv 0775 root root -"
-    "d /mnt/storage/media/downloads 0775 root root -"
-    "d /mnt/storage/media/downloads/complete 0775 root root -"
-    "d /mnt/storage/media/downloads/incomplete 0775 root root -"
-    "d /mnt/storage/k3s 0755 root root -"
-    "d /mnt/storage/k3s/config 0755 root root -"
-    "d /mnt/storage/k3s/config/jellyfin 0755 root root -"
-    "d /mnt/storage/k3s/config/sonarr 0755 root root -"
-    "d /mnt/storage/k3s/config/radarr 0755 root root -"
-    "d /mnt/storage/k3s/config/prowlarr 0755 root root -"
-    "d /mnt/storage/k3s/config/bazarr 0755 root root -"
-    "d /mnt/storage/k3s/config/torrent 0755 root root -"
-    "d /mnt/storage/k3s/config/gluetun 0755 root root -"
-    "d /mnt/storage/k3s/config/seerr 0755 root root -"
-    "d /mnt/storage/k3s/config/flaresolverr 0755 root root -"
-    "d /mnt/storage/k3s/config/homepage 0755 root root -"
-  ];
+  # ── ArgoCD installation via k3s built-in Helm controller ──────────────────
+  services.k3s.manifests = {
+    argocd-namespace.content = {
+      apiVersion = "v1";
+      kind = "Namespace";
+      metadata.name = "argocd";
+    };
 
-  # Bridge sops-decrypted secrets into Kubernetes after k3s starts
+    argocd-install.content = {
+      apiVersion = "helm.cattle.io/v1";
+      kind = "HelmChart";
+      metadata = {
+        name = "argocd";
+        namespace = "kube-system";
+      };
+      spec = {
+        repo = "https://argoproj.github.io/argo-helm";
+        chart = "argo-cd";
+        targetNamespace = "argocd";
+        createNamespace = true;
+        valuesContent = ''
+          server:
+            service:
+              type: ClusterIP
+            ingress:
+              enabled: true
+              hosts:
+                - argocd.jcing.de
+              annotations:
+                traefik.ingress.kubernetes.io/router.entrypoints: web
+          configs:
+            params:
+              server.insecure: true
+        '';
+      };
+    };
+  };
+
+  # ── Bootstrap ArgoCD root application after CRD is available ────────────
+  systemd.services.k3s-bootstrap-argocd = {
+    description = "Bootstrap ArgoCD root application";
+    after = [ "k3s.service" ];
+    wants = [ "k3s.service" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.kubectl ];
+    script = ''
+      export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+      # Wait for ArgoCD Application CRD to be registered
+      until kubectl get crd applications.argoproj.io 2>/dev/null; do sleep 5; done
+      sleep 10
+
+      # Create repo credentials secret (SSH deploy key from sops)
+      kubectl -n argocd apply -f - <<YAML
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: homelab-charts-repo
+        namespace: argocd
+        labels:
+          argocd.argoproj.io/secret-type: repository
+      stringData:
+        type: git
+        url: "${argocdRepoUrl}"
+        sshPrivateKey: |
+          $(cat ${config.sops.secrets."argocd/ssh-deploy-key".path})
+      YAML
+
+      # Apply the root app-of-apps Application
+      kubectl apply -f - <<YAML
+      apiVersion: argoproj.io/v1alpha1
+      kind: Application
+      metadata:
+        name: homelab-root
+        namespace: argocd
+      spec:
+        project: default
+        source:
+          repoURL: "${argocdRepoUrl}"
+          targetRevision: main
+          path: apps
+        destination:
+          server: https://kubernetes.default.svc
+          namespace: argocd
+        syncPolicy:
+          automated:
+            prune: true
+            selfHeal: true
+          syncOptions:
+            - CreateNamespace=true
+      YAML
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+  };
+
+  # ── Bridge sops-decrypted secrets into Kubernetes ─────────────────────────
   systemd.services.k3s-create-secrets = {
     description = "Create Kubernetes secrets from sops-decrypted files";
     after = [ "k3s.service" "sops-nix.service" ];

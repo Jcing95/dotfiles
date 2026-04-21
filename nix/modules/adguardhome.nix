@@ -29,6 +29,7 @@
           { domain = "flaresolverr.jcing.de"; answer = "192.168.0.121"; enabled = true; }
           { domain = "homepage.jcing.de";     answer = "192.168.0.121"; enabled = true; }
           { domain = "adguard.jcing.de";      answer = "192.168.0.121"; enabled = true; }
+          { domain = "argocd.jcing.de";      answer = "192.168.0.121"; enabled = true; }
         ];
       };
     };
