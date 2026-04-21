@@ -1,22 +1,32 @@
 * {
     font-family: "FiraCode Nerd Font", sans-serif;
+    font-weight: 300;
     font-size: 2rem;
 }
 
 window#waybar {
-    background-color: rgba(16, 79, 20, 0.5);
-    border-bottom: .2rem solid rgba(22, 112, 28, 0.5);
+    background-color: transparent;
     color: #ffffff;
-    transition-property: background-color;
-    transition-duration: .5s;
 }
 
 window#waybar.hidden {
     opacity: 0.2;
 }
 
+/* ── Module group containers (sketchybar "brackets") ─────────────── */
+.modules-left,
+.modules-center,
+.modules-right {
+    background-color: rgba(16, 79, 20, 0.5);
+    border: 2px solid #167c1c;
+    border-radius: 10px;
+    margin: 2px 4px;
+    padding: 0 4px;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────── */
 button {
-    box-shadow: inset 0 -.2rem transparent;
+    box-shadow: inset 0 -2px transparent;
     border: none;
     border-radius: 0;
 }
@@ -26,19 +36,21 @@ button:hover {
     box-shadow: inset 0 -3px #ffffff;
 }
 
-/* Workspaces */
+/* ── Workspaces ──────────────────────────────────────────────────── */
 #workspaces button {
-    padding: 0 5px;
+    padding: 0 8px;
     background-color: transparent;
-    color: #ffffff;
+    color: #888888;
 }
 
 #workspaces button:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
 }
 
 #workspaces button.focused,
 #workspaces button.active {
+    color: #ffffff;
     background-color: rgba(255, 255, 255, 0.15);
     box-shadow: inset 0 -3px #ffffff;
 }
@@ -47,45 +59,31 @@ button:hover {
     background-color: #eb4d4b;
 }
 
-/* Spacing for window title and workspaces */
 #window,
 #workspaces {
     margin: 0 4px;
 }
 
-.modules-left > widget:first-child > #workspaces {
-    margin-left: 0;
+/* ── Clock ───────────────────────────────────────────────────────── */
+#clock {
+    font-weight: 400;
+    padding: 0 10px;
 }
 
-
-
-.modules-right widget {
-  background-color: rgba(0,0,0,0.1);
-  color: #ffffff;
-  padding: 0 0.1rem;
-  margin: 0;
-}
-
-.modules-right widget:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-
-#idle_inhibitor {
-  padding-right: 1.5rem;
-  padding-left: 0.5rem;
-}
-
+/* ── Right-side modules ──────────────────────────────────────────── */
 #cpu,
 #memory,
 #temperature,
 #backlight,
 #pulseaudio,
 #network,
-#battery {
-    padding-right: 1rem;
+#battery,
+#tray,
+#idle_inhibitor {
+    padding: 0 1rem;
 }
 
-/* Battery states */
+/* ── Status colors ───────────────────────────────────────────────── */
 #battery.charging,
 #battery.plugged {
     color: #26A65B;

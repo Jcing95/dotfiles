@@ -1,8 +1,8 @@
-// ~/.config/waybar/config.jsonc
+// ~/.config/waybar/config-homelab.jsonc
 {
     "layer": "top",
     "position": "top",
-    "height": 48,
+    "height": 30,
     "spacing": 4,
 
     "modules-left": [
@@ -15,9 +15,7 @@
         "cpu",
         "memory",
         "temperature",
-        "backlight",
         "pulseaudio",
-        "battery",
         "network",
         "tray",
         "idle_inhibitor"
@@ -35,20 +33,20 @@
     },
 
     "tray": {
-        "icon-size": 28,
-        "spacing": 10
+        "icon-size": 16,
+        "spacing": 8
     },
 
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "",
-            "deactivated": ""
+            "activated": "",
+            "deactivated": ""
         }
     },
 
     "pulseaudio": {
-        "format": "{volume}% {icon}",
+        "format": "{volume}% {icon}",
         "format-muted": " muted",
         "format-icons": {
             "headphone": "󰋋",
@@ -58,7 +56,7 @@
     },
 
     "network": {
-        "format-wifi": "{essid} ({signalStrength}%) {icon}",
+        "format-wifi": "{essid} ({signalStrength}%) {icon}",
         "format-ethernet": "{ipaddr}/{cidr} ",
         "format-disconnected": "Disconnected ⚠",
         "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
@@ -67,33 +65,17 @@
     },
 
     "cpu": {
-        "format": "{usage}% ",
+        "format": "{usage}% ",
         "tooltip": true
     },
 
     "memory": {
-        "format": "{}% "
+        "format": "{}% "
     },
 
     "temperature": {
         "critical-threshold": 80,
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
-    },
-
-    "backlight": {
-        "format": "{percent}% {icon}",
-        "format-icons": ["󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󱩕", "󰛨"]
-    },
-
-    "battery": {
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% {icon}",
-        "format-plugged": "{capacity}% {icon}",
-        "format-icons": ["", "", "", "", ""]
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
     }
 }
