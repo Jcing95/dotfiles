@@ -33,7 +33,6 @@
     '';
 
     shellAliases = {
-      cat = "bat";
       ls = "eza --icons";
       ll = "eza -lah --icons --git";
       la = "eza -lah --icons --git";
