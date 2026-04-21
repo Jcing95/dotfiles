@@ -1,0 +1,84 @@
+[global]
+    # ── Display ──────────────────────────────────────────────────────────
+    monitor = 0
+    follow = keyboard
+    origin = top-center
+    offset = 0x56
+    width = (400, 600)
+    height = 300
+    notification_limit = 5
+    indicate_hidden = yes
+
+    # ── Appearance ───────────────────────────────────────────────────────
+    font = FiraCode Nerd Font 16
+    corner_radius = 10
+    frame_width = 2
+    frame_color = "#167C1C"
+    separator_height = 2
+    separator_color = frame
+    gap_size = 4
+    transparency = 10
+    padding = 12
+    horizontal_padding = 16
+    text_icon_padding = 16
+
+    # ── Progress bar ─────────────────────────────────────────────────────
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+    progress_bar_max_width = 400
+    progress_bar_corner_radius = 5
+
+    # ── Text ─────────────────────────────────────────────────────────────
+    alignment = left
+    vertical_alignment = center
+    word_wrap = yes
+    ellipsize = middle
+    markup = full
+    format = "<b>%s</b>\n%b"
+    show_age_threshold = 60
+    ignore_newline = no
+    stack_duplicates = true
+    hide_duplicate_count = false
+    show_indicators = yes
+
+    # ── Icons ────────────────────────────────────────────────────────────
+    enable_recursive_icon_lookup = true
+    icon_theme = Papirus-Dark
+    icon_position = left
+    min_icon_size = 16
+    max_icon_size = 32
+
+    # ── Interaction ──────────────────────────────────────────────────────
+    mouse_left_click = do_action, close_current
+    mouse_middle_click = close_all
+    mouse_right_click = close_current
+
+    # ── History ──────────────────────────────────────────────────────────
+    sticky_history = yes
+    history_length = 20
+
+    # ── Misc ─────────────────────────────────────────────────────────────
+    sort = yes
+    idle_threshold = 120
+    layer = overlay
+    force_xwayland = false
+
+[urgency_low]
+    background = "#104F14CC"
+    foreground = "#888888"
+    frame_color = "#167C1C"
+    timeout = 5
+
+[urgency_normal]
+    background = "#104F14CC"
+    foreground = "#FFFFFF"
+    frame_color = "#167C1C"
+    timeout = 10
+
+[urgency_critical]
+    background = "#3D0A0ACC"
+    foreground = "#FFFFFF"
+    frame_color = "#f53c3c"
+    timeout = 0

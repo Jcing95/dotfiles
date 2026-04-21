@@ -26,6 +26,7 @@ in
   home.file.".config/hypr/hyprland.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/common.conf";
   home.file.".config/hypr/hyprlock.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hyprlock.conf";
   home.file.".config/hypr/hypridle.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hypridle.conf";
+  home.file.".config/dunst".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/dunst";
 
   home.pointerCursor = {
     name = "Nordzy-cursors";

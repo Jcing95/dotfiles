@@ -4,6 +4,8 @@
 {
   home.packages = with pkgs; [
     any-nix-shell
+    affine
+    btop
   ];
 
   home.sessionVariables = {
