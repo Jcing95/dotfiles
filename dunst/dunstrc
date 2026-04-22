@@ -2,10 +2,10 @@
     # ── Display ──────────────────────────────────────────────────────────
     monitor = 0
     follow = keyboard
-    origin = top-center
-    offset = 0x56
+    origin = top-left
+    offset = (24, 24)
     width = (400, 600)
-    height = 300
+    height = (0, 300)
     notification_limit = 5
     indicate_hidden = yes
 
