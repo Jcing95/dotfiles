@@ -6,6 +6,7 @@
     any-nix-shell
     affine
     btop
+    dust
   ];
 
   home.sessionVariables = {
