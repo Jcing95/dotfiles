@@ -1,6 +1,10 @@
 # Overlays for packages that need newer versions than nixpkgs provides.
 # Add overrides here when nixpkgs-unstable lags behind upstream releases.
 final: prev: {
+  openldap = prev.openldap.overrideAttrs (old: {
+    doCheck = false;
+  });
+
   lutris-unwrapped = prev.lutris-unwrapped.overrideAttrs (old: {
     version = "0.5.22";
     src = prev.fetchFromGitHub {

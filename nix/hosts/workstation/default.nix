@@ -9,6 +9,7 @@
     ../../modules/audio.nix
     ../../modules/amd.nix
     ../../modules/goxlr.nix
+    ../../modules/docker.nix
   ];
 
   networking.hostName = "workstation";

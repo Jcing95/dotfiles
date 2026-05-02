@@ -7,6 +7,7 @@
     affine
     btop
     dust
+    tldr
   ];
 
   home.sessionVariables = {
