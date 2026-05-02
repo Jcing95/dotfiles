@@ -59,18 +59,22 @@
       }
     },
     "oms": {
-      "flake": false,
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1777689058,
-        "narHash": "sha256-6fg6A9B9SC7pIUTvB4LGlSyJMwvxTvlvQYCz5hnMe9U=",
-        "owner": "codesphere-cloud",
-        "repo": "oms",
-        "rev": "56674a5e07066389820505ae4dc6b92b879274fc",
+        "lastModified": 1777739938,
+        "narHash": "sha256-m+zHkbxYDghzq5DZZWdtuVlks74+BWBotnP5m5AqspY=",
+        "owner": "jcing95",
+        "repo": "oms-nix",
+        "rev": "8da2e27be06e228de7a4aceac99a5954287b26ae",
         "type": "github"
       },
       "original": {
-        "owner": "codesphere-cloud",
-        "repo": "oms",
+        "owner": "jcing95",
+        "repo": "oms-nix",
         "type": "github"
       }
     },
