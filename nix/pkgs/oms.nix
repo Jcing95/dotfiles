@@ -12,7 +12,14 @@ buildGoModule {
     sed -i 's/^go [0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?$/go 1.26.1/' go.mod
   '';
 
-  vendorHash = "sha256-3jl+VfqxOtPk/xWuAlOthdMminos2X/4FBpLJ3i/lFs=";
+  overrideModAttrs = old: {
+    preBuild = (old.preBuild or "") + ''
+      sed -i 's/^go [0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?$/go 1.26.1/' go.mod
+      go mod tidy
+    '';
+  };
+
+  vendorHash = "sha256-VPKkmkDpI+QZjxakxE8hOfaFJaaj/FMgzYWkNX2Nrwo=";
 
   ldflags = let pkg = "github.com/codesphere-cloud/oms/internal/version"; in [
     "-X ${pkg}.version=${src.shortRev or "unstable"}"
