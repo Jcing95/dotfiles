@@ -15,8 +15,8 @@
     };
 
     oms = {
-      url = "github:codesphere-cloud/oms";
-      flake = false;
+      url = "github:jcing95/oms-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     sops-nix = {
@@ -31,7 +31,7 @@
     email = "dev@jcing.de";
     linuxSystem = "x86_64-linux";
     darwinSystem = "aarch64-darwin";
-    overlays = [ (import ./overlays.nix) ];
+    overlays = [ (import ./overlays.nix) oms.overlays.default ];
   in
   {
     nixosConfigurations = {
@@ -79,7 +79,7 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit username email; omsSrc = oms; };
+          home-manager.extraSpecialArgs = { inherit username email; };
           home-manager.users.${username} = import ./home/macbook.nix;
         }
       ];

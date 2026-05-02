@@ -1,8 +1,7 @@
 # Home Manager configuration for macbook
-{ config, pkgs, username, omsSrc, ... }:
+{ config, pkgs, username, ... }:
 
 let
-  oms = pkgs.callPackage ../pkgs/oms.nix { src = omsSrc; };
   dotfiles = "${config.home.homeDirectory}/dotfiles";
 
   sketchybarConfig = pkgs.stdenvNoCC.mkDerivation {
