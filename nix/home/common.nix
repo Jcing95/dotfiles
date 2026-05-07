@@ -9,6 +9,8 @@
     dust
     tldr
     opencode
+    claude-code
+    codex
   ];
 
   home.sessionVariables = {
