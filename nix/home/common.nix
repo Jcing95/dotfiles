@@ -8,6 +8,7 @@
     btop
     dust
     tldr
+    opencode
   ];
 
   home.sessionVariables = {
