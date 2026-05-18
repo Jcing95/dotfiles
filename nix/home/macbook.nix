@@ -46,6 +46,7 @@ in
 
   home.sessionVariables = {
     KUBE_EDITOR = "nvim";
+    CODESPHERE_DIRENV_AUTOSECRETS = "1";
   };
 
   programs.zsh.shellAliases = {

@@ -33,6 +33,7 @@
       "1password-cli"
       "dbeaver-community"
       "font-fira-code-nerd-font"
+      "gpg-suite"
       "postman"
       "visual-studio-code"
       "wezterm"
