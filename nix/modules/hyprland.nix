@@ -42,6 +42,11 @@
   services.greetd.enable = true;
 
   # Bluetooth
-  hardware.bluetooth.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings.General.JustWorksRepairing = "always";
+  };
   services.blueman.enable = true;
 }
+

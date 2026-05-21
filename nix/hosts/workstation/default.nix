@@ -10,6 +10,7 @@
     ../../modules/amd.nix
     ../../modules/goxlr.nix
     ../../modules/docker.nix
+    ../../modules/zmk.nix
   ];
 
   networking.hostName = "workstation";

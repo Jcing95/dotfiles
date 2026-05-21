@@ -5,7 +5,7 @@
 
   services.goxlr-utility = {
     enable = true;
-    autoStart.xdg = false;  # Disable XDG autostart, we use systemd instead
+    autoStart.xdg = true;  # Disable XDG autostart, we use systemd instead
   };
 
   systemd.user.services = {
