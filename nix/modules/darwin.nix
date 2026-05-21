@@ -118,6 +118,13 @@
           "64" = { enabled = false; };
           # Disable "Show Finder search window" (Opt+Cmd+Space)
           "65" = { enabled = false; };
+          # Disable default screenshot shortcuts
+          # "Save picture of screen as file" (Cmd+Shift+3)
+          "28" = { enabled = false; };
+          # "Copy picture of screen to clipboard" (Cmd+Shift+Ctrl+3)
+          "29" = { enabled = false; };
+          # "Save picture of selected area as file" (Cmd+Shift+4)
+          "30" = { enabled = false; };
           # Area screenshot to clipboard → Cmd+Shift+S
           "31" = {
             enabled = true;

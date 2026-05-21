@@ -11,6 +11,7 @@
     opencode
     claude-code
     codex
+    zmk-studio
   ];
 
   home.sessionVariables = {
@@ -37,6 +38,28 @@
 
     initContent = ''
       any-nix-shell zsh --info-right | source /dev/stdin
+
+      gwt() {
+        if [[ -z "$1" ]]; then
+          echo "Error: Please provide a branch name."
+          echo "Usage: gwt <branch-name>"
+          return 1
+        fi
+
+        local branch_name="$1"
+        local dir_name="''${branch_name##*/}"
+
+        if git show-ref --verify --quiet "refs/heads/$branch_name"; then
+          echo "Checking out local branch '$branch_name' into './$dir_name'..."
+          git worktree add "$dir_name" "$branch_name"
+        elif git show-ref --verify --quiet "refs/remotes/origin/$branch_name"; then
+          echo "Checking out remote branch 'origin/$branch_name' into './$dir_name'..."
+          git worktree add -b "$branch_name" "$dir_name" "origin/$branch_name"
+        else
+          echo "Creating entirely new branch '$branch_name' into './$dir_name'..."
+          git worktree add -b "$branch_name" "$dir_name"
+        fi
+      }
     '';
 
     shellAliases = {
