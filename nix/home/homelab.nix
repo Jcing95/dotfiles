@@ -16,7 +16,7 @@ in
 
   home.sessionVariables.KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
 
-  home.file.".config/hypr/host.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/homelab.conf";
+  home.file.".config/hypr/host.lua".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/homelab.lua";
 
   home.packages = with pkgs; [
     brave

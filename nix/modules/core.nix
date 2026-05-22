@@ -75,13 +75,6 @@
     home-manager
   ];
 
-  programs.neovim = {
-      enable = true;
-      defaultEditor = true;
-      vimAlias = true;
-      viAlias = true;
-  };
-
   # Common programs
   programs = {
     dconf.enable = true;

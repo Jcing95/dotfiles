@@ -5,6 +5,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/core.nix
+    ../../modules/neovim.nix
     ../../modules/desktop.nix
     ../../modules/audio.nix
     ../../modules/amd.nix

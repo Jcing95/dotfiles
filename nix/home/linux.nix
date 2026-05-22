@@ -23,9 +23,15 @@ in
   home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/wezterm";
   home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/lazyvim";
   home.file.".config/waybar".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/waybar";
-  home.file.".config/hypr/hyprland.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/common.conf";
-  home.file.".config/hypr/hyprlock.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hyprlock.conf";
-  home.file.".config/hypr/hypridle.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hypridle.conf";
+  home.file.".config/hypr/hyprland.lua".source   = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hyprland.lua";
+  home.file.".config/hypr/appearance.lua".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/appearance.lua";
+  home.file.".config/hypr/input.lua".source      = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/input.lua";
+  home.file.".config/hypr/devices.lua".source    = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/devices.lua";
+  home.file.".config/hypr/binds.lua".source      = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/binds.lua";
+  home.file.".config/hypr/rules.lua".source      = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/rules.lua";
+  home.file.".config/hypr/autostart.lua".source  = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/autostart.lua";
+  home.file.".config/hypr/hyprlock.conf".source  = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hyprlock.conf";
+  home.file.".config/hypr/hypridle.conf".source  = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hypridle.conf";
   home.file.".config/dunst".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/dunst";
 
   home.pointerCursor = {

@@ -11,7 +11,7 @@ in
 
   # Nextcloud needs a writable config file, not a nix store symlink
   home.file.".config/Nextcloud/nextcloud.cfg".text = builtins.readFile ../../nextcloud.cfg;
-  home.file.".config/hypr/host.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/workstation.conf";
+  home.file.".config/hypr/host.lua".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/workstation.lua";
 
   home.packages = with pkgs; [
     brave
@@ -29,6 +29,7 @@ in
     lutris
     bottles
     umu-launcher
+    cameractrls-gtk4
   ];
 
   home.pointerCursor.size = 36;
