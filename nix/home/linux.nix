@@ -8,7 +8,10 @@ in
   imports = [
     ./common.nix
   ];
-
+ 
+  home.packages = with pkgs; [
+    mgba
+  ];
   home.stateVersion = "25.05";
 
   programs.zsh.shellAliases = {
