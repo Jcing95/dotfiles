@@ -35,6 +35,7 @@ in
   home.file.".config/hypr/autostart.lua".source  = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/autostart.lua";
   home.file.".config/hypr/hyprlock.conf".source  = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hyprlock.conf";
   home.file.".config/hypr/hypridle.conf".source  = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hypridle.conf";
+  home.file.".config/hypr/scripts".source        = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/scripts";
   home.file.".config/dunst".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/dunst";
 
   home.pointerCursor = {
@@ -72,4 +73,6 @@ in
     platformTheme.name = "gtk";
     style.name = "adwaita-dark";
   };
+
+  services.hyprpolkitagent.enable = true;
 }

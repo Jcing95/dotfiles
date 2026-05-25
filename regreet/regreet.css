@@ -1,0 +1,65 @@
+* {
+  font-family: "FiraCode Nerd Font", sans-serif;
+  font-weight: 300;
+  color: #ffffff;
+}
+
+window {
+  background-color: #0a0f0a;
+}
+
+box.main, .background {
+  background-color: rgba(16, 79, 20, 0.5);
+  border: 2px solid #167c1c;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+label { color: #ffffff; }
+label.dim, label.subtitle { color: #888888; }
+
+entry {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 2px solid #167c1c;
+  border-radius: 10px;
+  padding: 6px 12px;
+  color: #ffffff;
+  caret-color: #14b81f;
+}
+
+entry:focus {
+  border-color: #33ccff;
+  box-shadow: inset 0 -3px #ffffff;
+}
+
+button {
+  background-color: transparent;
+  border: 2px solid #167c1c;
+  border-radius: 10px;
+  padding: 6px 14px;
+  color: #ffffff;
+  box-shadow: inset 0 -2px transparent;
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 -3px #ffffff;
+}
+
+button:active, button.suggested-action {
+  background-color: rgba(20, 184, 31, 0.2);
+  border-color: #14b81f;
+  color: #ffffff;
+}
+
+combobox, combobox > button {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 2px solid #167c1c;
+  border-radius: 10px;
+  color: #ffffff;
+}
+
+.error, label.error, infobar.error {
+  color: #ff6633;
+  border-color: #ff6633;
+}

@@ -1,5 +1,5 @@
 # Shared Hyprland desktop environment configuration
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 
 {
   # Desktop packages
@@ -10,7 +10,7 @@
     rofi
     waybar
     dunst
-    hyprpaper
+    awww
     hyprshot
     hypridle
     hyprlock
@@ -34,6 +34,11 @@
 
   # Hyprland
   programs.hyprland.enable = true;
+
+  # ydotool daemon — synthesizes real input events (mouse wheel, unicode typing)
+  # Used by Hyprland keybinds for scroll injection.
+  programs.ydotool.enable = true;
+  users.users.${username}.extraGroups = [ "ydotool" ];
 
   # Steam
   programs.steam.enable = true;

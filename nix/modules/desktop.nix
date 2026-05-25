@@ -10,11 +10,16 @@
     wlogout
   ];
 
-  # Display manager with themed tuigreet
-  services.greetd.settings = {
-    default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd start-hyprland -g 'Welcome in Jcingspace. Trying to enter the system...' -w 100 --theme 'button=red;text=green;time=red;action=red;container=black;input=red;border=green;prompt=green'";
-      user = "greeter";
+  # Display manager — regreet (GTK4 under cage), themed via regreet/regreet.css
+  programs.regreet = {
+    enable = true;
+    theme.name = "Adwaita-dark";
+    iconTheme.name = "Adwaita";
+    font = {
+      name = "FiraCode Nerd Font";
+      size = 14;
     };
+    extraCss = ../../regreet/regreet.css;
+    cageArgs = [ "-s" "-m" "last" ];
   };
 }

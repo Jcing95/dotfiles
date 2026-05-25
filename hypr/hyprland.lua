@@ -1,7 +1,7 @@
+require("host")
 require("appearance")
 require("input")
 require("devices")
 require("binds")
 require("rules")
 require("autostart")
-require("host")

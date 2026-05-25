@@ -6,11 +6,13 @@ hl.device({
 })
 
 hl.device({
-    name      = "corne-choc-pro-keyboard",
-    kb_layout = "us",
+    name       = "corne-choc-pro-keyboard",
+    kb_layout  = "us",
+    kb_options = "compose:ralt",
 })
 
 hl.device({
-    name      = "zmk-project-corne-choc-pro-keyboard",
-    kb_layout = "us",
+    name       = "zmk-project-corne-choc-pro-keyboard",
+    kb_layout  = "us",
+    kb_options = "compose:ralt",
 })
