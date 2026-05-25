@@ -6,7 +6,6 @@
   environment.systemPackages = with pkgs; [
     # Hyprland ecosystem
     wezterm
-    dmenu
     rofi
     waybar
     dunst
@@ -14,6 +13,7 @@
     hyprshot
     hypridle
     hyprlock
+    wlogout
     # Utilities
     networkmanagerapplet
     nwg-displays
@@ -22,8 +22,6 @@
     brightnessctl
     wl-clipboard
     pwvucontrol
-    gnome-keyring
-    polkit
     libnotify
   ];
 

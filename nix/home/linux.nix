@@ -34,7 +34,6 @@ in
   home.file.".config/hypr/rules.lua".source      = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/rules.lua";
   home.file.".config/hypr/autostart.lua".source  = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/autostart.lua";
   home.file.".config/hypr/hyprlock.conf".source  = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hyprlock.conf";
-  home.file.".config/hypr/hypridle.conf".source  = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hypridle.conf";
   home.file.".config/hypr/scripts".source        = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/scripts";
   home.file.".config/dunst".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/dunst";
 
@@ -75,4 +74,21 @@ in
   };
 
   services.hyprpolkitagent.enable = true;
+
+  # Dunst as a graphical-session systemd user unit (replaces autostart.lua entry).
+  # Manual unit instead of services.dunst: the existing ~/.config/dunst/dunstrc is
+  # symlinked out-of-store (line 36 above) and HM's dunst module would clobber it.
+  systemd.user.services.dunst = {
+    Unit = {
+      Description = "Dunst notification daemon";
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "dbus";
+      BusName = "org.freedesktop.Notifications";
+      ExecStart = "${pkgs.dunst}/bin/dunst";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
 }

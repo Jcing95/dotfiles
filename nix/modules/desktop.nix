@@ -4,12 +4,6 @@
 {
   imports = [ ./hyprland.nix ];
 
-  # Additional workstation packages
-  environment.systemPackages = with pkgs; [
-    hyprshutdown
-    wlogout
-  ];
-
   # Display manager — regreet (GTK4 under cage), themed via regreet/regreet.css
   programs.regreet = {
     enable = true;
