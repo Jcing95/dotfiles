@@ -12,6 +12,7 @@
     ../../modules/goxlr.nix
     ../../modules/docker.nix
     ../../modules/zmk.nix
+    ../../modules/webcam.nix
   ];
 
   networking.hostName = "workstation";
