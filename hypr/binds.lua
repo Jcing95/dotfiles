@@ -24,11 +24,30 @@ hl.bind(mainMod .. "+ SHIFT + U", resizePct(0, -5), { repeating = true })
 hl.bind(mainMod .. "+ SHIFT + I", resizePct(0, 5), { repeating = true })
 hl.bind(mainMod .. "+ SHIFT + O", resizePct(2.5, 0), { repeating = true })
 
--- Move window
-hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.move({ direction = "left" }))
-hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "down" }))
-hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "up" }))
-hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "right" }))
+-- Move active window: pixel nudge if floating (movewindow snaps to screen edge),
+-- directional swap if tiled.
+local floatStep = 100
+local function moveSmart(dir)
+    local d = ({
+        left  = { dx = -floatStep, dy = 0,          direction = "left"  },
+        right = { dx =  floatStep, dy = 0,          direction = "right" },
+        up    = { dx = 0,          dy = -floatStep, direction = "up"    },
+        down  = { dx = 0,          dy =  floatStep, direction = "down"  },
+    })[dir]
+    return function()
+        local win = hl.get_active_window()
+        if win and win.floating then
+            hl.dispatch(hl.dsp.window.move({ x = d.dx, y = d.dy, relative = true }))
+        else
+            hl.dispatch(hl.dsp.window.move({ direction = d.direction }))
+        end
+    end
+end
+
+hl.bind(mainMod .. " + SHIFT + H", moveSmart("left"),  { repeating = true })
+hl.bind(mainMod .. " + SHIFT + J", moveSmart("down"),  { repeating = true })
+hl.bind(mainMod .. " + SHIFT + K", moveSmart("up"),    { repeating = true })
+hl.bind(mainMod .. " + SHIFT + L", moveSmart("right"), { repeating = true })
 
 -- Apps + window actions
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))

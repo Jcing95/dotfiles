@@ -88,6 +88,13 @@
       enable = true;
       libraries = with pkgs; [
         stdenv.cc.cc
+        zlib
+        openssl
+        curl
+        icu
+        libxml2
+        libxcrypt
+        expat
       ];
     };
   };

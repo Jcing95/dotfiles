@@ -1,113 +1,109 @@
 // ~/.config/waybar/config.jsonc
 {
-    "layer": "top",
-    "position": "top",
-    "height": 48,
-    "spacing": 4,
+  "layer": "top",
+  "position": "top",
+  "height": 48,
+  "spacing": 4,
 
-    "modules-left": [
-        "hyprland/workspaces"
-    ],
-    "modules-center": [
-        "clock"
-    ],
-    "modules-right": [
-        "cpu",
-        "memory",
-        "temperature",
-        "backlight",
-        "pulseaudio",
-        "battery",
-        "bluetooth",
-        "network",
-        "tray",
-        "idle_inhibitor"
-    ],
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["clock"],
+  "modules-right": [
+    "cpu",
+    "memory",
+    "temperature",
+    "backlight",
+    "pulseaudio",
+    "battery",
+    "bluetooth",
+    "network",
+    "tray",
+    "idle_inhibitor"
+  ],
 
-    "hyprland/workspaces": {
-        "format": "{id}",
-        "on-click": "activate"
-    },
+  "hyprland/workspaces": {
+    "format": "{id}",
+    "on-click": "activate"
+  },
 
-    "clock": {
-        "format": "{:%d.%m - %H:%M}",
-        "format-alt": "{:%A, %B %d, %Y}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
-    },
+  "clock": {
+    "format": "{:%d.%m - %H:%M}",
+    "format-alt": "{:%A, %B %d, %Y}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+  },
 
-    "tray": {
-        "icon-size": 28,
-        "spacing": 10
-    },
+  "tray": {
+    "icon-size": 28,
+    "spacing": 10
+  },
 
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
-    },
-
-    "pulseaudio": {
-        "format": "{volume}% {icon}",
-        "format-muted": " muted",
-        "format-icons": {
-            "headphone": "󰋋",
-            "default": ["󰕿", "󰖀", "󰕾"]
-        },
-        "on-click": "pwvucontrol"
-    },
-
-    "network": {
-        "format-wifi": "{essid} ({signalStrength}%) {icon}",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "format-disconnected": "Disconnected ⚠",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
-        "on-click": "nm-connection-editor",
-        "format-icons": ["󰤯","󰤟","󰤢","󰤥","󰤨"]
-    },
-
-    "cpu": {
-        "format": "{usage}% ",
-        "tooltip": true
-    },
-
-    "memory": {
-        "format": "{}% "
-    },
-
-    "temperature": {
-        "critical-threshold": 80,
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
-    },
-
-    "backlight": {
-        "format": "{percent}% {icon}",
-        "format-icons": ["󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󱩕", "󰛨"]
-    },
-
-    "battery": {
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% {icon}",
-        "format-plugged": "{capacity}% {icon}",
-        "format-icons": ["", "", "", "", ""]
-    },
-
-    "bluetooth": {
-        "format": "",
-        "format-disabled": "󰂲",
-        "format-off": "󰂲",
-        "format-connected": "{num_connections 󰂰} ",
-        "format-connected-battery": "{device_battery_percentage} 󰂰%",
-        "tooltip-format": "{controller_alias}",
-        "tooltip-format-connected": "{controller_alias}\n\n{device_enumerate}",
-        "tooltip-format-enumerate-connected": "{device_alias}",
-        "tooltip-format-enumerate-connected-battery": "{device_alias} — {device_battery_percentage}%",
-        "on-click": "blueman-manager"
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
     }
+  },
+
+  "pulseaudio": {
+    "format": "{volume}% {icon}",
+    "format-muted": " muted",
+    "format-icons": {
+      "headphone": "󰋋",
+      "default": ["󰕿", "󰖀", "󰕾"]
+    },
+    "on-click": "pwvucontrol"
+  },
+
+  "network": {
+    "format-wifi": "{essid} ({signalStrength}%) {icon}",
+    "format-ethernet": "{ipaddr}/{cidr} ",
+    "format-disconnected": "Disconnected !",
+    "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+    "on-click": "nm-connection-editor",
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+  },
+
+  "cpu": {
+    "format": "{usage}% ",
+    "tooltip": true
+  },
+
+  "memory": {
+    "format": "{}% "
+  },
+
+  "temperature": {
+    "critical-threshold": 80,
+    "format": "{temperatureC}°C {icon}",
+    "format-icons": ["", "", ""]
+  },
+
+  "backlight": {
+    "format": "{percent}% {icon}",
+    "format-icons": ["󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󱩕", "󰛨"]
+  },
+
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{capacity}% {icon}",
+    "format-charging": "{capacity}% {icon}",
+    "format-plugged": "{capacity}% {icon}",
+    "format-icons": ["", "", "", "", ""]
+  },
+
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "󰂲",
+    "format-off": "󰂲",
+    "format-connected": "{num_connections} 󰂰",
+    "format-connected-battery": "{device_battery_percentage}% 󰂰",
+    "tooltip-format": "{controller_alias}",
+    "tooltip-format-connected": "{controller_alias}\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias} — {device_battery_percentage}%",
+    "on-click": "blueman-manager"
+  }
 }

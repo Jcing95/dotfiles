@@ -17,6 +17,7 @@
   home.sessionVariables = {
     DOTFILES = "$HOME/dotfiles";
     EDITOR = "nvim";
+    MANPAGER = "bat -l man -p";
   };
 
   programs.starship.enable = true;
@@ -28,16 +29,39 @@
     autosuggestion.enable = true;
 
     history = {
-      size = 10000;
-      save = 10000;
+      size = 100000;
+      save = 100000;
       path = "$HOME/.zsh_history";
       ignoreDups = true;
       ignoreAllDups = true;
       share = true;
     };
 
+    plugins = [
+      {
+        name = "zsh-history-substring-search";
+        src = pkgs.zsh-history-substring-search;
+        file = "share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh";
+      }
+    ];
+
     initContent = ''
       any-nix-shell zsh --info-right | source /dev/stdin
+
+      # History and shell behaviour
+      setopt HIST_IGNORE_SPACE HIST_EXPIRE_DUPS_FIRST HIST_FIND_NO_DUPS APPEND_HISTORY
+      setopt AUTOCD NOBEEP NUMERIC_GLOB_SORT
+
+      # Completion styling
+      zstyle ':completion:*' menu select
+      zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+      compdef eza=ls
+
+      # Keybindings
+      bindkey '^[[A' history-substring-search-up
+      bindkey '^[[B' history-substring-search-down
+      bindkey '^[[1;5C' forward-word
+      bindkey '^[[1;5D' backward-word
 
       gwt() {
         if [[ -z "$1" ]]; then
@@ -66,6 +90,7 @@
       ls = "eza --icons";
       ll = "eza -lah --icons --git";
       la = "eza -lah --icons --git";
+      tree = "eza --tree --icons";
       ws = "cd ~/workspace/";
       ":q" = "exit";
       q = "exit";
@@ -73,12 +98,28 @@
       src = "source ~/.zshrc";
       update = "nix flake update --flake $DOTFILES/nix";
       k = "kubectl";
+      vim = "nvim";
+      grep = "rg --color=auto";
+      "-" = "cd -";
+      glog = "PAGER='less -F -X' git log";
+      gadog = "PAGER='less -F -X' git log --all --decorate --oneline --graph";
     };
   };
+
+  programs.fd.enable = true;
 
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
+    defaultCommand = "fd --type f --hidden --strip-cwd-prefix";
+    defaultOptions = [
+      "--height=60%"
+      "--layout=reverse"
+      "--border=rounded"
+    ];
+    fileWidgetOptions = [
+      "--preview 'bat --color=always --style=plain,numbers --line-range=:500 {}'"
+    ];
   };
 
   programs.direnv = {
