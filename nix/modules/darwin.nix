@@ -1,5 +1,5 @@
 # Shared nix-darwin core settings
-{ pkgs, username, ... }:
+{ pkgs, lib, username, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -152,10 +152,14 @@
   };
 
   # macOS services
-  services.aerospace = {
-    enable = true;
-    settings = builtins.fromTOML (builtins.readFile ../../darwin/aerospace.toml);
-  };
+  # Aerospace config is symlinked from dotfiles via home-manager
+  # (see home/macbook.nix) so edits take effect without a rebuild.
+  services.aerospace.enable = true;
+  # The nix-darwin aerospace module always passes --config-path to a store-built
+  # config (even with no explicit settings, since submodule defaults make
+  # cfg.settings != {}). Point it at our home-manager symlink instead.
+  launchd.user.agents.aerospace.command = lib.mkForce
+    "${pkgs.aerospace}/Applications/AeroSpace.app/Contents/MacOS/AeroSpace --config-path /Users/${username}/.config/aerospace/aerospace.toml";
 
   services.jankyborders = {
     enable = true;
@@ -169,9 +173,13 @@
 
   services.sketchybar = {
     enable = true;
+    extraPackages = [ pkgs.lua5_5 ];
     config = ''
       #!/usr/bin/env bash
-      source "$HOME/.config/sketchybar/sketchybarrc"
+      export LUA_CPATH="${pkgs.sbarlua}/lib/lua/5.5/?.so;;"
+      export LUA_PATH="$HOME/.config/sketchybar/?.lua;$HOME/.config/sketchybar/?/init.lua;;"
+      cd "$HOME/.config/sketchybar"
+      exec ${pkgs.lua5_5}/bin/lua sketchybarrc
     '';
   };
 

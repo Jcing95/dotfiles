@@ -3,18 +3,6 @@
 
 let
   dotfiles = "${config.home.homeDirectory}/dotfiles";
-
-  sketchybarConfig = pkgs.stdenvNoCC.mkDerivation {
-    name = "sketchybar-config";
-    src = ../../darwin/sketchybar;
-    dontUnpack = true;
-    installPhase = ''
-      mkdir -p $out
-      cp -r $src/* $out/
-      find $out -name '*.sh' -exec chmod +x {} \;
-      chmod +x $out/sketchybarrc
-    '';
-  };
 in
 {
   imports = [
@@ -35,9 +23,12 @@ in
   # Dotfile symlinks (out-of-store so changes are reflected immediately)
   home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/wezterm";
   home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/lazyvim";
+  home.file.".config/aerospace/aerospace.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/darwin/aerospace.toml";
 
-  # Sketchybar config (deployed with executable permissions)
-  home.file.".config/sketchybar".source = sketchybarConfig;
+  # Sketchybar config (out-of-store symlink so .lua edits take effect on --reload, no rebuild needed)
+  home.file.".config/sketchybar".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/darwin/sketchybar";
 
   home.sessionPath = [
     "/opt/homebrew/opt/openjdk@21/bin"

@@ -1,0 +1,12 @@
+require("bar")
+require("default")
+
+require("items.spaces")
+require("items.indicator")
+require("items.right_spacer")
+require("items.battery")
+require("items.wifi")
+require("items.date")
+require("items.notch")
+require("items.clock")
+require("items.brackets")
