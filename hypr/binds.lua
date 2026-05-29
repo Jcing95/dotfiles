@@ -61,7 +61,7 @@ hl.bind(mainMod .. " + CTRL + N", hl.dsp.exec_cmd(browser .. " --profile-directo
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + V", hl.dsp.layout("togglesplit"))
-hl.bind(mainMod .. " + CTRL + L", hl.dsp.exec_cmd("hyprlock"))
+hl.bind(mainMod .. " + CTRL + L", hl.dsp.exec_cmd("loginctl lock-session"))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"))
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m output --clipboard-only"))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m window --clipboard-only"))
@@ -73,11 +73,11 @@ hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
 hl.bind(mainMod .. " + TAB", hl.dsp.window.cycle_next())
 
--- Workspaces 1-10 (switch + move active window)
+-- Workspaces 1-10 (switch + move active window) — CTRL to match aerospace
 for i = 1, 10 do
 	local key = i % 10 -- 10 → key 0
-	hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
-	hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
+	hl.bind("CTRL + " .. key, hl.dsp.focus({ workspace = i }))
+	hl.bind("CTRL + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
 
 -- Toggle laptop display

@@ -2,6 +2,9 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder()
 
+-- Don't proxy/override SSH_AUTH_SOCK; use the session's ssh-agent (gnome-keyring) directly.
+config.mux_enable_ssh_agent = false
+
 config.color_scheme = "Ayu Dark (Gogh)"
 config.window_close_confirmation = "NeverPrompt"
 config.default_cursor_style = "BlinkingBar"

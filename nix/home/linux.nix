@@ -14,6 +14,10 @@ in
   ];
   home.stateVersion = "25.05";
 
+  # Use the persistent gnome-keyring ssh-agent rather than wezterm's per-mux one,
+  # so a key added in one terminal is reachable everywhere (incl. the lock script).
+  home.sessionVariables.SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/gcr/ssh";
+
   programs.zsh.shellAliases = {
     rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#$(hostname)";
     os-gc = "sudo nix-env --delete-generations old && nix-collect-garbage -d";

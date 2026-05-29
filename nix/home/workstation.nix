@@ -41,7 +41,9 @@ in
   # doesn't activate. hypridle is started from hypr/autostart.lua instead.
   home.file.".config/hypr/hypridle.conf".text = ''
     general {
-      lock_cmd = pidof hyprlock || hyprlock
+      # Clear the ssh-agent on every lock (idle, sleep, manual all route here via
+      # loginctl lock-session) so the key passphrase must be re-entered after unlock.
+      lock_cmd = SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gcr/ssh ssh-add -D 2>/dev/null; pidof hyprlock || hyprlock
       before_sleep_cmd = loginctl lock-session
       after_sleep_cmd = hyprctl dispatch dpms on
     }
