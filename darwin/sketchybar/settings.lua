@@ -15,4 +15,6 @@ return {
     connected    = "󰖩",
     disconnected = "󰖪",
   },
+
+  github_icon = "",
 }

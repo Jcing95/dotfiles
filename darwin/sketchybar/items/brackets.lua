@@ -23,3 +23,7 @@ sbar.add("bracket", "spaces_group", spaces_members, {
 sbar.add("bracket", "right_group", { "wifi", "battery" }, {
 	background = frame,
 })
+
+sbar.add("bracket", "github_group", { "github_reviews" }, {
+	background = frame,
+})
