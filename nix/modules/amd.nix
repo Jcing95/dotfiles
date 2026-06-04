@@ -21,6 +21,7 @@
     wine
     winetricks
     vulkan-loader
+    vulkan-tools
   ];
 
   hardware.amdgpu.overdrive.enable = true;

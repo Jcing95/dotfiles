@@ -7,6 +7,7 @@
     ../../modules/core.nix
     ../../modules/neovim.nix
     ../../modules/desktop.nix
+    ../../modules/fonts.nix
     ../../modules/audio.nix
     ../../modules/amd.nix
     ../../modules/goxlr.nix

@@ -5,8 +5,8 @@
   "height": 48,
   "spacing": 4,
 
-  "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["clock"],
+  "modules-left": ["hyprland/workspaces", "hyprland/submap"],
+  "modules-center": ["clock", "custom/github-reviews"],
   "modules-right": [
     "cpu",
     "memory",
@@ -23,6 +23,11 @@
   "hyprland/workspaces": {
     "format": "{id}",
     "on-click": "activate"
+  },
+
+  "hyprland/submap": {
+    "format": "󰮃 GAME",
+    "tooltip": false
   },
 
   "clock": {
@@ -92,6 +97,15 @@
     "format-charging": "{capacity}% {icon}",
     "format-plugged": "{capacity}% {icon}",
     "format-icons": ["", "", "", "", ""]
+  },
+
+  "custom/github-reviews": {
+    "exec": "~/.config/waybar/scripts/github-reviews.sh",
+    "interval": 60,
+    "return-type": "json",
+    "format": "{}",
+    "hide-empty-text": true,
+    "on-click": "xdg-open 'https://github.com/pulls?q=is%3Aopen+is%3Apr+user-review-requested%3AJcing95+archived%3Afalse+'"
   },
 
   "bluetooth": {

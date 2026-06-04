@@ -15,13 +15,26 @@ window#waybar.hidden {
 
 /* ── Module group containers (sketchybar "brackets") ─────────────── */
 .modules-left,
-.modules-center,
 .modules-right {
     background-color: rgba(16, 79, 20, 0.5);
     border: 2px solid #167c1c;
-    border-radius: 10px;
-    margin: 2px 4px;
-    padding: 0 4px;
+    border-radius: 0.625rem;
+    margin: 2px 0.25rem;
+    padding: 0 0.25rem;
+}
+
+/* Center area has no shared bracket — each module gets its own */
+.modules-center {
+    background-color: transparent;
+    border: none;
+}
+
+#clock,
+#custom-github-reviews {
+    background-color: rgba(16, 79, 20, 0.5);
+    border: 2px solid #167c1c;
+    border-radius: 0.625rem;
+    margin: 2px 0.25rem;
 }
 
 /* ── Buttons ─────────────────────────────────────────────────────── */
@@ -38,7 +51,7 @@ button:hover {
 
 /* ── Workspaces ──────────────────────────────────────────────────── */
 #workspaces button {
-    padding: 0 8px;
+    padding: 0 0.5rem;
     background-color: transparent;
     color: #888888;
 }
@@ -59,15 +72,26 @@ button:hover {
     background-color: #eb4d4b;
 }
 
+/* ── Game mode submap indicator ──────────────────────────────────── */
+#submap {
+    background-color: rgba(214, 40, 40, 0.7);
+    border: 2px solid #d62828;
+    border-radius: 0.625rem;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0 0.75rem;
+    margin: 2px 0.25rem;
+}
+
 #window,
 #workspaces {
-    margin: 0 4px;
+    margin: 0 0.25rem;
 }
 
 /* ── Clock ───────────────────────────────────────────────────────── */
 #clock {
     font-weight: 400;
-    padding: 0 10px;
+    padding: 0 0.625rem;
 }
 
 /* ── Right-side modules ──────────────────────────────────────────── */
@@ -81,6 +105,10 @@ button:hover {
 #tray,
 #idle_inhibitor {
     padding: 0 1rem;
+}
+
+#custom-github-reviews {
+    padding: 0 0.625rem;
 }
 
 /* ── Status colors ───────────────────────────────────────────────── */

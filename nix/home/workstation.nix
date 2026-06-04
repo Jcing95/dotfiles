@@ -62,12 +62,6 @@ in
       on-resume = brightnessctl -rd rgb:kbd_backlight
     }
 
-    # 5min: lock screen
-    listener {
-      timeout = 300
-      on-timeout = loginctl lock-session
-    }
-
     # 5.5min: DPMS off
     listener {
       timeout = 330
@@ -75,9 +69,15 @@ in
       on-resume = hyprctl dispatch dpms on && brightnessctl -r
     }
 
-    # 30min: suspend
+    # 30min: lock screen
     listener {
       timeout = 1800
+      on-timeout = loginctl lock-session
+    }
+
+    # 60min: suspend
+    listener {
+      timeout = 3600
       on-timeout = systemctl suspend
     }
   '';

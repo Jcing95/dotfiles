@@ -25,11 +25,6 @@
     libnotify
   ];
 
-  # Fonts
-  fonts.packages = with pkgs; [
-    nerd-fonts.fira-code
-  ];
-
   # Hyprland
   programs.hyprland.enable = true;
 
