@@ -21,12 +21,6 @@
   homebrew = {
     enable = true;
 
-    onActivation = {
-      cleanup = "zap";
-      autoUpdate = true;
-      upgrade = true;
-    };
-
     casks = [
       "raycast"
       "1password"
