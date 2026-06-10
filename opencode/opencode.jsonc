@@ -1,0 +1,28 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["RULES.md"],
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "git commit*": "deny",
+      "git push*": "deny",
+      "git rebase*": "ask",
+      "npm install*": "deny",
+      "npm i*": "deny",
+      "pip install*": "deny",
+      "pip3 install*": "deny",
+      "brew install*": "deny",
+      "yarn add*": "deny",
+      "yarn install*": "deny",
+      "pnpm install*": "deny",
+      "pnpm add*": "deny",
+      "bun install*": "deny",
+      "bun add*": "deny",
+      "cargo install*": "deny",
+      "gem install*": "deny",
+      "go install*": "deny",
+      "apt install*": "deny",
+      "apt-get install*": "deny"
+    }
+  }
+}

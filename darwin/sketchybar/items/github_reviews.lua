@@ -8,7 +8,6 @@ local github_reviews = sbar.add("item", "github_reviews", {
   drawing      = false,
   icon         = { string = settings.github_icon, padding_left = 10 },
   label        = { padding_right = 6 },
-  padding_left = 10,
   click_script = "open '" .. review_url .. "'",
 })
 

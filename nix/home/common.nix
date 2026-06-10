@@ -1,5 +1,9 @@
 # Shared Home Manager configuration for all hosts
-{ pkgs, username, email, ... }:
+{ config, pkgs, username, email, ... }:
+
+let
+  dotfiles = "${config.home.homeDirectory}/dotfiles";
+in
 
 {
   home.packages = with pkgs; [
@@ -170,4 +174,12 @@
       "cd"
     ];
   };
+
+  # OpenCode config (file-level symlinks; runtime files like node_modules stay untracked in ~/.config/opencode)
+  home.file.".config/opencode/opencode.jsonc".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/opencode/opencode.jsonc";
+  home.file.".config/opencode/RULES.md".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/opencode/RULES.md";
+  home.file.".config/opencode/skills".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/opencode/skills";
 }
