@@ -34,7 +34,11 @@
   users.users.${username}.extraGroups = [ "ydotool" ];
 
   # Steam
-  programs.steam.enable = true;
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true;
+  };
 
   # Display manager
   services.greetd.enable = true;
