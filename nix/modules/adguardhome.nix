@@ -16,6 +16,12 @@
         port = 53;
         upstream_dns = [ "1.1.1.1" "1.0.0.1" ];
         bootstrap_dns = [ "1.1.1.1" "1.0.0.1" ];
+        # Disable per-client query rate limiting. The default (20 q/s) silently
+        # drops bursts, which breaks apps that fire many lookups at once — e.g.
+        # StarCraft 2 map/lobby downloads crawl and time out. This resolver is
+        # LAN-only (firewall opens 53 to the local network, not the internet),
+        # so the anti-amplification limit serves no purpose here.
+        ratelimit = 0;
       };
       filtering = {
         rewrites = [
