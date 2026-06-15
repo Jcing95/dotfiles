@@ -2,9 +2,6 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder()
 
--- Don't proxy/override SSH_AUTH_SOCK; use the session's ssh-agent (gnome-keyring) directly.
-config.mux_enable_ssh_agent = false
-
 config.color_scheme = "Ayu Dark (Gogh)"
 config.window_close_confirmation = "NeverPrompt"
 config.default_cursor_style = "BlinkingBar"
@@ -53,6 +50,9 @@ config.send_composed_key_when_left_alt_is_pressed = true
 
 if wezterm.target_triple == "x86_64-unknown-linux-gnu" then
 	config.window_decorations = "NONE"
+	-- Don't proxy/override SSH_AUTH_SOCK; use the session's ssh-agent (gnome-keyring) directly.
+	-- Only available on the Linux build; the macOS WezTerm doesn't have this field.
+	config.mux_enable_ssh_agent = false
 else
 	config.window_decorations = "RESIZE"
 end
