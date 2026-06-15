@@ -1,5 +1,5 @@
 # Home Manager configuration for workstation
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   dotfiles = "${config.home.homeDirectory}/dotfiles";
@@ -9,9 +9,33 @@ in
     ./linux.nix
   ];
 
-  # Nextcloud needs a writable config file, not a nix store symlink
-  home.file.".config/Nextcloud/nextcloud.cfg".text = builtins.readFile ../../nextcloud.cfg;
   home.file.".config/hypr/host.lua".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/workstation.lua";
+
+  # Nextcloud must own its own config file: it persists account/sync state and
+  # saves via an atomic rename, so the target has to be a real, writable file —
+  # not a (read-only) nix-store symlink or an out-of-store symlink (the rename
+  # would clobber the link). We only seed the experimental-options flag once,
+  # then leave the file for Nextcloud to manage.
+  home.activation.nextcloudCfg = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    cfg="$HOME/.config/Nextcloud/nextcloud.cfg"
+    $DRY_RUN_CMD mkdir -p "$(dirname "$cfg")"
+
+    # Drop a read-only store symlink left by a previous generation.
+    if [ -L "$cfg" ]; then
+      $DRY_RUN_CMD rm -f "$cfg"
+    fi
+
+    if [ ! -e "$cfg" ]; then
+      $DRY_RUN_CMD tee "$cfg" >/dev/null <<'EOF'
+[General]
+showExperimentalOptions=true
+EOF
+      $DRY_RUN_CMD chmod 600 "$cfg"
+    elif ! ${pkgs.gnugrep}/bin/grep -q '^showExperimentalOptions' "$cfg"; then
+      # Enable the experiment without disturbing Nextcloud's own settings.
+      $DRY_RUN_CMD ${pkgs.gnused}/bin/sed -i '0,/^\[General\]/s//[General]\nshowExperimentalOptions=true/' "$cfg"
+    fi
+  '';
 
   home.packages = with pkgs; [
     brave
