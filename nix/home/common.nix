@@ -182,4 +182,12 @@ in
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/opencode/RULES.md";
   home.file.".config/opencode/skills".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/opencode/skills";
+
+  # Claude Code config (file-level symlinks; runtime state in ~/.claude stays untracked)
+  home.file.".claude/settings.json".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/settings.json";
+  home.file.".claude/CLAUDE.md".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/CLAUDE.md";
+  home.file.".claude/skills".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/skills";
 }
