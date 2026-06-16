@@ -1,9 +1,8 @@
 {
-  "model": "opus[1m]",
-  "skipAutoPermissionPrompt": true,
   "permissions": {
-    "allow": ["Bash"],
-    "ask": ["Bash(git rebase:*)"],
+    "allow": [
+      "Bash"
+    ],
     "deny": [
       "Bash(git commit:*)",
       "Bash(git push:*)",
@@ -23,6 +22,17 @@
       "Bash(go install:*)",
       "Bash(apt install:*)",
       "Bash(apt-get install:*)"
+    ],
+    "ask": [
+      "Bash(git rebase:*)"
     ]
-  }
+  },
+  "model": "opus[1m]",
+  "sandbox": {
+    "excludedCommands": [
+      "gh *"
+    ]
+  },
+  "effortLevel": "high",
+  "skipAutoPermissionPrompt": true
 }

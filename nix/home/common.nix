@@ -88,6 +88,12 @@ in
           git worktree add -b "$branch_name" "$dir_name"
         fi
       }
+
+      # zoxide (kept last, as recommended). Skipped under Claude Code, whose
+      # sandboxed shell breaks on the `--cmd cd` override.
+      if [[ -z "$CLAUDECODE" ]]; then
+        eval "$(${config.programs.zoxide.package}/bin/zoxide init zsh --cmd cd)"
+      fi
     '';
 
     shellAliases = {
@@ -168,11 +174,11 @@ in
 
   programs.zoxide = {
     enable = true;
-    enableZshIntegration = true;
-    options = [
-      "--cmd"
-      "cd"
-    ];
+    # Integration is added manually (guarded) in programs.zsh.initContent below.
+    # Under Claude Code the `--cmd cd` override breaks the sandboxed shell:
+    # zoxide can't write its DB (blocked path -> error spam on every cd) and
+    # `cd` silently fuzzy-jumps to the wrong directory instead of erroring.
+    enableZshIntegration = false;
   };
 
   # OpenCode config (file-level symlinks; runtime files like node_modules stay untracked in ~/.config/opencode)

@@ -115,7 +115,7 @@ on-mode-changed = []
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 #    cmd-slash = 'layout tiles horizontal vertical'
 #cmd-comma = 'layout accordion horizontal vertical'
-    cmd-enter = 'exec-and-forget wezterm'
+    cmd-enter = 'exec-and-forget open -na "WezTerm.app"'
     cmd-b = 'exec-and-forget open -na "Brave Browser.app"'
     cmd-q = 'close'
     cmd-m = 'macos-native-minimize'
