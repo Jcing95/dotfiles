@@ -7,7 +7,7 @@
     ../../modules/neovim.nix
     ../../modules/server.nix
     ../../modules/audio.nix
-    ../../modules/nvidia.nix
+    ../../modules/nvidia-lab.nix
     ../../modules/sshd.nix
     ../../modules/cloudflared.nix
     ../../modules/sops.nix
@@ -16,7 +16,7 @@
     ../../modules/k3s-storage.nix
   ];
 
-  networking.hostName = "homelab";
+  networking.hostName = "lab";
 
   # Use local Adguard Home for DNS (overrides core.nix Cloudflare defaults)
   # Adguard Home rewrites *.jcing.de → 192.168.0.121, no /etc/hosts needed
@@ -24,13 +24,6 @@
   networking.networkmanager.insertNameservers = lib.mkForce [ "127.0.0.1" ];
 
   # Enable Wake on LAN on Ethernet
-  networking.interfaces.enp3s0f1.wakeOnLan.enable = true;
-
-  # Allow laptop to stay on with lid closed (connected to external display)
-  services.logind.settings.Login = {
-    HandleLidSwitch = "ignore";
-    HandleLidSwitchDocked = "ignore";
-    HandleLidSwitchExternalPower = "ignore";
-  };
+  networking.interfaces.enp3s0.wakeOnLan.enable = true;
 
 }

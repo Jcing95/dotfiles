@@ -52,6 +52,23 @@
         ];
       };
 
+      lab = nixpkgs.lib.nixosSystem {
+        system = linuxSystem;
+        specialArgs = { inherit username email; };
+        modules = [
+          { nixpkgs.overlays = overlays; }
+          sops-nix.nixosModules.sops
+          ./hosts/lab
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit username email; };
+            home-manager.users.${username} = import ./home/lab.nix;
+          }
+        ];
+      };
+
       workstation = nixpkgs.lib.nixosSystem {
         system = linuxSystem;
         specialArgs = { inherit username email; };
