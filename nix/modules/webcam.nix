@@ -7,15 +7,33 @@ let
   applyZoom = pkgs.writeShellScript "anker-c200-apply-zoom" ''
     set -u
     DEV="${device}"
+    ZOOM=${toString zoom}
+    V4L2=${pkgs.v4l-utils}/bin/v4l2-ctl
+
+    apply() {
+      local reason="$1"
+      local i delay
+      for i in 1 2 3 4 5 6 7 8; do
+        delay=$(( i ))
+        if "$V4L2" -d "$DEV" --set-ctrl=zoom_absolute=$ZOOM >/dev/null 2>&1; then
+          echo "zoom=$ZOOM applied ($reason, attempt $i)"
+          return 0
+        fi
+        sleep "$delay"
+      done
+      echo "zoom apply gave up ($reason)"
+      return 1
+    }
+
     while true; do
       while [ ! -e "$DEV" ]; do sleep 2; done
 
-      ${pkgs.v4l-utils}/bin/v4l2-ctl -d "$DEV" --set-ctrl=zoom_absolute=${toString zoom} 2>/dev/null || true
+      apply "startup" || true
 
-      ${pkgs.inotify-tools}/bin/inotifywait -m -q -e open -e close_write "$DEV" 2>/dev/null \
+      ${pkgs.inotify-tools}/bin/inotifywait -m -q -e open -e close "$DEV" 2>/dev/null \
         | while read -r _; do
-            sleep 0.3
-            ${pkgs.v4l-utils}/bin/v4l2-ctl -d "$DEV" --set-ctrl=zoom_absolute=${toString zoom} 2>/dev/null || true
+            sleep 1
+            apply "open/close" || true
           done
 
       sleep 1
@@ -36,6 +54,8 @@ in
       ExecStart = "${applyZoom}";
       Restart = "always";
       RestartSec = 2;
+      StandardOutput = "journal";
+      StandardError = "journal";
     };
   };
 }

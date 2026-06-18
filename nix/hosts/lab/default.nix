@@ -14,6 +14,7 @@
     ../../modules/adguardhome.nix
     ../../modules/k3s.nix
     ../../modules/k3s-storage.nix
+    ../../modules/storage.nix
   ];
 
   networking.hostName = "lab";
