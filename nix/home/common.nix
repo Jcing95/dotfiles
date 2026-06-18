@@ -16,6 +16,7 @@ in
     claude-code
     codex
     zmk-studio
+    obsidian
   ];
 
   home.sessionVariables = {

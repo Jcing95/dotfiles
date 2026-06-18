@@ -34,5 +34,8 @@
     ]
   },
   "effortLevel": "high",
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "enabledPlugins": {
+    "figma@claude-plugins-official": true
+  }
 }
