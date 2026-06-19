@@ -1,4 +1,3 @@
-hl.monitor({ output = "eDP-1",    disabled = true })
 hl.monitor({ output = "HDMI-A-1", mode = "preferred", position = "auto", scale = 1 })
 
 hl.env("HYPRCURSOR_THEME", "Nordzy-hyprcursors-white")

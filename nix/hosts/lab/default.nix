@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/core.nix
+    ../../modules/fonts.nix
     ../../modules/neovim.nix
     ../../modules/server.nix
     ../../modules/audio.nix

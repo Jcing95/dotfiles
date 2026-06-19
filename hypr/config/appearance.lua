@@ -17,4 +17,9 @@ hl.config({
     animations = {
         enabled = true,
     },
+    render = {
+        -- Let solitary fullscreen apps (games) scan out directly to the
+        -- display, bypassing the compositor copy for lower input latency.
+        direct_scanout = 1,
+    },
 })
