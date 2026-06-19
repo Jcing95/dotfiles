@@ -19,6 +19,7 @@ in
     secrets."argocd/ssh-deploy-key" = {};
     secrets."obsidian/couchdb-user" = {};
     secrets."obsidian/couchdb-password" = {};
+    secrets."mosquitto/passwd" = {};
   };
 
   # Derive age key from SSH host key for standalone sops CLI usage

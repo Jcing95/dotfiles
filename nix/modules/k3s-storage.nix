@@ -29,6 +29,11 @@ in
     "d /mnt/storage/k3s/config/homepage 0755 root root -"
     "d /mnt/storage/k3s/config/gluetun 0755 root root -"
 
+    # Home Assistant runs as root (official image), like jellyfin — only needs
+    # the config dir to exist; root writes regardless of ownership.
+    "d /mnt/storage/k3s/config/homeassistant 0755 root root -"
+    "d /mnt/storage/k3s/config/homeassistant/config 0755 root root -"
+
     # Directories needing linuxserver ownership (Z = recursive chown)
     "d /mnt/storage/k3s/config/torrent 0755 ${puid} ${pgid} -"
     "Z /mnt/storage/k3s/config/torrent 0755 ${puid} ${pgid} -"
@@ -40,5 +45,13 @@ in
     "d /mnt/storage/k3s/config/obsidian 0755 5984 5984 -"
     "d /mnt/storage/k3s/config/obsidian/data 0755 5984 5984 -"
     "Z /mnt/storage/k3s/config/obsidian 0755 5984 5984 -"
+
+    # Mosquitto runs as uid/gid 1883 (non-root securityContext). hostPath
+    # volumes ignore the pod's fsGroup, so the data/log dirs must be pre-owned
+    # or the broker can't write its persistence DB and log.
+    "d /mnt/storage/k3s/config/mosquitto 0755 1883 1883 -"
+    "d /mnt/storage/k3s/config/mosquitto/data 0755 1883 1883 -"
+    "d /mnt/storage/k3s/config/mosquitto/log 0755 1883 1883 -"
+    "Z /mnt/storage/k3s/config/mosquitto 0755 1883 1883 -"
   ];
 }

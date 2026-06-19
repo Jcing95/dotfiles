@@ -148,6 +148,10 @@ in
         --from-file=COUCHDB_USER=${config.sops.secrets."obsidian/couchdb-user".path} \
         --from-file=COUCHDB_PASSWORD=${config.sops.secrets."obsidian/couchdb-password".path} \
         --dry-run=client -o yaml | kubectl apply -f -
+      kubectl create secret generic mosquitto-passwd \
+        --namespace=media \
+        --from-file=passwd=${config.sops.secrets."mosquitto/passwd".path} \
+        --dry-run=client -o yaml | kubectl apply -f -
     '';
     serviceConfig = {
       Type = "oneshot";
