@@ -34,5 +34,11 @@ in
     "Z /mnt/storage/k3s/config/torrent 0755 ${puid} ${pgid} -"
     "d /mnt/storage/k3s/config/seerr 0755 ${puid} ${pgid} -"
     "Z /mnt/storage/k3s/config/seerr 0755 ${puid} ${pgid} -"
+
+    # CouchDB (obsidian livesync) runs as uid/gid 5984; the data dir must be
+    # pre-owned since the non-root container can't chown the hostPath itself.
+    "d /mnt/storage/k3s/config/obsidian 0755 5984 5984 -"
+    "d /mnt/storage/k3s/config/obsidian/data 0755 5984 5984 -"
+    "Z /mnt/storage/k3s/config/obsidian 0755 5984 5984 -"
   ];
 }

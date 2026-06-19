@@ -28,6 +28,15 @@ in
 
   networking.firewall.allowedTCPPorts = [ 80 443 8096 ];
 
+  # Let k3s CNI (flannel) pod/service traffic through the host firewall.
+  # Without this, the enabled NixOS firewall drops pod -> API ClusterIP
+  # (10.43.0.1) traffic, so a nixos-rebuild leaves pods unable to reach the
+  # API and ArgoCD stops reconciling. Trusting the CNI interfaces (and loose
+  # reverse-path, which flannel/VXLAN needs) keeps cluster networking working
+  # across rebuilds.
+  networking.firewall.trustedInterfaces = [ "cni0" "flannel.1" ];
+  networking.firewall.checkReversePath = "loose";
+
   # ── ArgoCD installation via k3s built-in Helm controller ──────────────────
   services.k3s.manifests = {
     argocd-namespace.content = {
@@ -133,6 +142,11 @@ in
       kubectl create secret generic protonvpn-credentials \
         --namespace=media \
         --from-file=wireguard-private-key=${config.sops.secrets."protonvpn/wireguard-private-key".path} \
+        --dry-run=client -o yaml | kubectl apply -f -
+      kubectl create secret generic obsidian-couchdb \
+        --namespace=media \
+        --from-file=COUCHDB_USER=${config.sops.secrets."obsidian/couchdb-user".path} \
+        --from-file=COUCHDB_PASSWORD=${config.sops.secrets."obsidian/couchdb-password".path} \
         --dry-run=client -o yaml | kubectl apply -f -
     '';
     serviceConfig = {
