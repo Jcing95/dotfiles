@@ -5,15 +5,8 @@
     ./hardware-configuration.nix
     ../../modules/core.nix
     ../../modules/neovim.nix
-    ../../modules/server.nix
     ../../modules/audio.nix
     ../../modules/nvidia.nix
-    ../../modules/sshd.nix
-    ../../modules/cloudflared.nix
-    ../../modules/sops.nix
-    ../../modules/adguardhome.nix
-    ../../modules/k3s.nix
-    ../../modules/k3s-storage.nix
   ];
 
   networking.hostName = "homelab";
