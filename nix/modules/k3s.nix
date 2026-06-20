@@ -26,7 +26,9 @@ in
     # k3s runs IPv4-only; gluetun handles IPv6 inside the container via ip6tables.
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 8096 ];
+  # 1883: MQTT broker (mosquitto runs hostNetwork, so it listens on the node's
+  # LAN IP). Without this open, LAN smart devices (Tasmota, etc.) can't reach it.
+  networking.firewall.allowedTCPPorts = [ 80 443 8096 1883 ];
 
   # Let k3s CNI (flannel) pod/service traffic through the host firewall.
   # Without this, the enabled NixOS firewall drops pod -> API ClusterIP
