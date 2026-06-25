@@ -20,7 +20,7 @@ sbar.add("bracket", "spaces_group", spaces_members, {
 	background = frame,
 })
 
-sbar.add("bracket", "right_group", { "wifi", "battery" }, {
+sbar.add("bracket", "right_group", { "volume", "wifi", "battery" }, {
 	background = frame,
 })
 

@@ -16,5 +16,13 @@ return {
     disconnected = "󰖪",
   },
 
+  volume_icons = {
+    muted = "󰝟",
+    [66]  = "󰕾",
+    [33]  = "󰖀",
+    [1]   = "󰕿",
+    [0]   = "󰕿",
+  },
+
   github_icon = "",
 }

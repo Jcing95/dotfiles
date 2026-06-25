@@ -28,6 +28,9 @@
     ]
   },
   "model": "opus[1m]",
+  "enabledPlugins": {
+    "figma@claude-plugins-official": true
+  },
   "sandbox": {
     "excludedCommands": [
       "gh *"
@@ -35,7 +38,5 @@
   },
   "effortLevel": "high",
   "skipAutoPermissionPrompt": true,
-  "enabledPlugins": {
-    "figma@claude-plugins-official": true
-  }
+  "tui": "fullscreen"
 }
