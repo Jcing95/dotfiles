@@ -5,6 +5,7 @@ return {
     picker = {
       sources = {
         explorer = {
+          hidden = true, -- show dotfiles in the file tree
           win = {
             list = {
               keys = {
