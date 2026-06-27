@@ -29,7 +29,8 @@
   },
   "model": "opus[1m]",
   "enabledPlugins": {
-    "figma@claude-plugins-official": true
+    "figma@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
   },
   "sandbox": {
     "excludedCommands": [
@@ -37,6 +38,6 @@
     ]
   },
   "effortLevel": "high",
-  "skipAutoPermissionPrompt": true,
-  "tui": "fullscreen"
+  "tui": "fullscreen",
+  "skipAutoPermissionPrompt": true
 }
