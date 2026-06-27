@@ -11,12 +11,28 @@
   environment.variables = {
     WLR_NO_HARDWARE_CURSORS = "1";
     AQ_NO_HARDWARE_CURSORS = "1";
+
+    # Route VAAPI/VDPAU through NVDEC so browsers and players hardware-decode
+    # video instead of falling back to CPU software decode (the playback stutter).
+    LIBVA_DRIVER_NAME = "nvidia";
+    VDPAU_DRIVER = "nvidia";
+    NVD_BACKEND = "direct"; # nvidia-vaapi-driver: talk to NVDEC directly, not via X11
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware = {
-    graphics.enable = true;
+    graphics = {
+      enable = true;
+      # VAAPI -> NVDEC bridge (nvidia-vaapi-driver) plus VDPAU fallbacks, so
+      # browser/Jellyfin video decode runs on the GPU. 32-bit libs for Steam
+      # come from programs.steam (enable32Bit).
+      extraPackages = with pkgs; [
+        nvidia-vaapi-driver
+        vaapiVdpau
+        libvdpau-va-gl
+      ];
+    };
     nvidia = {
       modesetting.enable = true;
 
@@ -27,6 +43,10 @@
       # Maxwell predates the open kernel modules (Turing+), keep the proprietary one
       open = false;
       nvidiaSettings = true;
+
+      # Keep the driver resident so the GPU doesn't cold-start its clocks on
+      # every app launch — reduces latency-spike stutter when video/games begin.
+      nvidiaPersistenced = true;
 
       # 580 legacy branch — last branch supporting Maxwell; production/590+ dropped it
       package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
