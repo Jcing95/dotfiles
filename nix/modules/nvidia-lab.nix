@@ -29,7 +29,7 @@
       # come from programs.steam (enable32Bit).
       extraPackages = with pkgs; [
         nvidia-vaapi-driver
-        vaapiVdpau
+        libva-vdpau-driver
         libvdpau-va-gl
       ];
     };
