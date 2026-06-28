@@ -1,4 +1,4 @@
-// ~/.config/waybar/config-homelab.jsonc
+// ~/.config/waybar/config-lab.jsonc
 {
     "layer": "top",
     "position": "top",

@@ -58,8 +58,6 @@ EOF
 
   home.pointerCursor.size = 36;
 
-  # Hypridle and wlsunset on workstation only — homelab is mostly headless and
-  # must stay reachable, so we deliberately don't run an idle daemon there.
   # Config is written directly (not via services.hypridle) because the HM unit
   # is gated on graphical-session.target, which our greetd/Hyprland launch path
   # doesn't activate. hypridle is started from hypr/autostart.lua instead.

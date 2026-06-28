@@ -14,5 +14,5 @@ hl.env("VDPAU_DRIVER",      "nvidia")
 hl.env("NVD_BACKEND",       "direct")
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("waybar -c ~/.config/waybar/config-homelab.jsonc -s ~/.config/waybar/style-homelab.css")
+    hl.exec_cmd("waybar -c ~/.config/waybar/config-lab.jsonc -s ~/.config/waybar/style-lab.css")
 end)

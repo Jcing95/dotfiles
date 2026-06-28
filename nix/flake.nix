@@ -35,19 +35,18 @@
   in
   {
     nixosConfigurations = {
-      homelab = nixpkgs.lib.nixosSystem {
+      laptop = nixpkgs.lib.nixosSystem {
         system = linuxSystem;
         specialArgs = { inherit username email; };
         modules = [
           { nixpkgs.overlays = overlays; }
-          sops-nix.nixosModules.sops
-          ./hosts/homelab
+          ./hosts/laptop
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = { inherit username email; };
-            home-manager.users.${username} = import ./home/homelab.nix;
+            home-manager.users.${username} = import ./home/laptop.nix;
           }
         ];
       };
