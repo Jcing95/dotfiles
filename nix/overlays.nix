@@ -13,6 +13,18 @@ final: prev: {
     doCheck = false;
   });
 
+  # cantarell-fonts 0.311 fails to build: afdko 5's otfautohint crashes while
+  # autohinting the variable font (NixOS/nixpkgs#535887, no upstream fix yet).
+  # Autohinting is cosmetic polish that runs after the (already-valid) font is
+  # saved, so neutralise the call to let the build produce the un-hinted font.
+  # Pulled in transitively (Steam FHS env, system fonts). Remove once #535887 lands.
+  cantarell-fonts = prev.cantarell-fonts.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace scripts/make-variable-font.py \
+        --replace-fail "subprocess.check_call(" "(lambda *a, **k: None)("
+    '';
+  });
+
   lutris-unwrapped = prev.lutris-unwrapped.overrideAttrs (old: {
     version = "0.5.22";
     src = prev.fetchFromGitHub {
