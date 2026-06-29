@@ -23,4 +23,5 @@ jobs:
           pr-labels: |
             dependencies
             automated
+          pr-reviewers: Jcing95
           commit-msg: "update flake"
