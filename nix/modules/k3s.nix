@@ -154,6 +154,11 @@ in
         --namespace=media \
         --from-file=passwd=${config.sops.secrets."mosquitto/passwd".path} \
         --dry-run=client -o yaml | kubectl apply -f -
+      kubectl create secret generic telegram-bot \
+        --namespace=media \
+        --from-file=BOT_TOKEN=${config.sops.secrets."telegram/bot-token".path} \
+        --from-file=ALLOWED_USER_ID=${config.sops.secrets."telegram/allowed-user-id".path} \
+        --dry-run=client -o yaml | kubectl apply -f -
     '';
     serviceConfig = {
       Type = "oneshot";

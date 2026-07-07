@@ -20,6 +20,8 @@ in
     secrets."obsidian/couchdb-user" = {};
     secrets."obsidian/couchdb-password" = {};
     secrets."mosquitto/passwd" = {};
+    secrets."telegram/bot-token" = {};
+    secrets."telegram/allowed-user-id" = {};
   };
 
   # Derive age key from SSH host key for standalone sops CLI usage
