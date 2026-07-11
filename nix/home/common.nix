@@ -128,7 +128,7 @@ in
       "--layout=reverse"
       "--border=rounded"
     ];
-    fileWidgetOptions = [
+    fileWidget.options = [
       "--preview 'bat --color=always --style=plain,numbers --line-range=:500 {}'"
     ];
   };

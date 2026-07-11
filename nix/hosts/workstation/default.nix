@@ -25,7 +25,7 @@
   # hosts like adguard.jcing.de to NXDOMAIN.
   services.resolved = {
     enable = true;
-    fallbackDns = [ "1.1.1.1" "1.0.0.1" ];
+    settings.Resolve.FallbackDNS = [ "1.1.1.1" "1.0.0.1" ];
   };
   networking.nameservers = lib.mkForce [ "192.168.0.121" ];
   networking.networkmanager.insertNameservers = lib.mkForce [ "192.168.0.121" ];
