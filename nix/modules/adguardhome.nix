@@ -29,6 +29,7 @@
           { domain = "sonarr.jcing.de";       answer = "192.168.0.121"; enabled = true; }
           { domain = "radarr.jcing.de";       answer = "192.168.0.121"; enabled = true; }
           { domain = "prowlarr.jcing.de";     answer = "192.168.0.121"; enabled = true; }
+          { domain = "profilarr.jcing.de";    answer = "192.168.0.121"; enabled = true; }
           { domain = "bazarr.jcing.de";       answer = "192.168.0.121"; enabled = true; }
           { domain = "seerr.jcing.de";        answer = "192.168.0.121"; enabled = true; }
           { domain = "torrent.jcing.de";      answer = "192.168.0.121"; enabled = true; }
@@ -38,6 +39,8 @@
           { domain = "argocd.jcing.de";      answer = "192.168.0.121"; enabled = true; }
           { domain = "affine.jcing.de";      answer = "192.168.0.121"; enabled = true; }
           { domain = "homeassistant.jcing.de"; answer = "192.168.0.121"; enabled = true; }
+          { domain = "obsidian.jcing.de";     answer = "192.168.0.121"; enabled = true; }
+          { domain = "immich.jcing.de";       answer = "192.168.0.121"; enabled = true; }
         ];
       };
     };

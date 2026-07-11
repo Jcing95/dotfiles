@@ -140,22 +140,28 @@ in
     path = [ pkgs.kubectl ];
     script = ''
       export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+      # Apps are split into per-area namespaces (all pre-created by the ArgoCD
+      # root app). Wait for each namespace before applying its secrets.
       until kubectl get namespace media 2>/dev/null; do sleep 2; done
       kubectl create secret generic protonvpn-credentials \
         --namespace=media \
         --from-file=wireguard-private-key=${config.sops.secrets."protonvpn/wireguard-private-key".path} \
         --dry-run=client -o yaml | kubectl apply -f -
+
+      until kubectl get namespace home 2>/dev/null; do sleep 2; done
+      kubectl create secret generic mosquitto-passwd \
+        --namespace=home \
+        --from-file=passwd=${config.sops.secrets."mosquitto/passwd".path} \
+        --dry-run=client -o yaml | kubectl apply -f -
+
+      until kubectl get namespace obsidian 2>/dev/null; do sleep 2; done
       kubectl create secret generic obsidian-couchdb \
-        --namespace=media \
+        --namespace=obsidian \
         --from-file=COUCHDB_USER=${config.sops.secrets."obsidian/couchdb-user".path} \
         --from-file=COUCHDB_PASSWORD=${config.sops.secrets."obsidian/couchdb-password".path} \
         --dry-run=client -o yaml | kubectl apply -f -
-      kubectl create secret generic mosquitto-passwd \
-        --namespace=media \
-        --from-file=passwd=${config.sops.secrets."mosquitto/passwd".path} \
-        --dry-run=client -o yaml | kubectl apply -f -
       kubectl create secret generic telegram-bot \
-        --namespace=media \
+        --namespace=obsidian \
         --from-file=BOT_TOKEN=${config.sops.secrets."telegram/bot-token".path} \
         --from-file=ALLOWED_USER_ID=${config.sops.secrets."telegram/allowed-user-id".path} \
         --dry-run=client -o yaml | kubectl apply -f -
