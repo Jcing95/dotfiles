@@ -74,6 +74,33 @@ in
         '';
       };
     };
+
+    # AdGuard runs on the host (services.adguardhome, :3380), not in-cluster.
+    # The adguard-external chart ships a selector-less Service, but ArgoCD's
+    # resource.exclusions drop Endpoints/EndpointSlice, so it can never create
+    # the backing endpoints. Define the EndpointSlice here (outside ArgoCD's
+    # blind spot) so Traefik has a backend to route adguard.jcing.de to.
+    # Traefik reaches :3380 via the trusted cni0 interface (no firewall change).
+    adguard-endpointslice.content = {
+      apiVersion = "discovery.k8s.io/v1";
+      kind = "EndpointSlice";
+      metadata = {
+        name = "adguard-external";
+        namespace = "infra";
+        labels."kubernetes.io/service-name" = "adguard";
+      };
+      addressType = "IPv4";
+      # Empty port name matches the adguard Service's single unnamed port.
+      ports = [
+        { name = ""; port = 3380; protocol = "TCP"; }
+      ];
+      endpoints = [
+        {
+          addresses = [ "192.168.0.121" ];
+          conditions.ready = true;
+        }
+      ];
+    };
   };
 
   # ── Bootstrap ArgoCD root application after CRD is available ────────────
