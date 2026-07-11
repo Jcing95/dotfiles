@@ -159,6 +159,14 @@ in
         --from-file=BOT_TOKEN=${config.sops.secrets."telegram/bot-token".path} \
         --from-file=ALLOWED_USER_ID=${config.sops.secrets."telegram/allowed-user-id".path} \
         --dry-run=client -o yaml | kubectl apply -f -
+
+      # Immich runs in its own namespace (created by the ArgoCD root app), so
+      # wait for it before applying the DB password secret.
+      until kubectl get namespace immich 2>/dev/null; do sleep 2; done
+      kubectl create secret generic immich-postgres \
+        --namespace=immich \
+        --from-file=POSTGRES_PASSWORD=${config.sops.secrets."immich/postgres-password".path} \
+        --dry-run=client -o yaml | kubectl apply -f -
     '';
     serviceConfig = {
       Type = "oneshot";

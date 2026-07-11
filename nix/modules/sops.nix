@@ -22,6 +22,7 @@ in
     secrets."mosquitto/passwd" = {};
     secrets."telegram/bot-token" = {};
     secrets."telegram/allowed-user-id" = {};
+    secrets."immich/postgres-password" = {};
   };
 
   # Derive age key from SSH host key for standalone sops CLI usage
