@@ -24,23 +24,12 @@
         ratelimit = 0;
       };
       filtering = {
+        # Wildcard: every *.jcing.de subdomain is served by Traefik on the lab
+        # node, so point them all at it. New apps resolve with no rebuild.
+        # NB: does not match the apex (jcing.de) — left to public DNS so the
+        # website/email keep resolving normally from the LAN.
         rewrites = [
-          { domain = "jellyfin.jcing.de";     answer = "192.168.0.121"; enabled = true; }
-          { domain = "sonarr.jcing.de";       answer = "192.168.0.121"; enabled = true; }
-          { domain = "radarr.jcing.de";       answer = "192.168.0.121"; enabled = true; }
-          { domain = "prowlarr.jcing.de";     answer = "192.168.0.121"; enabled = true; }
-          { domain = "profilarr.jcing.de";    answer = "192.168.0.121"; enabled = true; }
-          { domain = "bazarr.jcing.de";       answer = "192.168.0.121"; enabled = true; }
-          { domain = "seerr.jcing.de";        answer = "192.168.0.121"; enabled = true; }
-          { domain = "torrent.jcing.de";      answer = "192.168.0.121"; enabled = true; }
-          { domain = "flaresolverr.jcing.de"; answer = "192.168.0.121"; enabled = true; }
-          { domain = "homepage.jcing.de";     answer = "192.168.0.121"; enabled = true; }
-          { domain = "adguard.jcing.de";      answer = "192.168.0.121"; enabled = true; }
-          { domain = "argocd.jcing.de";      answer = "192.168.0.121"; enabled = true; }
-          { domain = "affine.jcing.de";      answer = "192.168.0.121"; enabled = true; }
-          { domain = "homeassistant.jcing.de"; answer = "192.168.0.121"; enabled = true; }
-          { domain = "obsidian.jcing.de";     answer = "192.168.0.121"; enabled = true; }
-          { domain = "immich.jcing.de";       answer = "192.168.0.121"; enabled = true; }
+          { domain = "*.jcing.de"; answer = "192.168.0.121"; enabled = true; }
         ];
       };
     };
