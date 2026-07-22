@@ -35,6 +35,7 @@ in
   home.file.".config/dunst".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/dunst";
 
   home.pointerCursor = {
+    enable = true;
     name = "Nordzy-cursors-white";
     package = pkgs.nordzy-cursor-theme;
     gtk.enable = true;
