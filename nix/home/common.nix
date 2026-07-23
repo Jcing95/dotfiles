@@ -23,6 +23,7 @@ in
     DOTFILES = "$HOME/dotfiles";
     EDITOR = "nvim";
     MANPAGER = "bat -l man -p";
+    LANG = "en_US.UTF-8";
   };
 
   programs.starship.enable = true;
