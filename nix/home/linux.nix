@@ -46,8 +46,12 @@ in
     enable = true;
 
     theme = {
-      name = "Ayu-Dark";
-      package = pkgs.ayu-theme-gtk;
+      name = "catppuccin-mocha-blue-standard";
+      package = pkgs.catppuccin-gtk.override {
+        variant = "mocha";
+        accents = [ "blue" ];
+        size = "standard";
+      };
     };
 
     iconTheme = {
