@@ -19,7 +19,7 @@ local function resizePct(dxPct, dyPct)
 	end
 end
 
-hl.bind(mainMod .. "+ SHIFT + Z", resizePct(-2.5, 0), { repeating = true })
+hl.bind(mainMod .. "+ SHIFT + Y", resizePct(-2.5, 0), { repeating = true })
 hl.bind(mainMod .. "+ SHIFT + U", resizePct(0, -5), { repeating = true })
 hl.bind(mainMod .. "+ SHIFT + I", resizePct(0, 5), { repeating = true })
 hl.bind(mainMod .. "+ SHIFT + O", resizePct(2.5, 0), { repeating = true })
