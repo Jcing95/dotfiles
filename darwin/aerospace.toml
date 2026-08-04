@@ -54,6 +54,7 @@ on-mode-changed = []
 
     cmd-shift-r = 'reload-config'
     ctrl-cmd-v = 'layout floating tiling'
+    cmd-shift-v = 'layout horizontal vertical'
 
     cmd-shift-h = 'move left --boundaries all-monitors-outer-frame'
     cmd-shift-j = 'move down --boundaries all-monitors-outer-frame'
