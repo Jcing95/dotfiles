@@ -81,15 +81,120 @@ in
 
         if git show-ref --verify --quiet "refs/heads/$branch_name"; then
           echo "Checking out local branch '$branch_name' into './$dir_name'..."
-          git worktree add "$dir_name" "$branch_name"
+          git worktree add "$dir_name" "$branch_name" || return 1
         elif git show-ref --verify --quiet "refs/remotes/origin/$branch_name"; then
           echo "Checking out remote branch 'origin/$branch_name' into './$dir_name'..."
-          git worktree add -b "$branch_name" "$dir_name" "origin/$branch_name"
+          git worktree add -b "$branch_name" "$dir_name" "origin/$branch_name" || return 1
         else
           echo "Creating entirely new branch '$branch_name' into './$dir_name'..."
-          git worktree add -b "$branch_name" "$dir_name"
+          git worktree add -b "$branch_name" "$dir_name" || return 1
+        fi
+
+        cd "$dir_name"
+      }
+
+      grm() {
+        local force=""
+        local -a rest
+        local a
+        for a in "$@"; do
+          case "$a" in
+            -f|--force) force="--force" ;;
+            -*)
+              echo "grm: unknown option '$a'" >&2
+              return 1
+              ;;
+            *) rest+=("$a") ;;
+          esac
+        done
+
+        if (( ''${#rest} != 1 )); then
+          echo "Error: Please provide exactly one worktree."
+          echo "Usage: grm [-f|--force] <worktree>"
+          return 1
+        fi
+
+        if ! git rev-parse --git-dir >/dev/null 2>&1; then
+          echo "grm: not inside a git repository" >&2
+          return 1
+        fi
+
+        # Resolve the target against the worktree list, so either a bare
+        # directory name ('feature-x') or a path ('../feature-x') works.
+        local target="''${rest[1]}"
+        local main_wt="" path="" branch="" found_path="" found_branch=""
+        local line
+        while IFS= read -r line; do
+          case "$line" in
+            worktree\ *)
+              path="''${line#worktree }"
+              [[ -z "$main_wt" ]] && main_wt="$path"
+              branch=""
+              ;;
+            branch\ refs/heads/*) branch="''${line#branch refs/heads/}" ;;
+            "")
+              if [[ "$path" != "$main_wt" ]] &&
+                 [[ "''${path:t}" == "$target" || "''${path:A}" == "''${target:A}" ]]; then
+                found_path="$path"
+                found_branch="$branch"
+              fi
+              ;;
+          esac
+        done < <(git worktree list --porcelain; echo)
+
+        if [[ -z "$found_path" ]]; then
+          echo "grm: no linked worktree matching '$target'" >&2
+          echo "Existing worktrees:" >&2
+          git worktree list >&2
+          return 1
+        fi
+
+        # Step out to the main worktree first if we're standing inside the one
+        # being removed, otherwise we'd be left in a deleted directory. Both
+        # sides go through :A so a symlinked path still matches.
+        local found_real="''${found_path:A}"
+        if [[ "''${PWD:A}" == "$found_real" || "''${PWD:A}" == "$found_real"/* ]]; then
+          cd "$main_wt" || return 1
+        fi
+
+        echo "Removing worktree '$found_path'..."
+        if ! git worktree remove $force "$found_path"; then
+          if [[ -z "$force" ]]; then
+            echo "hint: re-run as: grm -f $target" >&2
+          fi
+          return 1
+        fi
+
+        # Clean up the branch only when git considers it safe to.
+        if [[ -n "$found_branch" ]]; then
+          local out
+          if out=$(git branch -d "$found_branch" 2>&1); then
+            echo "$out"
+          else
+            echo "$out" >&2
+            echo "  delete anyway with: git branch -D $found_branch" >&2
+          fi
         fi
       }
+
+      # Complete grm with the basenames of the repo's linked worktrees.
+      _grm() {
+        if [[ "$words[CURRENT]" == -* ]]; then
+          compadd -- -f --force
+          return
+        fi
+
+        local -a names
+        local line
+        local n=0
+        while IFS= read -r line; do
+          [[ "$line" == worktree\ * ]] || continue
+          (( ++n > 1 )) && names+=("''${''${line#worktree }:t}")
+        done < <(git worktree list --porcelain 2>/dev/null)
+
+        compadd -- $names
+      }
+      compdef _grm grm
 
       # zoxide (kept last, as recommended). Skipped under Claude Code, whose
       # sandboxed shell breaks on the `--cmd cd` override.
