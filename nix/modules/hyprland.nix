@@ -50,7 +50,15 @@
   # - mangohud: on-screen frametime/FPS overlay to actually measure stutter.
   programs.gamescope = {
     enable = true;
-    capSysNice = true;
+    # Must stay false: capSysNice installs gamescope as a file-capability binary
+    # (cap_sys_nice=eip), which makes the loader run it AT_SECURE and strip
+    # LD_PRELOAD/LD_LIBRARY_PATH. Steam's pressure-vessel runtime needs both, so
+    # any game launched via `gamescope -- %command%` exits instantly.
+    capSysNice = false;
+    # VK_LAYER_FROG_gamescope_wsi — without it a game running inside gamescope
+    # never sees an HDR10 swapchain format, so its in-game HDR toggle stays
+    # greyed out even with `gamescope --hdr-enabled`.
+    enableWsi = true;
   };
   programs.gamemode.enable = true;
 
