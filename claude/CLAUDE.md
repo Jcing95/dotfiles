@@ -11,10 +11,10 @@
 - Never install packages, dependencies, or tools of any kind.
 - All package manager install commands are blocked.
 
-## Linting
-
-- When a PR is ready, always run the linter and fix any issues before considering the task complete.
-
 ## Decision Making
 
 - When a decision is not absolutely clear, always ask the user for clarification before proceeding. Do not make assumptions.
+
+## Summary
+
+- After finishing an iteration summarize concisely what you did and where you deviated from the instructions and why. Explain how to validate the changes as well. Think of this as a kind of executive summary.
