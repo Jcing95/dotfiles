@@ -5,7 +5,7 @@
   imports = [ ./hyprland.nix ];
 
   # Display manager — regreet (GTK4 under cage), themed via regreet/regreet.css
-  programs.regreet = {
+  services.displayManager.regreet = {
     enable = true;
     theme.name = "Adwaita-dark";
     iconTheme.name = "Adwaita";
