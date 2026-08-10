@@ -164,6 +164,22 @@ in
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
       pull.rebase = true;
+
+      # Whole-PR views: diff against the merge base with the upstream default
+      # branch rather than HEAD, so all commits on the branch show up at once
+      # and commits landed on main after branching stay out of the diff.
+      # Each takes an optional base override, e.g. `git pr origin/release`.
+      # These go through git diff/log, so delta renders them.
+      alias =
+        let
+          resolveBase = "b=\"$1\"; [ -n \"$b\" ] || b=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null) || b=origin/main;";
+        in
+        {
+          pr = "!f() { ${resolveBase} git diff \"$b...HEAD\"; }; f";
+          prstat = "!f() { ${resolveBase} git diff --stat \"$b...HEAD\"; }; f";
+          prfiles = "!f() { ${resolveBase} git diff --name-status \"$b...HEAD\"; }; f";
+          prlog = "!f() { ${resolveBase} git log --oneline --no-merges \"$b..HEAD\"; }; f";
+        };
     };
   };
 
