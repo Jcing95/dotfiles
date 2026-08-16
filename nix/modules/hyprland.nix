@@ -28,7 +28,18 @@
   ];
 
   # Hyprland
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+    # uwsm wraps the compositor in wayland-wm@hyprland.desktop.service and binds
+    # it to graphical-session.target. Launched bare from greetd, Hyprland never
+    # activates that target (it dropped hyprland-session.target), so every unit
+    # gated on it stayed dead — including xdg-desktop-portal, which carries
+    # `Requisite=graphical-session.target` and therefore failed instantly. No
+    # portal meant no screen-share picker in Discord, and no wlsunset/hypridle.
+    # Requires the uwsm session entry in greetd and `uwsm finalize` from
+    # hypr/config/uwsm.lua.
+    withUWSM = true;
+  };
 
   # ydotool daemon — synthesizes real input events (mouse wheel, unicode typing)
   # Used by Hyprland keybinds for scroll injection.

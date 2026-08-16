@@ -66,6 +66,19 @@ hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m output --clipboard-only"))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m window --clipboard-only"))
 
+-- Do-not-disturb: a notification popping up over a fullscreen video makes the
+-- display re-sync (black screen), so pause dunst before watching. No toast when
+-- pausing (dunst can't show one while paused); on resume the queue that piled up
+-- is dropped instead of flushing all at once.
+hl.bind(
+	mainMod .. " + SHIFT + D",
+	hl.dsp.exec_cmd(
+		"dunstctl set-paused toggle; "
+			.. "dunstctl is-paused | grep -q false "
+			.. "&& { dunstctl close-all; notify-send -u low 'Notifications resumed'; }"
+	)
+)
+
 -- Focus
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))

@@ -6,5 +6,5 @@ hl.env("XCURSOR_THEME",    "Nordzy-cursors-white")
 hl.env("XCURSOR_SIZE",     "24")
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("waybar")
+    hl.exec_cmd("uwsm app -- waybar")
 end)

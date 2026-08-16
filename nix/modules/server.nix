@@ -10,10 +10,14 @@
     wireguard-tools
   ];
 
-  # Display manager with simple greetd
+  # Display manager with simple greetd. lab has no session picker (it autologins
+  # straight into the compositor), so the uwsm wrapper that the other hosts get
+  # from the hyprland-uwsm.desktop session entry has to be spelled out here.
+  # This is the same command that entry runs — without it graphical-session.target
+  # never activates and the shared `uwsm finalize` in hypr/config/uwsm.lua fails.
   services.greetd.settings = {
     default_session = {
-      command = "start-hyprland";
+      command = "uwsm start -e -D Hyprland hyprland.desktop";
       user = username;
     };
   };
