@@ -122,20 +122,22 @@ in
         # Resolve the target against the worktree list, so either a bare
         # directory name ('feature-x') or a path ('../feature-x') works.
         local target="''${rest[1]}"
-        local main_wt="" path="" branch="" found_path="" found_branch=""
+        # NB: never name a local 'path' here -- zsh ties it to $PATH, so a
+        # local copy wipes PATH for the rest of the function.
+        local main_wt="" wt="" branch="" found_path="" found_branch=""
         local line
         while IFS= read -r line; do
           case "$line" in
             worktree\ *)
-              path="''${line#worktree }"
-              [[ -z "$main_wt" ]] && main_wt="$path"
+              wt="''${line#worktree }"
+              [[ -z "$main_wt" ]] && main_wt="$wt"
               branch=""
               ;;
             branch\ refs/heads/*) branch="''${line#branch refs/heads/}" ;;
             "")
-              if [[ "$path" != "$main_wt" ]] &&
-                 [[ "''${path:t}" == "$target" || "''${path:A}" == "''${target:A}" ]]; then
-                found_path="$path"
+              if [[ "$wt" != "$main_wt" ]] &&
+                 [[ "''${wt:t}" == "$target" || "''${wt:A}" == "''${target:A}" ]]; then
+                found_path="$wt"
                 found_branch="$branch"
               fi
               ;;
