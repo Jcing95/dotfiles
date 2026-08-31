@@ -41,6 +41,57 @@ in
 
   # ── ArgoCD installation via k3s built-in Helm controller ──────────────────
   services.k3s.manifests = {
+    # Let Traefik preserve the X-Forwarded-For it receives instead of
+    # overwriting it with the peer address.
+    #
+    # Every request reaches Traefik from a klipper svclb pod, because servicelb
+    # DNATs the hostPort to the Traefik ClusterIP and then MASQUERADEs
+    # (`-A POSTROUTING -d <traefik-clusterip>/32 -p tcp -j MASQUERADE`). So the
+    # peer is always 10.42.x.x and the original client address only survives in
+    # the header. Traefik's default trustedIPs is empty, which makes it *strip*
+    # untrusted X-Forwarded-* and substitute the peer — so without this, the real
+    # client IP set by the VPS's Caddy is destroyed before Immich or anything
+    # else sees it. Trusting the pod CIDR restores it, and Immich's own default
+    # (['linklocal','uniquelocal'], which covers 10/8) then resolves it correctly
+    # with no app-side config.
+    #
+    # Only `web` is configured: every Ingress pins router.entrypoints=web, and
+    # nothing terminates TLS in-cluster. The trade-off is that any pod could
+    # forge X-Forwarded-For — acceptable on a single-tenant homelab, and the
+    # standard way to run Traefik behind a LoadBalancer that masquerades.
+    #
+    # readTimeout: Traefik's built-in default is 60s and it covers "reading the
+    # entire request, including the body" (`traefik --help`). That silently kills
+    # any upload whose body takes longer than a minute to transfer — a large
+    # Immich video over a normal uplink — and the client just sees a gateway
+    # error, with Traefik logging 499. It never showed up before because
+    # Cloudflare's 100 MB cap kept uploads short; removing that cap is exactly
+    # what exposed it.
+    #
+    # Set to 0 (no limit) rather than a bigger finite number: this entrypoint is
+    # not directly internet-facing (the VPS's Caddy fronts it, LAN/tailnet
+    # otherwise), and any finite value is just a slower cliff to rediscover.
+    # idleTimeout stays at its 180s default, so dead keep-alive connections are
+    # still reaped.
+    traefik-forwarded-headers.content = {
+      apiVersion = "helm.cattle.io/v1";
+      kind = "HelmChartConfig";
+      metadata = {
+        name = "traefik";
+        namespace = "kube-system";
+      };
+      spec.valuesContent = ''
+        ports:
+          web:
+            forwardedHeaders:
+              trustedIPs:
+                - 10.42.0.0/16
+            transport:
+              respondingTimeouts:
+                readTimeout: 0
+      '';
+    };
+
     argocd-namespace.content = {
       apiVersion = "v1";
       kind = "Namespace";
