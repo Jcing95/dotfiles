@@ -15,6 +15,7 @@ in
     };
 
     secrets."cloudflared/tunnel-token" = {};
+    secrets."tailscale/auth-key" = {};
     secrets."protonvpn/wireguard-private-key" = {};
     secrets."argocd/ssh-deploy-key" = {};
     secrets."obsidian/couchdb-user" = {};

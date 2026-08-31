@@ -11,11 +11,13 @@
     ../../modules/nvidia-lab.nix
     ../../modules/sshd.nix
     ../../modules/cloudflared.nix
+    ../../modules/tailscale.nix
     ../../modules/sops.nix
     ../../modules/adguardhome.nix
     ../../modules/k3s.nix
     ../../modules/k3s-storage.nix
     ../../modules/storage.nix
+    ../../modules/games.nix
   ];
 
   networking.hostName = "lab";
