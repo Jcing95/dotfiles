@@ -2,7 +2,7 @@ hl.monitor({
 	output = "desc:Samsung Electric Company Odyssey G95NC HNTWB00204",
 	mode = "highres@highrr",
 	position = "auto",
-	scale = 1,
+	scale = 1.15,
 	vrr = 1,
 	bitdepth = 10,
 	cm = "auto",
