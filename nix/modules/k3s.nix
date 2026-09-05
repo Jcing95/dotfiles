@@ -119,9 +119,25 @@ in
               hostname: argocd.jcing.de
               annotations:
                 traefik.ingress.kubernetes.io/router.entrypoints: web
+          # Helm repositories the umbrella charts in homelab-charts depend on.
+          # ArgoCD renders those charts with `helm dependency build`, which only
+          # knows the repos registered here (it runs helm with its own
+          # repository config, not a shared one). Without these entries the build
+          # fails with "no repository definition for <url>", the render errors,
+          # and -- since the charts are no longer vendored as .tgz in git -- the
+          # chart cannot be rendered at all.
           configs:
             params:
               server.insecure: true
+            repositories:
+              immich-charts:
+                name: immich-charts
+                type: helm
+                url: https://immich-app.github.io/immich-charts
+              bjw-s:
+                name: bjw-s
+                type: helm
+                url: https://bjw-s-labs.github.io/helm-charts
         '';
       };
     };
