@@ -56,6 +56,8 @@ EOF
     cameractrls-gtk4
   ];
 
+  programs.btop.package = pkgs.btop-rocm;
+
   home.pointerCursor.size = 36;
 
   services.hypridle = {

@@ -16,6 +16,7 @@ hl.env("XCURSOR_SIZE", "36")
 
 hl.config({
 	misc = { vrr = 1 },
+	xwayland = { force_zero_scaling = true },
 })
 
 hl.on("hyprland.start", function()

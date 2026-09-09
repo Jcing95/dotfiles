@@ -9,7 +9,6 @@ in
   home.packages = with pkgs; [
     any-nix-shell
     affine
-    btop
     dust
     tldr
     opencode
@@ -27,6 +26,8 @@ in
   };
 
   programs.starship.enable = true;
+
+  programs.btop.enable = true;
 
   programs.zsh = {
     enable = true;
