@@ -1,6 +1,8 @@
 {
   "permissions": {
-    "allow": ["Bash"],
+    "allow": [
+      "Bash"
+    ],
     "deny": [
       "Bash(git commit:*)",
       "Bash(git push:*)",
@@ -13,15 +15,20 @@
       "Bash(yarn install:*)",
       "Bash(go install:*)"
     ],
-    "ask": ["Bash(git rebase:*)"]
+    "ask": [
+      "Bash(git rebase:*)"
+    ]
   },
   "model": "opus[1m]",
   "enabledPlugins": {
     "figma@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true
+    "lua-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true
   },
   "sandbox": {
-    "excludedCommands": ["gh *"]
+    "excludedCommands": [
+      "gh *"
+    ]
   },
   "effortLevel": "high",
   "tui": "fullscreen",
