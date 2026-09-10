@@ -1,23 +1,8 @@
 {
   "permissions": {
-    "allow": [
-      "Bash"
-    ],
-    "deny": [
-      "Bash(git commit:*)",
-      "Bash(git push:*)",
-      "Bash(npm install:*)",
-      "Bash(npm i:*)",
-      "Bash(pip install:*)",
-      "Bash(pip3 install:*)",
-      "Bash(brew install:*)",
-      "Bash(yarn add:*)",
-      "Bash(yarn install:*)",
-      "Bash(go install:*)"
-    ],
-    "ask": [
-      "Bash(git rebase:*)"
-    ]
+    "allow": ["Bash", "Bash(git commit:*)", "Bash(git rebase:*)"],
+    "deny": ["Bash(npm install:*)", "Bash(npm i:*)", "Bash(brew install:*)"],
+    "ask": []
   },
   "model": "opus[1m]",
   "enabledPlugins": {
@@ -26,9 +11,7 @@
     "typescript-lsp@claude-plugins-official": true
   },
   "sandbox": {
-    "excludedCommands": [
-      "gh *"
-    ]
+    "excludedCommands": ["gh *"]
   },
   "effortLevel": "high",
   "tui": "fullscreen",
