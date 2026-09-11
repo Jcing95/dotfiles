@@ -11,6 +11,10 @@ in
     role = "server";
     extraFlags = toString [
       "--write-kubeconfig-mode=644"
+      # hosts/lab/default.nix enables zramSwap. kubelet still fails to start on
+      # a node with swap enabled unless told otherwise, so this flag has to move
+      # in lockstep with that setting -- never enable one without the other.
+      "--kubelet-arg=fail-swap-on=false"
     ];
   };
 

@@ -7,11 +7,7 @@
   boot.kernelModules = [ "nvidia" ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Cursor fix for wlroots/Hyprland
   environment.variables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-    AQ_NO_HARDWARE_CURSORS = "1";
-
     # Route VAAPI/VDPAU through NVDEC so browsers and players hardware-decode
     # video instead of falling back to CPU software decode (the playback stutter).
     LIBVA_DRIVER_NAME = "nvidia";
@@ -42,10 +38,19 @@
 
       # Maxwell predates the open kernel modules (Turing+), keep the proprietary one
       open = false;
+
+      # Also provides /run/current-system/sw/bin/nvidia-settings, which the
+      # nvidia-powermizer user unit in ../home/lab.nix uses to force the card out
+      # of its minimum P8 clocks for the duration of a desktop session. Adaptive
+      # PowerMizer never ramps under Wayland (no X server to drive its
+      # heuristic), so without that unit the desktop renders at 135 MHz.
       nvidiaSettings = true;
 
-      # Keep the driver resident so the GPU doesn't cold-start its clocks on
-      # every app launch — reduces latency-spike stutter when video/games begin.
+      # Keeps the driver resident so the GPU is not torn down and re-initialised
+      # between clients — this is what cuts NVENC start-up latency for Jellyfin.
+      # Note it has no effect on clocks or P-states: persistence is about the
+      # driver staying loaded, not the GPU staying boosted. Clock behaviour is
+      # PowerMizer's job, handled by the nvidia-powermizer unit described above.
       nvidiaPersistenced = true;
 
       # 580 legacy branch — last branch supporting Maxwell; production/590+ dropped it
