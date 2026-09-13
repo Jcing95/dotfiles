@@ -10,6 +10,7 @@
     ../../modules/fonts.nix
     ../../modules/audio.nix
     ../../modules/amd.nix
+    ../../modules/gpu-routing.nix
     ../../modules/goxlr.nix
     ../../modules/docker.nix
     ../../modules/zmk.nix
