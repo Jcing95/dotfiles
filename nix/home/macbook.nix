@@ -11,7 +11,7 @@ in
 
   home.username = username;
   home.homeDirectory = "/Users/${username}";
-  home.stateVersion = "25.05";
+  home.stateVersion = "26.11";
 
   home.packages = with pkgs; [
     github-copilot-cli

@@ -12,7 +12,7 @@ in
   home.packages = with pkgs; [
     mgba
   ];
-  home.stateVersion = "25.05";
+  home.stateVersion = "26.11";
 
   # Use the persistent gnome-keyring ssh-agent rather than wezterm's per-mux one,
   # so a key added in one terminal is reachable everywhere (incl. the lock script).
