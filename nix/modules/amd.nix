@@ -1,4 +1,3 @@
-# AMD GPU configuration (for workstation)
 { config, pkgs, ... }:
 
 {

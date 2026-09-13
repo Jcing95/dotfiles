@@ -6,18 +6,15 @@
     ../../modules/darwin.nix
   ];
 
-  # Hostname
   networking.hostName = "macbook-jcing";
 
   system.primaryUser = username;
 
-  # User
   users.users.${username} = {
     home = "/Users/${username}";
     shell = pkgs.zsh;
   };
 
-  # Homebrew (managed declaratively by nix-darwin)
   homebrew = {
     enable = true;
 

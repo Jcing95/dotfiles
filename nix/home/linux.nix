@@ -21,14 +21,10 @@ in
   programs.zsh.shellAliases = {
     rebuild = "sudo nixos-rebuild switch --flake $DOTFILES/nix#$(hostname)";
     os-gc = "sudo nix-env --delete-generations old && nix-collect-garbage -d";
-    config = "nvim $DOTFILES";
     secrets = "sudo -E sops";
     k = "kubectl";
   };
 
-  # Dotfile symlinks (out-of-store so changes are reflected immediately)
-  home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/wezterm";
-  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/lazyvim";
   home.file.".config/waybar".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/waybar";
   home.file.".config/hypr/hyprland.lua".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/hyprland.lua";
   home.file.".config/hypr/config".source       = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/config";
@@ -64,7 +60,6 @@ in
     };
 
     gtk4 = {
-      theme = null;  # GTK4 apps use libadwaita, explicit theming not needed
       extraConfig.gtk-application-prefer-dark-theme = true;
     };
   };
@@ -77,9 +72,6 @@ in
 
   services.hyprpolkitagent.enable = true;
 
-  # Dunst as a graphical-session systemd user unit (replaces autostart.lua entry).
-  # Manual unit instead of services.dunst: the existing ~/.config/dunst/dunstrc is
-  # symlinked out-of-store (line 36 above) and HM's dunst module would clobber it.
   systemd.user.services.dunst = {
     Unit = {
       Description = "Dunst notification daemon";

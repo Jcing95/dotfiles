@@ -12,14 +12,10 @@ in
   home.file.".config/hypr/host.lua".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/laptop.lua";
 
   home.packages = with pkgs; [
-    brave
-    spotify
-    claude-code
   ];
 
   home.pointerCursor.size = 24;
 
-  # hypridle: dim/lock/suspend on idle.
   services.hypridle = {
     enable = true;
     settings = {

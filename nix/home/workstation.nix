@@ -38,21 +38,18 @@ EOF
   '';
 
   home.packages = with pkgs; [
-    brave
     telegram-desktop
     discord
-    spotify
+
+    # Games
     prismlauncher
-    nextcloud-client
-    claude-code
     bolt-launcher
     runelite
-    devenv
-    hueadm
     heroic
     lutris
-    bottles
     umu-launcher
+
+    # misc
     cameractrls-gtk4
   ];
 

@@ -8,13 +8,12 @@ in
 {
   home.packages = with pkgs; [
     any-nix-shell
-    affine
     dust
     tldr
-    opencode
     claude-code
-    codex
     zmk-studio
+    spotify
+    brave
     obsidian
   ];
 
@@ -199,15 +198,12 @@ in
       }
       compdef _grm grm
 
-      # zoxide (kept last, as recommended). Skipped under Claude Code, whose
-      # sandboxed shell breaks on the `--cmd cd` override.
       if [[ -z "$CLAUDECODE" ]]; then
         eval "$(${config.programs.zoxide.package}/bin/zoxide init zsh --cmd cd)"
       fi
     '';
 
     shellAliases = {
-      ls = "eza --icons";
       ll = "eza -lah --icons --git";
       la = "eza -lah --icons --git";
       tree = "eza --tree --icons";
@@ -219,7 +215,6 @@ in
       update = "nix flake update --flake $DOTFILES/nix";
       k = "kubectl";
       vim = "nvim";
-      grep = "rg --color=auto";
       "-" = "cd -";
       glog = "PAGER='less -F -X' git log";
       gadog = "PAGER='less -F -X' git log --all --decorate --oneline --graph";
@@ -273,11 +268,6 @@ in
       push.autoSetupRemote = true;
       pull.rebase = true;
 
-      # Whole-PR views: diff against the merge base with the upstream default
-      # branch rather than HEAD, so all commits on the branch show up at once
-      # and commits landed on main after branching stay out of the diff.
-      # Each takes an optional base override, e.g. `git pr origin/release`.
-      # These go through git diff/log, so delta renders them.
       alias =
         let
           resolveBase = "b=\"$1\"; [ -n \"$b\" ] || b=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null) || b=origin/main;";
@@ -310,22 +300,12 @@ in
 
   programs.zoxide = {
     enable = true;
-    # Integration is added manually (guarded) in programs.zsh.initContent below.
-    # Under Claude Code the `--cmd cd` override breaks the sandboxed shell:
-    # zoxide can't write its DB (blocked path -> error spam on every cd) and
-    # `cd` silently fuzzy-jumps to the wrong directory instead of erroring.
     enableZshIntegration = false;
   };
 
-  # OpenCode config (file-level symlinks; runtime files like node_modules stay untracked in ~/.config/opencode)
-  home.file.".config/opencode/opencode.jsonc".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/opencode/opencode.jsonc";
-  home.file.".config/opencode/RULES.md".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/opencode/RULES.md";
-  home.file.".config/opencode/skills".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/opencode/skills";
-
-  # Claude Code config (file-level symlinks; runtime state in ~/.claude stays untracked)
+  home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/wezterm";
+  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/lazyvim";
+ 
   home.file.".claude/settings.json".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/settings.json";
   home.file.".claude/CLAUDE.md".source =

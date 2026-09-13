@@ -20,13 +20,8 @@ in
     cloudflared
   ];
 
-  # Dotfile symlinks (out-of-store so changes are reflected immediately)
-  home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/wezterm";
-  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/lazyvim";
   home.file.".config/aerospace/aerospace.toml".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/darwin/aerospace.toml";
-
-  # Sketchybar config (out-of-store symlink so .lua edits take effect on --reload, no rebuild needed)
   home.file.".config/sketchybar".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/darwin/sketchybar";
 
