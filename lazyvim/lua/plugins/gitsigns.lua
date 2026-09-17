@@ -1,8 +1,9 @@
 local gitutil = require("jcing.git")
 
 -- Toggle the gitsigns diff base between the index (default -- shows only what
--- you changed since the last commit) and the merge base with the upstream
--- default branch (shows every line the PR touches).
+-- you changed since the last commit) and the merge base with the branch's PR
+-- base (shows every line the PR touches, and in a stacked PR only the lines
+-- this branch adds on top of its parent).
 --
 -- Deliberately a toggle rather than a permanent `base` setting: while a
 -- non-index base is active, hunks are relative to the branch root, so gitsigns'

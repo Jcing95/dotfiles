@@ -1,14 +1,14 @@
 local gitutil = require("jcing.git")
 
----Diff the whole branch against where it forked from the default branch.
+---Diff the whole branch against where it forked from its PR base.
 ---`A...HEAD` is git's symmetric-difference syntax, which diffview resolves to
----the merge base -- so commits landed on main after branching stay out of view.
----`--imply-local` puts the real working tree on the right instead of a
+---the merge base -- so commits landed on the base after branching stay out of
+---view. `--imply-local` puts the real working tree on the right instead of a
 ---read-only blob, so files stay editable inside the diff.
 local function open_pr()
-  local base = gitutil.default_branch()
+  local base = gitutil.base_ref()
   if not base then
-    return gitutil.warn("could not resolve an upstream default branch")
+    return gitutil.warn("could not resolve a base branch to diff against")
   end
   vim.cmd(("DiffviewOpen %s...HEAD --imply-local"):format(base))
 end
@@ -16,9 +16,9 @@ end
 ---Every commit the branch adds, as a browsable log with per-commit diffs.
 ---`--right-only` drops commits that are only on the base side.
 local function pr_commits()
-  local base = gitutil.default_branch()
+  local base = gitutil.base_ref()
   if not base then
-    return gitutil.warn("could not resolve an upstream default branch")
+    return gitutil.warn("could not resolve a base branch to diff against")
   end
   vim.cmd(("DiffviewFileHistory --range=%s...HEAD --right-only --no-merges"):format(base))
 end
