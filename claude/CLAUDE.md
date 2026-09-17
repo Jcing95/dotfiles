@@ -23,6 +23,12 @@
 - If you add comments always be concise.
 - Never persist any session decisions in the comments, as those are intransparent without the session context.
 
+## Stacked PRs
+
+Always compare the diff against the PR base. Never assume main/master branch as base of a PR.
+Try to keep PR diffs minimal, so reviewers are able to make sense of it.
+When optimizing a diff, always optimize against PR base, never master directly, as that will result in changes supposed to live in the base PR.
+
 ## Summary
 
 - After finishing an iteration summarize concisely what you did and where you deviated from the instructions and why. Explain how to validate the changes as well. Think of this as a kind of executive summary.
