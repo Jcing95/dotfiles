@@ -4,6 +4,11 @@
     "deny": ["Bash(npm install:*)", "Bash(npm i:*)", "Bash(brew install:*)"],
     "ask": []
   },
+  "env": {
+    "GIT_CONFIG_COUNT": "1",
+    "GIT_CONFIG_KEY_0": "url.https://github.com/.insteadOf",
+    "GIT_CONFIG_VALUE_0": "git@github.com:"
+  },
   "model": "opus[1m]",
   "enabledPlugins": {
     "figma@claude-plugins-official": false,
@@ -11,7 +16,10 @@
     "typescript-lsp@claude-plugins-official": true
   },
   "sandbox": {
-    "excludedCommands": ["gh *"]
+    "excludedCommands": ["gh *"],
+    "network": {
+      "allowedDomains": ["github.com", "*.github.com", "*.githubusercontent.com"]
+    }
   },
   "effortLevel": "high",
   "tui": "fullscreen",
