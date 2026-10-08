@@ -40,6 +40,11 @@
     unzip
   ];
 
+  environment.systemPath = [
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+  ];
+
   homebrew = {
     enable = true;
 
@@ -49,6 +54,14 @@
       upgrade = true;
       extraFlags = [ "--force-cleanup" ];
     };
+
+    taps = [
+      "rjyo/moshi"
+    ];
+
+    brews = [
+      "rjyo/moshi/moshi-hook"
+    ];
 
     casks = [
       "raycast"

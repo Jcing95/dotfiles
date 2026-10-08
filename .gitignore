@@ -6,3 +6,6 @@
 .Spotlight-V100
 .Trashes
 nvim.log
+
+# Claude Code account skill sync cache
+claude/skills/synced/
