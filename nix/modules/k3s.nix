@@ -229,6 +229,29 @@ in
     };
   };
 
+  # ── Raise the coredns memory limit ───────────────────────────────────────
+  # coredns idles at ~66Mi but spikes past the 170Mi k3s default and gets
+  # OOM-killed (observed on three consecutive boots). The limit cannot be set
+  # declaratively: coredns is a packaged addon, not a HelmChart, and k3s
+  # rewrites its manifest on every start. Re-applied per boot because the
+  # deploy controller resets the deployment each time it re-applies.
+  systemd.services.k3s-patch-coredns = {
+    description = "Raise the coredns memory limit above the k3s default";
+    after = [ "k3s.service" ];
+    wants = [ "k3s.service" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.kubectl ];
+    script = ''
+      export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+      until kubectl -n kube-system get deploy coredns >/dev/null 2>&1; do sleep 5; done
+      kubectl -n kube-system set resources deploy/coredns --limits=memory=512Mi
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+  };
+
   # ── Bridge sops-decrypted secrets into Kubernetes ─────────────────────────
   systemd.services.k3s-create-secrets = {
     description = "Create Kubernetes secrets from sops-decrypted files";
