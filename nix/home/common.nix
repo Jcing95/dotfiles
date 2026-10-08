@@ -15,6 +15,7 @@ in
     spotify
     brave
     obsidian
+    mise
   ];
 
   home.sessionVariables = {

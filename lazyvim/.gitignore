@@ -6,3 +6,7 @@ debug
 foo.*
 *.log
 data
+
+# migration audit scratch
+audit/raw/
+audit/keys.tsv

@@ -1,12 +1,12 @@
 {
   "permissions": {
-    "allow": ["Bash", "Bash(git commit:*)", "Bash(git rebase:*)"],
+    "allow": ["Bash(git commit:*)", "Bash(git rebase:*)"],
     "deny": ["Bash(npm install:*)", "Bash(npm i:*)", "Bash(brew install:*)"],
     "ask": []
   },
   "model": "opus[1m]",
   "enabledPlugins": {
-    "figma@claude-plugins-official": true,
+    "figma@claude-plugins-official": false,
     "lua-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
   },

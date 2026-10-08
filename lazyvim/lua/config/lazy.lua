@@ -35,7 +35,8 @@ require("lazy").setup({
   },
   install = { colorscheme = { "tokyonight", "habamax" } },
   checker = {
-    enabled = true, -- check for plugin updates periodically
+    enabled = false, -- disabled for the duration of the migration audit: a mid-audit
+    -- update invalidates every file:line in AUDIT.md's Source column
     notify = false, -- notify on update
   }, -- automatically check for plugin updates
   performance = {

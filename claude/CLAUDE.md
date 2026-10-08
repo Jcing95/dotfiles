@@ -1,15 +1,9 @@
 # Claude Rules
 
-## Git Operations
-
-- Read-only git commands (log, diff, status, show, blame, etc.) are allowed.
-- `git commit` and `git push` are never allowed — do not attempt them.
-- `git rebase` requires explicit user approval before proceeding.
-
 ## Package and Tool Installation
 
-- Never install packages, dependencies, or tools of any kind.
-- All package manager install commands are blocked.
+- Never install software on the host using apt/ homebrew etc.
+- Dev packages using yarn cargo etc, are fine but no global installs without prior verification.
 
 ## Decision Making
 
@@ -21,7 +15,7 @@
 - only comment why something deviates from what a reasonable dev would expect.
 - Never explain what is already logical or derivable from context.
 - If you add comments always be concise.
-- Never persist any session decisions in the comments, as those are intransparent without the session context.
+- Never persist any session decisions in the comments, these are intransparent without the session context.
 
 ## Stacked PRs
 

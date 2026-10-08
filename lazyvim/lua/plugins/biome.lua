@@ -1,13 +1,12 @@
 -- Biome LSP, for repos that ship a biome.json.
 --
--- Why this exists: LazyVim's default <leader>co fires the LSP code action
--- `source.organizeImports`, which only vtsls answers -- so imports get
--- TypeScript's flat alphabetical sort, ignoring biome's `assist.actions.
--- source.organizeImports.options.groups` entirely. Biome's action is named
--- `source.organizeImports.biome`, so it never matched.
+-- Why this exists: LazyVim's default <leader>co (servers["*"]) fires
+-- `source.organizeImports`, which only vtsls answers -- imports get TypeScript's
+-- flat alphabetical sort, ignoring biome's `assist.actions.source.
+-- organizeImports.options.groups`.
 --
 -- The keymap is declared under `servers.biome`, which LazyVim binds with a
--- `{ name = "biome" }` client filter (lazyvim/plugins/lsp/init.lua:175). It is
+-- `{ name = "biome" }` client filter (lazyvim/plugins/lsp/keymaps.lua). It is
 -- therefore only active in buffers where the biome client attached, and the
 -- biome client only attaches when a biome.json/biome.jsonc is found upward from
 -- the file (`workspace_required = true` in nvim-lspconfig/lsp/biome.lua).
@@ -22,11 +21,28 @@ return {
           -- Use the repo-local binary (nvim-lspconfig's `cmd` prefers
           -- node_modules/.bin/biome) so the version matches the project.
           mason = false,
-          -- stylua: ignore
           keys = {
             {
               "<leader>co",
-              function() LazyVim.lsp.action["source.organizeImports.biome"]() end,
+              function()
+                vim.lsp.buf.code_action({
+                  apply = true,
+                  -- Biome scopes assist actions to the requested range, and the
+                  -- organize-imports action only spans the import block, so the
+                  -- default cursor range misses it from anywhere below.
+                  range = { start = { 1, 0 }, ["end"] = { vim.api.nvim_buf_line_count(0), 0 } },
+                  -- Biome answers under either the legacy kind or a
+                  -- `source.biome.*` one; `filter` narrows the wider request back
+                  -- down to organize-imports.
+                  context = {
+                    only = { "source.organizeImports.biome", "source.biome" },
+                    diagnostics = {},
+                  },
+                  filter = function(action)
+                    return (action.kind or ""):find("organizeImports", 1, true) ~= nil
+                  end,
+                })
+              end,
               desc = "Organize Imports (biome)",
               has = "codeAction",
             },
