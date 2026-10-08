@@ -11,6 +11,7 @@
     ../../modules/audio.nix
     ../../modules/amd.nix
     ../../modules/gpu-routing.nix
+    ../../modules/display-hotplug.nix
     ../../modules/goxlr.nix
     ../../modules/docker.nix
     ../../modules/zmk.nix
