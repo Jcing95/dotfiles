@@ -18,6 +18,18 @@
     ../../modules/k3s-storage.nix
     ../../modules/storage.nix
     ../../modules/games.nix
+    ../../modules/herdr.nix
+  ];
+
+  # home/common.nix already installs brave for every host, so adding a second,
+  # differently-configured brave to home.packages collides in buildEnv. Override the
+  # package instead: the VAAPI flags are what the GTX 980 needs for hardware decode.
+  nixpkgs.overlays = [
+    (final: prev: {
+      brave = prev.brave.override {
+        commandLineArgs = "--enable-features=VaapiOnNvidiaGPUs,AcceleratedVideoDecodeLinuxGL,AcceleratedVideoEncoder";
+      };
+    })
   ];
 
   networking.hostName = "lab";

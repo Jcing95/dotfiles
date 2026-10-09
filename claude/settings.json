@@ -24,5 +24,6 @@
   "effortLevel": "high",
   "tui": "fullscreen",
   "theme": "dark",
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "hooks": {"SessionStart":[{"matcher":"^(startup|resume|clear|compact|fork)$","hooks":[{"type":"command","command":"bash '/home/jcing/.claude/hooks/herdr-agent-state.sh' session","timeout":10}]}]}
 }

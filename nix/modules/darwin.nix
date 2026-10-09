@@ -59,8 +59,10 @@
       "rjyo/moshi"
     ];
 
+    # herdr from nixpkgs fails to build on darwin (herdr #830), so take the bottle here.
     brews = [
       "rjyo/moshi/moshi-hook"
+      "herdr"
     ];
 
     casks = [
