@@ -1,6 +1,7 @@
 require("config.uwsm") -- must be first: finalizes the systemd session
 require("host")
 require("config.appearance")
+require("config.windowrules")
 require("config.input")
 require("config.devices")
 require("config.binds")

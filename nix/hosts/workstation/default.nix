@@ -10,6 +10,7 @@
     ../../modules/fonts.nix
     ../../modules/audio.nix
     ../../modules/amd.nix
+    ../../modules/wine.nix
     ../../modules/gpu-routing.nix
     ../../modules/display-hotplug.nix
     ../../modules/goxlr.nix

@@ -7,6 +7,7 @@ in
 {
   imports = [
     ./linux.nix
+    ./affinity.nix
   ];
 
   home.file.".config/hypr/host.lua".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/hypr/workstation.lua";

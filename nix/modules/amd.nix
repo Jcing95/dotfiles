@@ -17,8 +17,6 @@
   };
 
   environment.systemPackages = with pkgs; [
-    wine
-    winetricks
     vulkan-loader
     vulkan-tools
   ];
