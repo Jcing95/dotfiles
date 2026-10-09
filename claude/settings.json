@@ -1,13 +1,14 @@
 {
   "permissions": {
     "allow": ["Bash(git commit:*)", "Bash(git rebase:*)"],
-    "deny": ["Bash(npm install:*)", "Bash(npm i:*)", "Bash(brew install:*)"],
+    "deny": ["Bash(brew install:*)"],
     "ask": []
   },
   "env": {
     "GIT_CONFIG_COUNT": "1",
     "GIT_CONFIG_KEY_0": "url.https://github.com/.insteadOf",
-    "GIT_CONFIG_VALUE_0": "git@github.com:"
+    "GIT_CONFIG_VALUE_0": "git@github.com:",
+    "SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt"
   },
   "model": "opus[1m]",
   "enabledPlugins": {
@@ -18,7 +19,11 @@
   "sandbox": {
     "excludedCommands": ["gh *"],
     "network": {
-      "allowedDomains": ["github.com", "*.github.com", "*.githubusercontent.com"]
+      "allowedDomains": [
+        "github.com",
+        "*.github.com",
+        "*.githubusercontent.com"
+      ]
     }
   },
   "effortLevel": "high",
