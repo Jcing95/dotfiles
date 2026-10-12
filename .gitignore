@@ -9,3 +9,7 @@ nvim.log
 
 # Claude Code account skill sync cache
 claude/skills/synced/
+
+# nix build output links
+result
+result-*
