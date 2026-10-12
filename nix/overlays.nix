@@ -50,4 +50,17 @@ final: prev: {
       hash = "sha256-4mNknvfJQJEPZjQoNdKLQcW4CI93D6BUDPj8LtD940A=";
     };
   });
+
+  # Chromium puts its SingletonSocket under $TMPDIR. Sandboxes with a private
+  # /tmp (steam-run, Heroic, Steam) can't reach it there, so links opened from
+  # them start a second browser on the locked profile instead of a new tab.
+  brave =
+    if prev.stdenv.hostPlatform.isLinux then
+      prev.brave.overrideAttrs (old: {
+        postFixup = (old.postFixup or "") + ''
+          wrapProgram $out/bin/brave --run 'export TMPDIR="''${XDG_RUNTIME_DIR:-/tmp}"'
+        '';
+      })
+    else
+      prev.brave;
 }
