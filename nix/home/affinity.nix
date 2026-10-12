@@ -12,17 +12,53 @@ let
   prefix = "${config.home.homeDirectory}/Games/Heroic/Prefixes/default/Affinity";
   appDir = "${prefix}/drive_c/Program Files/Affinity/Affinity";
 
+  # Prefix construction only. Running Affinity needs ElementalWarrior's build
+  # below, but winetricks is far easier to drive against a normal nixpkgs wine,
+  # and both are 11.18 so they agree on the prefix.
   wine = pkgs.wineWow64Packages.stagingFull;
 
+  # Libraries the prebuilt wine's unix modules dlopen; handed to it through
+  # nix-ld, which core.nix already enables.
+  wineLibs = lib.makeLibraryPath (with pkgs; [
+    libx11 libxext libxrandr libxi libxcursor
+    libxinerama libxcomposite libxfixes libxrender libxcb
+    libxkbcommon freetype fontconfig libGL vulkan-loader mesa libdrm
+    alsa-lib libpulseaudio openal gnutls libgcrypt SDL2 libusb1 systemd
+    krb5 wayland zlib ocl-icd libpcap pcsclite glib gtk3 cups
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base
+  ]);
+
+  # Stock Wine mis-handles Affinity's in-app drag and drop — its OLE drag loop
+  # dispatches mouse input instead of handling it — and gets panel re-docking and
+  # modal dialog stacking wrong. ElementalWarrior's build carries the Affinity
+  # patch set for exactly those. Kept in Heroic's tools directory so Heroic's
+  # own launch path finds it without extra configuration.
+  ewWine = rec {
+    version = "11.18";
+    release = "11.18-r1";
+    sha256 = "c325bf804407abcf8070d02066b5be00680b0339e796a6583b4a1d2dae934853";
+    dir = "${config.home.homeDirectory}/.config/heroic/tools/wine/ElementalWarrior-wine-${version}";
+    url = "https://github.com/jfacemyer/Affinity-Wine-Builder/releases/download/${release}/ElementalWarrior-wine-${version}.tar.xz";
+  };
+
   # Wine DPI. The workstation runs XWayland unscaled (force_zero_scaling), so
-  # Affinity's chrome is sized purely by this: 144 = 1.5x.
-  logPixels = 144;
+  # Affinity's chrome is sized purely by this: 192 = 2x.
+  logPixels = 192;
 
   affinity = pkgs.writeShellApplication {
     name = "affinity";
-    runtimeInputs = [ wine ];
+    runtimeInputs = [ ];
     text = ''
       export WINEPREFIX="${prefix}"
+      # ElementalWarrior's wine is a prebuilt FHS binary, so it needs its loader
+      # and libraries supplied — via nix-ld rather than an FHS sandbox. A sandbox
+      # (steam-run) gives every launch its own mount namespace, so wine derives a
+      # different server directory from the prefix's device id each time and each
+      # launch gets a private wineserver. That breaks Affinity's single-instance
+      # IPC, and with it the Canva sign-in callback, which is handed to the
+      # running instance as an argv URL.
+      export NIX_LD="''${NIX_LD:-/run/current-system/sw/share/nix-ld/lib/ld.so}"
+      export NIX_LD_LIBRARY_PATH="${wineLibs}"
       export WINEDEBUG="''${WINEDEBUG:--all}"
       export WINEFSYNC=1
       # winemenubuilder would rewrite ~/.local/share/applications on every start,
@@ -35,15 +71,19 @@ let
         echo "affinity: no installation in ${prefix} — run affinity-setup first" >&2
         exit 1
       fi
+      if [ ! -x "${ewWine.dir}/bin/wine" ]; then
+        echo "affinity: patched wine missing from ${ewWine.dir} — run affinity-setup first" >&2
+        exit 1
+      fi
 
       cd "${appDir}"
-      exec wine ./Affinity.exe "$@"
+      exec "${ewWine.dir}/bin/wine" ./Affinity.exe "$@"
     '';
   };
 
   affinity-setup = pkgs.writeShellApplication {
     name = "affinity-setup";
-    runtimeInputs = with pkgs; [ wine winetricks cabextract p7zip unzip curl ];
+    runtimeInputs = with pkgs; [ wine winetricks cabextract p7zip unzip curl gnutar xz ];
     text = ''
       set -euo pipefail
 
@@ -82,10 +122,9 @@ let
       winetricks -q fontsmooth=rgb
 
       echo ">>> DXVK"
-      # Affinity's shell is WPF, which renders through D3D9, and its canvas
-      # through D3D11. Both land on wined3d by default, which is slow enough here
-      # to make the app unusable (single-digit FPS at this resolution). DXVK puts
-      # them on Vulkan instead. d3d12 is left as Wine's builtin vkd3d — Affinity's
+      # Affinity's canvas renders through D3D11, which on wined3d is slow enough
+      # here to make the app unusable (single-digit FPS at this resolution). DXVK
+      # puts it on Vulkan instead. d3d12 is left as Wine's builtin vkd3d — Affinity's
       # DXCore probe finds no hardware D3D12 adapter under Wine anyway, and Heroic
       # layers vkd3d-proton on top when the app is launched from there.
       for dll in d3d9 d3d10core d3d11 dxgi; do
@@ -93,6 +132,10 @@ let
         install -m644 "${pkgs.dxvk}/x32/$dll.dll" "$WINEPREFIX/drive_c/windows/syswow64/$dll.dll"
         wine reg add 'HKCU\Software\Wine\DllOverrides' /v "$dll" /t REG_SZ /d native /f >/dev/null
       done
+      # The WPF shell goes software. Hardware WPF under XWayland loses the first
+      # frame of new popups and panels, leaving them black (DXVK, wined3d Vulkan)
+      # or white (wined3d GL) apart from controls that later repaint.
+      wine reg add 'HKCU\Software\Microsoft\Avalon.Graphics' /v DisableHWAcceleration /t REG_DWORD /d 1 /f
 
       echo ">>> WinMetadata"
       # WinRT metadata is not part of Wine; Affinity's CLR needs it to JIT the
@@ -149,6 +192,14 @@ let
           wine "$installer"
           ;;
       esac
+
+      echo ">>> patched wine"
+      if [ ! -x "${ewWine.dir}/bin/wine" ]; then
+        curl -fL --retry 3 -o "$work/ew-wine.tar.xz" "${ewWine.url}"
+        echo "${ewWine.sha256}  $work/ew-wine.tar.xz" | sha256sum -c -
+        mkdir -p "$(dirname "${ewWine.dir}")"
+        tar -xf "$work/ew-wine.tar.xz" -C "$(dirname "${ewWine.dir}")"
+      fi
 
       echo ">>> desktop integration"
       icon="${appDir}/Package/AppLogo.scale-400.png"
