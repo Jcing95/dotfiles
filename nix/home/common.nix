@@ -91,7 +91,11 @@ in
           git worktree add -b "$branch_name" "$dir_name" || return 1
         fi
 
-        cd "$dir_name"
+        cd "$dir_name" || return 1
+
+        if [[ -f .envrc ]] && (( $+commands[direnv] )); then
+          direnv allow
+        fi
       }
 
       grm() {
