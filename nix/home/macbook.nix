@@ -18,6 +18,7 @@ in
     oms
     google-cloud-sdk
     cloudflared
+    go
   ];
 
   home.file.".config/aerospace/aerospace.toml".source =
