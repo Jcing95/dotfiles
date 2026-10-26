@@ -102,16 +102,8 @@
     };
 
     CustomUserPreferences = {
-      # Enable both German and U.S. layouts system-wide so a specific
-      # layout can be assigned per physical keyboard via
-      # System Settings → Keyboard → Input Sources (right-click → "Use for ...").
       "com.apple.HIToolbox" = {
         AppleEnabledInputSources = [
-          {
-            InputSourceKind = "Keyboard Layout";
-            "KeyboardLayout ID" = 3;
-            "KeyboardLayout Name" = "German";
-          }
           {
             InputSourceKind = "Keyboard Layout";
             "KeyboardLayout ID" = 0;
