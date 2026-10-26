@@ -91,6 +91,12 @@ in
           git worktree add -b "$branch_name" "$dir_name" || return 1
         fi
 
+        # Sandboxed agents can't write .git/config, so push.autosetupremote fails silently on their first push.
+        if ! git rev-parse --abbrev-ref --symbolic-full-name "$branch_name@{u}" >/dev/null 2>&1; then
+          git config "branch.$branch_name.remote" origin
+          git config "branch.$branch_name.merge" "refs/heads/$branch_name"
+        fi
+
         cd "$dir_name" || return 1
 
         if [[ -f .envrc ]] && (( $+commands[direnv] )); then
