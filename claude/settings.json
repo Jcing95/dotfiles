@@ -1,34 +1,55 @@
 {
-  "permissions": {
-    "allow": ["Bash(git commit:*)", "Bash(git rebase:*)"],
-    "deny": ["Bash(brew install:*)"],
-    "ask": []
-  },
   "env": {
     "GIT_CONFIG_COUNT": "1",
     "GIT_CONFIG_KEY_0": "url.https://github.com/.insteadOf",
     "GIT_CONFIG_VALUE_0": "git@github.com:",
     "SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt"
   },
+  "permissions": {
+    "allow": [
+      "Bash(git commit:*)",
+      "Bash(git rebase:*)"
+    ],
+    "deny": [
+      "Bash(brew install:*)"
+    ],
+    "ask": []
+  },
   "model": "opus[1m]",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/home/jcing/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {
     "figma@claude-plugins-official": false,
     "lua-lsp@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true
   },
   "sandbox": {
-    "excludedCommands": ["gh *"],
     "network": {
       "allowedDomains": [
         "github.com",
         "*.github.com",
         "*.githubusercontent.com"
       ]
-    }
+    },
+    "excludedCommands": [
+      "gh *"
+    ]
   },
   "effortLevel": "high",
   "tui": "fullscreen",
   "theme": "dark",
-  "skipAutoPermissionPrompt": true,
-  "hooks": {"SessionStart":[{"matcher":"^(startup|resume|clear|compact|fork)$","hooks":[{"type":"command","command":"bash '/home/jcing/.claude/hooks/herdr-agent-state.sh' session","timeout":10}]}]}
+  "skipAutoPermissionPrompt": true
 }

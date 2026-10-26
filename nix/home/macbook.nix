@@ -19,6 +19,38 @@ in
     google-cloud-sdk
     cloudflared
     go
+
+    jq
+    yq-go
+    gnumake
+
+    gopls
+    gotools
+    go-tools
+    delve
+    exercism
+
+    nodejs_24
+    corepack_24
+    fnm
+    biome
+
+    uv
+
+    argocd
+    crane
+    oras
+    cosign
+
+    sops
+    age
+    lima
+
+    ansible
+    ansible-lint
+
+    nix-update
+    nixfmt
   ];
 
   home.file.".config/aerospace/aerospace.toml".source =
@@ -53,6 +85,8 @@ in
     if [ -f "$HOME/.deno/env" ]; then
       . "$HOME/.deno/env"
     fi
+
+    eval "$(${pkgs.fnm}/bin/fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
   '';
 
   programs.home-manager.enable = true;
