@@ -15,6 +15,12 @@ in
       # a node with swap enabled unless told otherwise, so this flag has to move
       # in lockstep with that setting -- never enable one without the other.
       "--kubelet-arg=fail-swap-on=false"
+      # Without a reservation allocatable == capacity, so pods can starve k3s and
+      # the host and an overrun ends in a node-wide kernel OOM instead of the
+      # kubelet evicting a pod. Sized to also cover an on-demand Hyprland session
+      # (modules/server.nix), which runs outside the pods' cgroup.
+      "--kubelet-arg=system-reserved=memory=6Gi"
+      "--kubelet-arg=eviction-hard=memory.available<1Gi"
     ];
   };
 

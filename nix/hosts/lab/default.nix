@@ -39,7 +39,7 @@
 
   zramSwap = {
     enable = true;
-    memoryPercent = 25; # ~4 GB of compressed swap
+    memoryPercent = 25; # ~8 GB of compressed swap
   };
 
   networking.interfaces.enp3s0.wakeOnLan.enable = true;

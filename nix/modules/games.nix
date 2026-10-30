@@ -13,7 +13,7 @@ in
 {
   networking.firewall.allowedTCPPorts = [
     21025 # Starbound (game protocol is TCP-only; 21026 is RCON, not enabled)
-    7777  # Terraria / tModLoader (game protocol is TCP-only)
+    25565 # Minecraft (All the Mods 10)
   ];
 
   # Server state lives on the SSD tier alongside the other k3s app configs. Same
@@ -22,6 +22,8 @@ in
   systemd.tmpfiles.rules = [
     "d /mnt/storage/k3s/config/starbound 0755 ${puid} ${pgid} -"
     "Z /mnt/storage/k3s/config/starbound 0755 ${puid} ${pgid} -"
+    "d /mnt/storage/k3s/config/minecraft 0755 ${puid} ${pgid} -"
+    "Z /mnt/storage/k3s/config/minecraft 0755 ${puid} ${pgid} -"
     # tModLoader's image declares no USER and its entrypoint writes as root,
     # so unlike starbound this tree is root-owned rather than ${puid}:${pgid}.
     "d /mnt/storage/k3s/config/terraria 0755 root root -"
