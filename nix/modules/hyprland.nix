@@ -2,6 +2,8 @@
 { pkgs, username, ... }:
 
 {
+  imports = [ ./screenshot.nix ];
+
   # Desktop packages
   environment.systemPackages = with pkgs; [
     # Hyprland ecosystem
@@ -10,7 +12,6 @@
     waybar
     dunst
     awww
-    hyprshot
     hypridle
     hyprlock
     wlogout

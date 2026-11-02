@@ -109,7 +109,7 @@ EOF
       After = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${pkgs.wlsunset}/bin/wlsunset -l 49.0 -L 8.4";
+      ExecStart = "${pkgs.wlsunset}/bin/wlsunset -l 49.0 -L 8.4 -t 4500";
       Restart = "on-failure";
     };
     Install.WantedBy = [ "graphical-session.target" ];

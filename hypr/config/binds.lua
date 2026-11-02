@@ -62,9 +62,9 @@ hl.bind(mainMod .. " + SHIFT + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + V", hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + CTRL + L", hl.dsp.exec_cmd("loginctl lock-session"))
-hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"))
-hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m output --clipboard-only"))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m window --clipboard-only"))
+hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("screenshot region"))
+hl.bind("Print", hl.dsp.exec_cmd("screenshot output"))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd("screenshot window"))
 
 -- Do-not-disturb: a notification popping up over a fullscreen video makes the
 -- display re-sync (black screen), so pause dunst before watching. No toast when

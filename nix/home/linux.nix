@@ -15,6 +15,7 @@ in
     # The lab runs the herdr server (modules/herdr.nix); laptop and workstation only
     # need the client for `herdr --remote lab`.
     herdr
+    signal-desktop
   ];
   home.stateVersion = "26.11";
 
