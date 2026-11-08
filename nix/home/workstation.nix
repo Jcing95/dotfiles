@@ -49,6 +49,7 @@ EOF
     heroic
     lutris
     umu-launcher
+    osu-lazer-bin
 
     # misc
     cameractrls-gtk4

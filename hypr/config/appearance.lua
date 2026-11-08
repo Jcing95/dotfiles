@@ -18,6 +18,6 @@ hl.config({
 		enabled = true,
 	},
 	render = {
-		direct_scanout = 1,
+		direct_scanout = 2,
 	},
 })
