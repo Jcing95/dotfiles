@@ -3,7 +3,7 @@ name: Update flake.lock
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 6 * * 0"
+    - cron: "0 6 * * *"
 
 jobs:
   update:
@@ -17,6 +17,7 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@main
 
       - uses: DeterminateSystems/update-flake-lock@main
+        id: update
         with:
           path-to-flake-dir: nix
           pr-title: "chore: update flake.lock"
@@ -25,3 +26,21 @@ jobs:
             automated
           pr-reviewers: Jcing95
           commit-msg: "update flake"
+
+      - name: Evaluate hosts
+        if: steps.update.outputs.pull-request-number != ''
+        run: |
+          git fetch origin update_flake_lock_action
+          git checkout FETCH_HEAD
+          for host in workstation laptop lab; do
+            nix eval --raw "./nix#nixosConfigurations.$host.config.system.build.toplevel.drvPath"
+            echo
+          done
+
+      # PRs opened with GITHUB_TOKEN don't trigger other workflows, so there are
+      # no checks for GitHub's native auto-merge to wait on; merge after the eval above.
+      - name: Merge
+        if: steps.update.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr merge ${{ steps.update.outputs.pull-request-number }} --squash --delete-branch

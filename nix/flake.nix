@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
 
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -25,13 +26,17 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-darwin, oms, sops-nix, ... }:
+  outputs = { self, nixpkgs, nixpkgs-master, home-manager, nix-darwin, oms, sops-nix, ... }:
   let
     username = "jcing";
     email = "dev@jcing.de";
     linuxSystem = "x86_64-linux";
     darwinSystem = "aarch64-darwin";
-    overlays = [ (import ./overlays.nix) oms.overlays.default ];
+    overlays = [
+      (import ./overlays-master.nix nixpkgs-master)
+      (import ./overlays.nix)
+      oms.overlays.default
+    ];
   in
   {
     nixosConfigurations = {
