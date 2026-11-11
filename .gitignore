@@ -13,3 +13,6 @@ claude/skills/synced/
 # nix build output links
 result
 result-*
+
+# fonts uuid
+fonts/.uuid

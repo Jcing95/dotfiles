@@ -13,3 +13,11 @@ hl.window_rule({
 	match = { class = [[^[Aa]ffinity\.exe$]], initial_title = [[^$]] },
 	no_initial_focus = true,
 })
+
+-- Swing maps dropdowns and context menus as separate "winN" windows. Focusing
+-- one deactivates the owner frame, which makes Swing close the popup.
+hl.window_rule({
+	name = "runelite-popup-no-focus",
+	match = { class = [[^net-runelite-client-RuneLite$]], title = [[^win\d+$]] },
+	no_focus = true,
+})
