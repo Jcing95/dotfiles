@@ -53,6 +53,7 @@ EOF
 
     # misc
     cameractrls-gtk4
+    pkgsRocm.blender
   ];
 
   programs.btop.package = pkgs.btop-rocm;
