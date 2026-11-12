@@ -100,16 +100,21 @@ Consider threads where `isResolved` is false and the first comment's author star
 
 - Commit the fixes and `git push`.
 - Reply on every considered thread:
+
   ```bash
   gh api "repos/{owner}/{repo}/pulls/<n>/comments/<databaseId>/replies" -f body="..."
   ```
+
   Valid: `Fixed in <short-sha>.` Invalid: one sentence why it is not addressed.
+
 - Resolve only fixed threads; leave rejected ones open for a human:
+
   ```bash
   gh api graphql -f id=<thread-id> -f query='mutation($id:ID!){resolveReviewThread(input:{threadId:$id}){thread{isResolved}}}'
   ```
 
-Handle one Copilot round only. Do not re-request its review.
+  If Copilot commented, jump to Step 7.
+  If Copilot suggests approval, continue with step 10.
 
 ## 10. Mark ready
 
@@ -139,7 +144,11 @@ Classify each failure:
 
 One attempt = one batch handling all failures of a finished CI run: commit and push all fixes together; rerun unrelated failures only if nothing was pushed (a push retriggers CI anyway). Then wait for the full CI again. Stop after 3 attempts and report what is still failing.
 
-## 12. Summary
+## 12. Check for Master tests
+
+If there are tests touched in the PR that only run on master, and not on feature deployments add the "run all tests" tag in the PR to see if the tests is green. The test run is going to take longer but we should prevent broken tests on master.
+
+## 13. Summary
 
 Report concisely:
 

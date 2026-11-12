@@ -30,8 +30,6 @@ in
     delve
     exercism
 
-    nodejs_24
-    corepack_24
     fnm
     biome
 
@@ -86,7 +84,7 @@ in
       . "$HOME/.deno/env"
     fi
 
-    eval "$(${pkgs.fnm}/bin/fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
+    eval "$(${pkgs.fnm}/bin/fnm env --use-on-cd --version-file-strategy=recursive --corepack-enabled --shell zsh)"
   '';
 
   programs.home-manager.enable = true;

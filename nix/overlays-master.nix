@@ -13,6 +13,7 @@ nixpkgs-master: final: prev: {
     brave
     claude-code
     discord
+    fnm
     fzf
     github-copilot-cli
     google-cloud-sdk
