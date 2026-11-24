@@ -8,6 +8,7 @@
 ## Decision Making
 
 - When a decision is not absolutely clear, always ask the user for clarification before proceeding. Do not make assumptions.
+- In design docs, don't add design elements the user hasn't decided (model relations, migrations, backfills). Propose them in chat first.
 
 ## comments
 
@@ -28,10 +29,14 @@ When optimizing a diff, always optimize against PR base, never master directly, 
 The sandbox can't sign commits (no ssh-agent access) or write `.git/config`, so don't create commits or push branches locally. `gh` runs outside the sandbox: use the GitHub API instead.
 
 - New branch: `gh api repos/<owner>/<repo>/git/refs -f ref=refs/heads/<branch> -f sha=<base sha>`.
-- Commits: GraphQL `createCommitOnBranch` (file contents base64, `expectedHeadOid`). GitHub signs these, so they show as Verified.
+- Commits: GraphQL `createCommitOnBranch` (file contents base64, `expectedHeadOid`). GitHub signs these, so they show as Verified. Shell variables don't survive across Bash calls, so pass explicit file lists, and check the commit's file list on GitHub afterwards.
 - Rewriting an existing PR branch: build the new commit on a temporary branch, then force-move the PR branch to it (`PATCH git/refs/heads/<branch>` with `force=true`), and delete the temp branch. Never point a PR branch at its base, even briefly: GitHub auto-closes the PR when it has no diff.
 - Afterwards, `git fetch` and reset the local branch to the remote one.
 - Local read-only git (diff, log, show, fetch) is fine. Avoid local commands that write `.git/config`, such as `checkout -b` with auto-tracking or `push -u`.
+
+## Tests
+
+- CI runs the full test suite anyway. Tests that can't run locally are not a blocker: note which ones were skipped and why, then proceed.
 
 ## Code Quality
 
@@ -40,6 +45,7 @@ The sandbox can't sign commits (no ssh-agent access) or write `.git/config`, so 
 ## Summary
 
 - After finishing an iteration summarize concisely what you did and where you deviated from the instructions and why. Explain how to validate the changes as well. Think of this as a kind of executive summary.
+- If the session hit issues that a CLAUDE.md rule could have prevented (corrections, misunderstandings, repeated mistakes, sandbox/tooling friction), propose a concrete CLAUDE.md change in the summary. Suggest only; never edit CLAUDE.md without approval.
 
 ## Tone and Structure
 
