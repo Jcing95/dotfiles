@@ -4,6 +4,7 @@
 {
   imports = [
     ./terminal.nix
+    ./nix-gc.nix
   ];
 
   # Nix settings
