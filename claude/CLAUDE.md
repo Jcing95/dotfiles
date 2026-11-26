@@ -23,6 +23,7 @@
 Always compare the diff against the PR base. Never assume main/master branch as base of a PR.
 Try to keep PR diffs minimal, so reviewers are able to make sense of it.
 When optimizing a diff, always optimize against PR base, never master directly, as that will result in changes supposed to live in the base PR.
+When creating stacked PRs, also register them as a `gh stack` (`gh stack init <branch1> <branch2> …` for existing branches, `gh stack add` for new ones).
 
 ## Git
 
