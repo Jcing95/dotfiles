@@ -27,6 +27,7 @@ in
     gopls
     gotools
     go-tools
+    typescript-language-server
     delve
     exercism
 
