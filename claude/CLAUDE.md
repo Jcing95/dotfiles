@@ -32,7 +32,7 @@ When optimizing a diff, always optimize against PR base, never master directly, 
 - For a repo outside the session's working directories, `cd` doesn't stick, so bare git can't reach it. Ask the user to run `/add-dir <path>` instead of trying `git -C`.
 - Do new work in a worktree under `.claude/worktrees/` inside the repo, so it doesn't interfere with other work. Reuse an existing worktree for the task if there is one; otherwise `git fetch` and branch from the latest `origin/<base>`, never local state. Symlink secrets and installed packages (`.env*`, `node_modules`, etc.) into it from the main checkout.
 - Never point a PR branch at its base, even briefly: GitHub auto-closes the PR when it has no diff.
-- Rebasing a PR branch is authorization to force-push it afterwards with `git push --force-with-lease`; don't ask again.
+- Rebasing a PR branch is authorization to force-push it afterwards with `git push --force-with-lease`; don't ask again. `git fetch` the branch first: CI may have added `auto(bundle)` commits, which are safe to overwrite with `--force-with-lease=<branch>:<their sha>`.
 
 ## Tests
 
