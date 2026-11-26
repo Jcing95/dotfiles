@@ -42,7 +42,8 @@
       "allowedDomains": [
         "github.com",
         "*.github.com",
-        "*.githubusercontent.com"
+        "*.githubusercontent.com",
+        "*.blob.core.windows.net"
       ]
     },
     "excludedCommands": [
