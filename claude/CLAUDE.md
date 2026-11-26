@@ -29,8 +29,10 @@ When optimizing a diff, always optimize against PR base, never master directly, 
 - Use git and gh directly for branches, worktrees, signed commits and pushes.
 - Run each git/gh call as a standalone command: no `cd … &&`, no `git -C`, no chaining. Only a bare `git …`/`gh …` matches the org's sandbox exclusion; anything else runs sandboxed and fails on `.git/config` writes, commit signing or gh auth. `cd` in a separate call first.
 - Never send a `cd` and a command that relies on it in the same parallel batch; the second may run in the old directory.
-- Create worktrees under `.claude/worktrees/` inside the repo.
+- For a repo outside the session's working directories, `cd` doesn't stick, so bare git can't reach it. Ask the user to run `/add-dir <path>` instead of trying `git -C`.
+- Do new work in a worktree under `.claude/worktrees/` inside the repo, so it doesn't interfere with other work. Reuse an existing worktree for the task if there is one; otherwise `git fetch` and branch from the latest `origin/<base>`, never local state. Symlink secrets and installed packages (`.env*`, `node_modules`, etc.) into it from the main checkout.
 - Never point a PR branch at its base, even briefly: GitHub auto-closes the PR when it has no diff.
+- Rebasing a PR branch is authorization to force-push it afterwards with `git push --force-with-lease`; don't ask again.
 
 ## Tests
 
