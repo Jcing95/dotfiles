@@ -24,15 +24,12 @@ Always compare the diff against the PR base. Never assume main/master branch as 
 Try to keep PR diffs minimal, so reviewers are able to make sense of it.
 When optimizing a diff, always optimize against PR base, never master directly, as that will result in changes supposed to live in the base PR.
 
-## Git Branches and Commits (sandbox)
+## Git
 
-The sandbox can't sign commits (no ssh-agent access) or write `.git/config`, so don't create commits or push branches locally. `gh` runs outside the sandbox: use the GitHub API instead.
-
-- New branch: `gh api repos/<owner>/<repo>/git/refs -f ref=refs/heads/<branch> -f sha=<base sha>`.
-- Commits: GraphQL `createCommitOnBranch` (file contents base64, `expectedHeadOid`). GitHub signs these, so they show as Verified. Shell variables don't survive across Bash calls, so pass explicit file lists, and check the commit's file list on GitHub afterwards.
-- Rewriting an existing PR branch: build the new commit on a temporary branch, then force-move the PR branch to it (`PATCH git/refs/heads/<branch>` with `force=true`), and delete the temp branch. Never point a PR branch at its base, even briefly: GitHub auto-closes the PR when it has no diff.
-- Afterwards, `git fetch` and reset the local branch to the remote one.
-- Local read-only git (diff, log, show, fetch) is fine. Avoid local commands that write `.git/config`, such as `checkout -b` with auto-tracking or `push -u`.
+- Use git and gh directly for branches, worktrees, signed commits and pushes.
+- Run each git/gh call as a standalone command: no `cd … &&`, no `git -C`, no chaining. Only a bare `git …`/`gh …` matches the org's sandbox exclusion; anything else runs sandboxed and fails on `.git/config` writes, commit signing or gh auth. `cd` in a separate call first.
+- Create worktrees under `.claude/worktrees/` inside the repo.
+- Never point a PR branch at its base, even briefly: GitHub auto-closes the PR when it has no diff.
 
 ## Tests
 
